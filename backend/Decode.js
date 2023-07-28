@@ -38,12 +38,9 @@ async function getPageContent(url) {
   
           // Farklı olan resmin URL'sine tıklama işlemi
           await page.click(`div[captcha-image][style*="${imageToClick}"]`);
-          console.log('Farklı olan resme tıklandı.');
         } else {
-          console.log('Farklı olan resim bulunamadı.');
         }
       } else {
-        console.log('5 farklı resim bulunamadı.');
       }
   
       await browser.close();

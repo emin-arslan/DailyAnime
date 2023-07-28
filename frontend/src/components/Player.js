@@ -2,7 +2,6 @@ import React from "react";
 import ReactPlayer from "react-player";
 
 const Player = (props) => {
-  console.log(props);
   if (!props.modal) return null;
   return (
     <div className="relative items-center justify-center sticky top-0 z-50">

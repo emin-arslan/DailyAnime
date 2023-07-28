@@ -19,27 +19,22 @@ async function ChineseAnime(url="https://www.chineseanime.org/") {
         const episode = $(element).find("span.epx").text();
         const subtitle = $(element).find("span.sb.Sub").text();
         const imageUrl = $(element).find("img").attr("src");
-        const link = $(element).find("a").attr("href");
+        const watchLink = $(element).find("a").attr("href");
         
-        const videoUrl = await getVideoUrlChinese(link);
+        const videoUrl = await getVideoUrlChinese(watchLink);
         const animeCard = {
           title,
           subtitle,
           episode,
           imageUrl,
           videoUrl,
+          watchLink,
           source:"Chinese",
         }
         if(!animeCards.find(card => card.title == title))
           {
             animeCards.push(animeCard)
             sayac++;
-            console.log("Başlık:", title);
-            console.log("Bölüm:", episode);
-            console.log("Altyazı:", subtitle);
-            console.log("Resim URL:", imageUrl);
-            console.log("Link:", videoUrl);
-            console.log("=".repeat(40));
           }
        
         index++;
@@ -47,7 +42,6 @@ async function ChineseAnime(url="https://www.chineseanime.org/") {
       }
       return animeCards
     } catch (error) {
-      console.log("Web sayfasına ulaşılamadı!", error);
     }
   }
   

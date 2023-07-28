@@ -139,7 +139,6 @@ async function getVideoUrlAfterClick(animeUrl) {
         return div ? div.src : null;
       });
 
-      console.log("Div içeriği:", videoPlayerDivContent);
       return videoPlayerDivContent;
     } else {
       throw new Error("AitrVip seçeneği bulunamadı.");

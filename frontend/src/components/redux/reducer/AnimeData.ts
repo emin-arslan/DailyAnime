@@ -14,7 +14,8 @@ const initialState: IState = {
       imageUrl:"sa",
       videoUrl:"asda",
       episode:"askdkd",
-      source:"asdasd"
+      source:"asdasd",
+      watchLink:"qwkdkqwdk"
     }
   ],
 };
@@ -29,7 +30,6 @@ const animeDataReducer = (
   switch (action.type) {
     
     case SET_ANIME_DATA:
-      console.log("asdasdasd")
       return {...state,cards:action.cards};
     default:
       return state;

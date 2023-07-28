@@ -5,4 +5,5 @@ export default interface AnimeCardState{
     description?: string;
     episode:string;
     source:string;
+    watchLink:string;
 }

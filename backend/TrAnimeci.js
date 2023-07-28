@@ -23,7 +23,7 @@ async function TrAnimeci(url="https://tranimeci.com/") {
         const videoUrl = await getVideoUrl(link);
         const check = await Anime.find({title:title})
         
-        console.log(check.length)
+
         const animeCard = {
           title,
           subtitle,
@@ -32,7 +32,7 @@ async function TrAnimeci(url="https://tranimeci.com/") {
           videoUrl,
           source:"TrAnimeci",
         }
-        console.log(animeCard)
+
         // if(check.length < 1 )
         // {
         //   await Anime.insertMany(animeCard)
@@ -49,7 +49,6 @@ async function TrAnimeci(url="https://tranimeci.com/") {
         
       }
     } catch (error) {
-      console.log("Web sayfasına ulaşılamadı!", error);
     }
   }
 
@@ -69,8 +68,6 @@ async function TrAnimeci(url="https://tranimeci.com/") {
       console.log(videoElement)
       // video etiketinin src özelliğini alın
       const videoUrl = await page.evaluate(element => element.src, videoElement);
-  
-      console.log('Video URL:', videoUrl);
   
       // İşlemi tamamlayın ve tarayıcıyı kapatın
       await browser.close();

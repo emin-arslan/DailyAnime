@@ -27,8 +27,6 @@ async function TrAnime() {
       
     });
     getVideoUrlAfterClick();
-
-    console.log(animeData);
     return animeData;
   } catch (error) {
     console.error("Error:", error);
@@ -92,8 +90,6 @@ async function getVideoUrlAfterClick(animeUrl = "https://www.tranimeizle.co/ruro
     } else {
       throw new Error("AitrVip seçeneği bulunamadı.");
     }
-
-    console.log(aitrVipButton);
     if (aitrVipButton) {
       await aitrVipButton.click();
 
@@ -111,7 +107,6 @@ async function getVideoUrlAfterClick(animeUrl = "https://www.tranimeizle.co/ruro
         return div ? div.src : null;
       });
       
-      console.log("Div içeriği:", videoPlayerDivContent);
       
     } else {
       throw new Error("AitrVip seçeneği bulunamadı.");

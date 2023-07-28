@@ -10,17 +10,10 @@ const TurkAnime = require("./TurkAnime");
 
 const clickDifferentImage = require("./Decode");
 app.use(cors());
-//const check = await Anime.find({title:title})
+
 app.use(express.json());
-//  await ChineseAnime(); //resp.status(200).json({ body: await Anime.find({}) });
-
-/* */
-/*  const resultCards = [...trAnimeCards, ...chineseAnimeCards]
-  console.log("#".repeat(100), resultCards) */
-app.get("/anime-cards", async (req, resp) => {
-
- 
-  console.log("buraya girdi.")
+/* 
+console.log("buraya girdi.")
   let trAnimeCards = []
   try {
     const animeData = await TrAnime();
@@ -39,6 +32,11 @@ app.get("/anime-cards", async (req, resp) => {
   }
   await Anime.deleteMany({});
   await Anime.insertMany(resultArray);
+
+*/
+app.get("/anime-cards", async (req, resp) => {
+
+ 
   resp.status(200).json({ body: await Anime.find({}) });
 
   
