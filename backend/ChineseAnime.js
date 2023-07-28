@@ -1,10 +1,11 @@
-const Anime = require("./db/CardData");
+
 const cheerio = require("cheerio");
 const axios = require("axios");
 
 const puppeteer = require("puppeteer")
+const animeCards = []
 async function ChineseAnime(url="https://www.chineseanime.org/") {
-  await Anime.deleteMany({});
+
     try {
       const response = await axios.get(url);
       const $ = cheerio.load(response.data);
@@ -21,8 +22,6 @@ async function ChineseAnime(url="https://www.chineseanime.org/") {
         const link = $(element).find("a").attr("href");
         
         const videoUrl = await getVideoUrlChinese(link);
-        const check = await Anime.find({title:title})
-        console.log(check.length)
         const animeCard = {
           title,
           subtitle,
@@ -31,20 +30,22 @@ async function ChineseAnime(url="https://www.chineseanime.org/") {
           videoUrl,
           source:"Chinese",
         }
-        if(check.length < 1 )
-        {
-          await Anime.insertMany(animeCard)
-          sayac++;
-          console.log("Başlık:", title);
-          console.log("Bölüm:", episode);
-          console.log("Altyazı:", subtitle);
-          console.log("Resim URL:", imageUrl);
-          console.log("Link:", videoUrl);
-          console.log("=".repeat(40));
-        }
+        if(!animeCards.find(card => card.title == title))
+          {
+            animeCards.push(animeCard)
+            sayac++;
+            console.log("Başlık:", title);
+            console.log("Bölüm:", episode);
+            console.log("Altyazı:", subtitle);
+            console.log("Resim URL:", imageUrl);
+            console.log("Link:", videoUrl);
+            console.log("=".repeat(40));
+          }
+       
         index++;
         
       }
+      return animeCards
     } catch (error) {
       console.log("Web sayfasına ulaşılamadı!", error);
     }

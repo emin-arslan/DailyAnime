@@ -27,6 +27,7 @@ function App() {
         <div className="grid grid-cols-6 w-fit gap-4 mt-5 md:grid-cols-4 sm:grid-cols-2 sm:w-[500px] ">
           {
             animeCards.animeDataReducer.cards.map(card => {
+              const color = card.source == "Chinese" ? "from-green-900 text-xs":"from-red-600"
               return (
                 <div>
                   <div onClick={() => {
@@ -37,7 +38,7 @@ function App() {
                     <div className="absolute bottom-0 text-sm font-semibold px-2 py-2 w-full text-gray-100 bg-gradient-to-t  from-black">
                       {card.episode}
                     </div>
-                    <div className="absolute top-0 right-0 p-1 bg-gradient-to-b from-green-900 text-xs text-white font-semibold rounded-bl">{card.source}</div>
+                    <div className={`absolute top-0 right-0 p-1 bg-gradient-to-b  text-xs text-white ${color} font-semibold rounded-tr-xl`}>{card.source}</div>
 
                   </div>
                   <p className="w-40 text-xs text-center line-clamp-2">{card.title}</p>

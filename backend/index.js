@@ -3,17 +3,48 @@ const cors = require("cors");
 const axios = require("axios");
 const app = express();
 const Anime = require("./db/CardData");
-const TrAnime = require("./TrAnime");
+const TrAnime = require("./abc");
 const ChineseAnime = require("./ChineseAnime");
 const TrAnimeci = require("./TrAnimeci");
 const TurkAnime = require("./TurkAnime");
+
+const clickDifferentImage = require("./Decode");
 app.use(cors());
-
+//const check = await Anime.find({title:title})
 app.use(express.json());
+//  await ChineseAnime(); //resp.status(200).json({ body: await Anime.find({}) });
 
+/* */
+/*  const resultCards = [...trAnimeCards, ...chineseAnimeCards]
+  console.log("#".repeat(100), resultCards) */
 app.get("/anime-cards", async (req, resp) => {
-  await ChineseAnime();
+
+ 
+  console.log("buraya girdi.")
+  let trAnimeCards = []
+  try {
+    const animeData = await TrAnime();
+    trAnimeCards = [...animeData]
+  } catch (error) {
+    console.error("Hata:", error);
+  }
+  console.log(trAnimeCards)
+  console.log("#".repeat(100))
+  const chineseAnimeCards = await ChineseAnime()
+  console.log( chineseAnimeCards );
+  const resultArray = [];
+  for (let index = 0; index < 9; index++) {
+    resultArray.push(chineseAnimeCards[index]);
+    resultArray.push(trAnimeCards[index])
+  }
+  await Anime.deleteMany({});
+  await Anime.insertMany(resultArray);
   resp.status(200).json({ body: await Anime.find({}) });
+
+  
+
+  
+
 });
 
 app.listen(5000);

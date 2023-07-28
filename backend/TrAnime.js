@@ -24,6 +24,7 @@ async function TrAnime() {
         watchLink,
         source,
       });
+      
     });
     getVideoUrlAfterClick();
 
@@ -33,9 +34,10 @@ async function TrAnime() {
     console.error("Error:", error);
     return null;
   }
+  
 }
 
-async function getVideoUrlAfterClick() {
+async function getVideoUrlAfterClick(animeUrl = "https://www.tranimeizle.co/rurouni-kenshin-meiji-kenkaku-romantan-2023-4-bolum-izle") {
   const preparePageForTests = async (page) => {
     // Pass the User-Agent Test.
     const userAgent =
@@ -43,42 +45,83 @@ async function getVideoUrlAfterClick() {
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36";
     await page.setUserAgent(userAgent);
   };
+
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await preparePageForTests(page);
 
   try {
+    const cookies = [
+      {
+        name: ".AitrWeb.Session",
+        value:
+          "CfDJ8DeMpL1wYptMhZhcRuIPrf8sDOQjFjBMegwQNUTxKOT6BL2u6nDL%2BNUkN0k0fsqvEfPPwfS2AV8XRZxLAehKBXFGqr7wIHyle1VEkckNV3bMaET5qdL6mcGQvGgIbvIY5gKmc1ibqgKkHkWALTnp8jXQg0VDfUtaxhmyg2mH1SDt",
+        domain: "www.tranimeizle.co",
+        url: animeUrl,
+      },
+      {
+        name: ".AitrWeb.Verification",
+        value: "CfDJ8DeMpL1wYptMhZhcRuIPrf8Txz2N4aw_eytkK_NFmoSe",
+        domain: "www.tranimeizle.co",
+        url: animeUrl,
+      },
+    ];
+
+    await page.setCookie(...cookies);
+
     await page.goto(
-      "https://www.tranimeizle.co/jidou-hanbaiki-ni-umarekawatta-ore-wa-meikyuu-wo-samayou-4-bolum-izle"
+      animeUrl
     );
 
-    // Beklenen öğeyi seçene kadar sayfanın yüklenmesini bekle
+    const sourceListItems = await page.$$(".videoSource-items ol li.sourceBtn");
 
-    // Beklenen öğeyi seçin (Bu örnekte ilk <li> öğesini seçiyoruz)
-    const liElement = await page.$("[class='videoSource']");
-    console.log(liElement);
-    // Öğeye tıklayın
-    await liElement.click();
+    // "AitrVip" seçeneğini bulun ve üzerine tıklayın
+    let aitrVipButton;
+    for (const item of sourceListItems) {
+      const buttonTitle = await item.$eval("p.title", (el) =>
+        el.innerText.trim()
+      );
+      if (buttonTitle.includes("AitrVip")) {
+        aitrVipButton = item;
+        break;
+      }
+    }
 
-    // Beklenen öğeyi seçene kadar sayfanın yüklenmesini bekle (iframe'in yüklenmesi için)
-    await page.waitForSelector("#videoPlayer iframe");
+    if (aitrVipButton) {
+      await aitrVipButton.click();
+    } else {
+      throw new Error("AitrVip seçeneği bulunamadı.");
+    }
 
-    // Beklenen öğeyi seçin (Bu örnekte iframe'i seçiyoruz)
-    const iframeElement = await page.$("#videoPlayer iframe");
+    console.log(aitrVipButton);
+    if (aitrVipButton) {
+      await aitrVipButton.click();
 
-    // iframe'in src özelliğini alın
-    const videoUrl = await iframeElement.evaluate((iframe) => iframe.src);
+      // "selected" classının eklenmesini bekleyin
 
-    console.log("Video URL:", videoUrl);
+      // Sayfada ".videoSource-video-player iframe" elemanını bekleyin
+      await page.waitForSelector(".videoSource-video-player iframe", {
+        visible: true,
+        timeout: 400, // 10 saniye bekleme süresi
+      });
 
-    // İşlemi tamamlayın ve tarayıcıyı kapatın
-    await browser.close();
+      // '.videoSource-video-player' div'inin içeriğini alın
+      const videoPlayerDivContent = await page.evaluate(() => {
+        const div = document.querySelector(".videoSource-video-player iframe");
+        return div ? div.src : null;
+      });
+      
+      console.log("Div içeriği:", videoPlayerDivContent);
+      
+    } else {
+      throw new Error("AitrVip seçeneği bulunamadı.");
+    }
 
-    return videoUrl;
+   
   } catch (error) {
-    console.error("Hata oluştu:", error);
-    await browser.close();
-    return null;
+    console.error("Hata:", error);
+  } finally {
+    await page.close(); // Sayfayı kapat
   }
 }
 
