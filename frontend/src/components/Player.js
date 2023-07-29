@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const Player = (props) => {
+  useEffect(() => {
+    const handleBackButton = (event) => {
+      event.preventDefault();
+    };
+
+    if (props.modal) {
+      // Modal açıkken geri tuşuna basıldığında handleBackButton fonksiyonu çağrılacak.
+      window.history.pushState(null, null, window.location.href);
+      window.addEventListener('popstate', handleBackButton);
+    } else {
+      window.removeEventListener('popstate', handleBackButton);
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handleBackButton);
+    };
+  }, [props.modal]);
   if (!props.modal) return null;
   return (
-    <div className="relative items-center justify-center sticky top-0 z-50">
+    <div className="items-center justify-center sticky top-0 z-50">
       <div
         onClick={() => props.setModal(false)}
         className="absolute top-0 w-full h-[100vh] bg-opacity-50 bg-black z-40"

@@ -30,13 +30,13 @@ function App() {
     </svg>
           
            </div>
-    :  <div className="grid grid-cols-6 w-fit gap-4 mt-5 md:grid-cols-4 sm:grid-cols-2 sm:w-[500px] ">
+    :  <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 sm:grid-cols-2 min-w-[300px] ">
     {
       animeCards.animeDataReducer.cards.map(card => {
         const color = card.source == "Chinese" ? "from-green-900":"from-red-900"
         return (
           <div>
-            <div  className="relative hover:cursor-pointer hover:z-20 hover:scale-[1.17] transition-all s ">
+            <div  className="relative hover:cursor-pointer hover:z-20 hover:scale-[1.17] transition-all  ">
               <img onClick={() => {
               setVideo(card.videoUrl)
               setModal(true)
