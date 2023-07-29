@@ -1,2 +1,3 @@
 const mongoose = require('mongoose')
-const connectDb = mongoose.connect("mongodb://0.0.0.0:27017/dailyanime");
+require('dotenv').config();
+const connectDb = mongoose.connect("mongodb+srv://deletedark:del123ete@earthquake-project.hpymb.mongodb.net/");

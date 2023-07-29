@@ -2,6 +2,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
 
+
 process.setMaxListeners(0);
 const animeData = [];
 const retryQueue = [];
@@ -16,11 +17,15 @@ async function TrAnime() {
         $(".flex-wrap-layout .flx-block").map(async (index, element) => {
           const imageUrl = $(element).find("img.img-responsive").attr("src");
           const title = $(element).find(".bar h4").text().trim();
-          const episode = $(element).find(".info-chip").eq(1).text().trim();
+          const episodeInfo = $(element).find(".info-chip").eq(1).text().trim();
+          const regexPattern = /(?<=BÖL\s)\d+(?=\s\/)/;
+          const result = episodeInfo.match(regexPattern)
+          const episode ="Ep "+parseInt(result[0]);
+          
           const watchLink =
             "https://www.tranimeizle.co" +
             $(element).find(".info-chip a").attr("href");
-  
+          
           const videoUrl = await getVideoUrlAfterClick(watchLink);
   
           if (videoUrl) {
@@ -87,7 +92,7 @@ async function getVideoUrlAfterClick(animeUrl) {
       },
       {
         name: ".AitrWeb.Verification",
-        value: "CfDJ8DeMpL1wYptMhZhcRuIPrf8Txz2N4aw_eytkK_NFmoSe",
+        value: "CfDJ8DeMpL1wYptMhZhcRuIPrf-sVpAejDTP429lA8BIl9z54Z0AuScyA3DokX-LOSz0RuWSm6nGHdyV0jsCRF_zZqacNVsU5OpgRYcaBX6KT8-Xf1_ZNK9nbnn5hfKkbM5fCtmfbzdJWtQuMOs_u55fUI8",
         domain: "www.tranimeizle.co",
         url: animeUrl,
       },
