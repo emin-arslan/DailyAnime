@@ -4,7 +4,7 @@ import { json } from "stream/consumers";
 
 export function* getCardDatas(): Generator<any, void, any> {
   try {
-    let response = yield fetch("http://localhost:5000/anime-cards");
+    let response = yield fetch("http://localhost:5000/animes");
     let reader = response.body.getReader();
     
     let result = yield reader.read();
