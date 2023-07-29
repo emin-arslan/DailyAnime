@@ -13,7 +13,7 @@ async function TrAnime(errorHandler) {
         throw new Error("burası 6")
       }
       const headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'}
-      const response = await axios.get("https://www.tranimeizle.co/",{headers}).then(response=>response.data)
+      const response = await axios.get("https://www.tranimeizle.co/",headers).then(response=>response.data)
       if(errorHandler==="7"){
         throw new Error("burası 7")
       }
