@@ -4,6 +4,7 @@ const Player = (props) => {
   useEffect(() => {
     const handleBackButton = (event) => {
       event.preventDefault();
+      props.setModal(false)
     };
 
     if (props.modal) {
