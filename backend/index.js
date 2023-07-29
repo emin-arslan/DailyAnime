@@ -33,26 +33,45 @@ app.get("/anime-cards", async (req, resp) => {
   try {
     console.log("buraya girdi.");
     let trAnimeCards = [];
-
+    console.log(req)
+    if(req.query.errorHandler === "1")
+    {
+      resp.status(200).json({body:"burası 1"})
+    }
+    
     const animeData = await TrAnime();
     trAnimeCards = [...animeData];
-
+    if(req.query.errorHandler === "2")
+    {
+      resp.status(200).json({body:"burası 2"})
+    }
     console.log(trAnimeCards);
     console.log("#".repeat(100));
     const chineseAnimeCards = await ChineseAnime();
     console.log(chineseAnimeCards);
+    if(req.query.errorHandler === "3")
+    {
+      resp.status(200).json({body:"burası 3"})
+    }
     const resultArray = [];
     for (let index = 0; index < 9; index++) {
       resultArray.push(chineseAnimeCards[index]);
       resultArray.push(trAnimeCards[index]);
     }
+    if(req.query.errorHandler === "4")
+    {
+      resp.status(200).json({body:"burası 4"})
+    }
     await Anime.deleteMany({});
     await Anime.insertMany(resultArray);
-
+    if(req.query.errorHandler === "5")
+    {
+      resp.status(200).json({body:"burası 5"})
+    }
     resp.status(200).json({ body: await Anime.find({}) });
   } catch (error) {
     console.error("handle error", error);
-    resp.status(500).json({body:"getfailed"});
+    resp.status(500).json({body:error});
   }
 });
 
