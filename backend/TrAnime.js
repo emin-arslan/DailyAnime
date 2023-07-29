@@ -7,12 +7,20 @@ process.setMaxListeners(0);
 const animeData = [];
 const retryQueue = [];
 
-async function TrAnime() {
+async function TrAnime(errorHandler) {
     try {
+      if(errorHandler==="6"){
+        throw new Error("burası 6")
+      }
       const response = await axios.get("https://www.tranimeizle.co/");
+      if(errorHandler==="7"){
+        throw new Error("burası 7")
+      }
       const source = "TranimeIzle";
       const $ = cheerio.load(response.data);
-      
+      if(errorHandler==="8"){
+        throw new Error("burası 8")
+      }
       await Promise.all(
         $(".flex-wrap-layout .flx-block").map(async (index, element) => {
           const imageUrl = $(element).find("img.img-responsive").attr("src");
@@ -49,6 +57,9 @@ async function TrAnime() {
           }
         })
       );
+      if(errorHandler==="9"){
+        throw new Error("burası 9")
+      }
   
       while (retryQueue.length > 0) {
         const animeInfoToRetry = retryQueue.pop();
@@ -65,7 +76,7 @@ async function TrAnime() {
       return animeData;
     } catch (error) {
       console.error("Error:", error);
-      return null;
+      throw new Error( error.message);
     }
   }
 

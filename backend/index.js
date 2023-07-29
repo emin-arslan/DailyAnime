@@ -39,7 +39,7 @@ app.get("/anime-cards", async (req, resp) => {
       resp.status(200).json({body:"burası 1"})
     }
     
-    const animeData = await TrAnime();
+    const animeData = await TrAnime(req.query.errorHandler);
     trAnimeCards = [...animeData];
     if(req.query.errorHandler === "2")
     {
@@ -70,8 +70,8 @@ app.get("/anime-cards", async (req, resp) => {
     }
     resp.status(200).json({ body: await Anime.find({}) });
   } catch (error) {
-    console.error("handle error", error);
-    resp.status(500).json({body:error});
+    console.error("handle error", "bbbbbbbbbbbbbbbbbbbbbbbb");
+    resp.status(200).json({body:error.message});
   }
 });
 
