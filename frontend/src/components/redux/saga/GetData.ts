@@ -1,10 +1,9 @@
 import { put } from "redux-saga/effects";
 import { SET_ANIME_DATA } from "../actions/actionTypes";
-import { json } from "stream/consumers";
 
 export function* getCardDatas(): Generator<any, void, any> {
   try {
-    let response = yield fetch("http://localhost:5000/animes");
+    let response = yield fetch("https://daily-anime-xi.vercel.app/animes");
     let reader = response.body.getReader();
     
     let result = yield reader.read();
