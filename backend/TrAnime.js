@@ -2,42 +2,75 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
 
+
+process.setMaxListeners(0);
+const animeData = [];
+const retryQueue = [];
+
 async function TrAnime() {
-  try {
-    const response = await axios.get("https://www.tranimeizle.co/"); // Burada hedef web sitesinin URL'sini girin
-    const source = "TranimeIzle";
-    const $ = cheerio.load(response.data);
-    const animeData = [];
-
-    $(".flex-wrap-layout .flx-block").each((index, element) => {
-      const imgSrc = $(element).find("img.img-responsive").attr("src");
-      const animeTitle = $(element).find(".bar h4").text().trim();
-      const episodeInfo = $(element).find(".info-chip").eq(1).text().trim();
-      const watchLink =
-        "https://www.tranimeizle.co" +
-        $(element).find(".info-chip a").attr("href");
-
-      animeData.push({
-        imgSrc,
-        animeTitle,
-        episodeInfo,
-        watchLink,
-        source,
-      });
+    try {
+      const response = await axios.get("https://www.tranimeizle.co/");
+      const source = "TranimeIzle";
+      const $ = cheerio.load(response.data);
       
-    });
-    getVideoUrlAfterClick();
-    return animeData;
-  } catch (error) {
-    console.error("Error:", error);
-    return null;
-  }
+      await Promise.all(
+        $(".flex-wrap-layout .flx-block").map(async (index, element) => {
+          const imageUrl = $(element).find("img.img-responsive").attr("src");
+          const title = $(element).find(".bar h4").text().trim();
+          const episodeInfo = $(element).find(".info-chip").eq(1).text().trim();
+          const regexPattern = /(?<=BÖL\s)\d+(?=\s\/)/;
+          const result = episodeInfo.match(regexPattern)
+          const episode ="Ep "+parseInt(result[0]);
+          
+          const watchLink =
+            "https://www.tranimeizle.co" +
+            $(element).find(".info-chip a").attr("href");
+          
+          const videoUrl = await getVideoUrlAfterClick(watchLink);
   
-}
+          if (videoUrl) {
+            animeData.push({
+              imageUrl,
+              title,
+              episode,
+              watchLink,
+              source,
+              videoUrl,
+            });
+          } else {
+            retryQueue.push({
+              imageUrl,
+              title,
+              episode,
+              watchLink,
+              source,
+              videoUrl,
+            });
+          }
+        })
+      );
+  
+      while (retryQueue.length > 0) {
+        const animeInfoToRetry = retryQueue.pop();
+        const videoUrl = await getVideoUrlAfterClick(animeInfoToRetry.watchLink);
+  
+        if (videoUrl) {
+          animeData.push({
+            ...animeInfoToRetry,
+            videoUrl,
+          });
+        }
+      }
+  
+      return animeData;
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  }
 
-async function getVideoUrlAfterClick(animeUrl = "https://www.tranimeizle.co/rurouni-kenshin-meiji-kenkaku-romantan-2023-4-bolum-izle") {
+async function getVideoUrlAfterClick(animeUrl) {
   const preparePageForTests = async (page) => {
-    // Pass the User-Agent Test.
     const userAgent =
       "Mozilla/5.0 (X11; Linux x86_64)" +
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36";
@@ -59,7 +92,7 @@ async function getVideoUrlAfterClick(animeUrl = "https://www.tranimeizle.co/ruro
       },
       {
         name: ".AitrWeb.Verification",
-        value: "CfDJ8DeMpL1wYptMhZhcRuIPrf8Txz2N4aw_eytkK_NFmoSe",
+        value: "CfDJ8DeMpL1wYptMhZhcRuIPrf-sVpAejDTP429lA8BIl9z54Z0AuScyA3DokX-LOSz0RuWSm6nGHdyV0jsCRF_zZqacNVsU5OpgRYcaBX6KT8-Xf1_ZNK9nbnn5hfKkbM5fCtmfbzdJWtQuMOs_u55fUI8",
         domain: "www.tranimeizle.co",
         url: animeUrl,
       },
@@ -67,21 +100,28 @@ async function getVideoUrlAfterClick(animeUrl = "https://www.tranimeizle.co/ruro
 
     await page.setCookie(...cookies);
 
-    await page.goto(
-      animeUrl
-    );
-
+    await page.goto(animeUrl);
+    page.waitForTimeout(1000);
     const sourceListItems = await page.$$(".videoSource-items ol li.sourceBtn");
 
-    // "AitrVip" seçeneğini bulun ve üzerine tıklayın
-    let aitrVipButton;
-    for (const item of sourceListItems) {
-      const buttonTitle = await item.$eval("p.title", (el) =>
-        el.innerText.trim()
-      );
-      if (buttonTitle.includes("AitrVip")) {
-        aitrVipButton = item;
-        break;
+    let aitrVipButton = null;
+    const maxRetries = 20;
+    let retryCount = 0;
+
+    while (!aitrVipButton && retryCount < maxRetries) {
+      for (const item of sourceListItems) {
+        const buttonTitle = await item.$eval("p.title", (el) =>
+          el.innerText.trim()
+        );
+        if (buttonTitle.includes("AitrVip")) {
+          aitrVipButton = item;
+          break;
+        }
+      }
+
+      if (!aitrVipButton) {
+        await page.waitForTimeout(1000);
+        retryCount++;
       }
     }
 
@@ -90,34 +130,39 @@ async function getVideoUrlAfterClick(animeUrl = "https://www.tranimeizle.co/ruro
     } else {
       throw new Error("AitrVip seçeneği bulunamadı.");
     }
+
     if (aitrVipButton) {
       await aitrVipButton.click();
 
-      // "selected" classının eklenmesini bekleyin
-
-      // Sayfada ".videoSource-video-player iframe" elemanını bekleyin
       await page.waitForSelector(".videoSource-video-player iframe", {
         visible: true,
-        timeout: 400, // 10 saniye bekleme süresi
+        timeout: 2000,
       });
 
-      // '.videoSource-video-player' div'inin içeriğini alın
       const videoPlayerDivContent = await page.evaluate(() => {
         const div = document.querySelector(".videoSource-video-player iframe");
         return div ? div.src : null;
       });
-      
-      
+
+      return videoPlayerDivContent;
     } else {
       throw new Error("AitrVip seçeneği bulunamadı.");
     }
-
-   
   } catch (error) {
     console.error("Hata:", error);
+    return null;
   } finally {
-    await page.close(); // Sayfayı kapat
+    try {
+      if (process.platform === "win32") {
+        await browser.close();
+      } else {
+        await browser.process().kill("SIGINT");
+      }
+    } catch (err) {
+      console.error("Hata:", err);
+    }
   }
 }
+
 
 module.exports = TrAnime;

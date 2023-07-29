@@ -1,17 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const axios = require("axios");
-const app = express();
-const Anime = require("./db/CardData");
-const TrAnime = require("./abc");
+const TrAnime = require("./TrAnime");
 const ChineseAnime = require("./ChineseAnime");
-const TrAnimeci = require("./TrAnimeci");
-const TurkAnime = require("./TurkAnime");
+const Anime = require("./db/CardData");
 
-const clickDifferentImage = require("./Decode");
-
-
-
+const app = express();
 app.use(cors());
 app.use(express.json());
 /* 
