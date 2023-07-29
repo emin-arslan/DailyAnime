@@ -53,4 +53,8 @@ app.get("/anime-cards", async (req, resp) => {
   resp.status(200).json({ body: await Anime.find({}) });
 });
 
+app.get("/",(req,resp)=>{
+  resp.status(200).json({status:"OK"})
+})
+
 app.listen(5000);
