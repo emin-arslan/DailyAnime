@@ -1,6 +1,7 @@
 {
 	"scripts": {
-		"start": "supervisor index.js"
+		"dev": "supervisor index.js",
+		"start":"node index.js"
 	},
 	"dependencies": {
 		"axios": "^1.4.0",
