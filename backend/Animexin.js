@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const puppeteer = require("puppeteer");
+const chromium = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 const animeCards = []
 async function AnimeXin(url = "https://animexin.vip/") {
   console.log("here");
