@@ -12,12 +12,13 @@ async function setAnimeDatas () {
     console.log("babahere")
     let turkAnimeCards = [];
     const resultCardArray = [];
-    const chineseAnimeCards = await AnimeXin();
+    
     try {
       turkAnimeCards = await TurkAnime();
     } catch (error) {
       console.error("Hata oluştu:", error);
     }
+    const chineseAnimeCards = await AnimeXin();
     for (let index = 0; index < 9; index++) {
       resultCardArray.push(chineseAnimeCards[index]);
       resultCardArray.push(turkAnimeCards[index]);

@@ -49,8 +49,8 @@ async function TurkAnime() {
     );
 
     const videoUrl = await getVideoSrc(link);
-    console.log(title.match(/^[^\d]+/)[0])
-    const orginalImageUrl =  await getCoverImage(title.match(/^[^\d]+/)[0]);
+    console.log("title22," ,title.match(/^(.*?)(?=\d+\.\s)/)[0])
+    const orginalImageUrl =  await getCoverImage(title.match(/^(.*?)(?=\d+\.\s)/)[0]);
     const animeCard = {
       title: title,
       imageUrl: orginalImageUrl ? orginalImageUrl : imageUrl,
@@ -132,18 +132,38 @@ async function getVideoSrc(videoUrl) {
           iframeSrc = await mainIframe.evaluate((iframe) => iframe.src);
         }
       } catch (error) {
-        // If FILEMOON button not found, try ALUCARD
-        console.log("FILEMOON button not found, trying ALUCARD...");
-        const alucardButton = await page.waitForXPath(
-          "//button[contains(., ' ALUCARD')]",
-          { timeout: 5000 }
-        );
-        await page.evaluate((button) => button.click(), alucardButton);
-        // Wait for the content to load
-        const mainIframe = await page.waitForSelector(".video-icerik iframe");
+        try {
+          // If FILEMOON button not found, try ALUCARD
+          console.log("FILEMOON button not found, trying ALUCARD...");
+          const alucardButton = await page.waitForXPath(
+            "//button[contains(., ' ALUCARD')]",
+            { timeout: 5000 }
+          );
+          await page.evaluate((button) => button.click(), alucardButton);
+          // Wait for the content to load
+          const mainIframe = await page.waitForSelector(".video-icerik iframe");
 
-        if (mainIframe) {
-          iframeSrc = await mainIframe.evaluate((iframe) => iframe.src);
+          if (mainIframe) {
+            iframeSrc = await mainIframe.evaluate((iframe) => iframe.src);
+          }
+        } catch (error) {
+          try {
+            // If ALUCARD button not found, try GDRIVE
+            console.log("ALUCARD button not found, trying GDRIVE...");
+            const gdriveButton = await page.waitForXPath(
+              "//button[contains(., ' GDRIVE')]",
+              { timeout: 5000 }
+            );
+            await page.evaluate((button) => button.click(), gdriveButton);
+            // Wait for the content to load
+            const mainIframe = await page.waitForSelector(".video-icerik iframe");
+
+            if (mainIframe) {
+              iframeSrc = await mainIframe.evaluate((iframe) => iframe.src);
+            }
+          } catch (error) {
+            console.log("GDRIVE button not found.");
+          }
         }
       }
     }
