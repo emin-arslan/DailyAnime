@@ -10,8 +10,8 @@ module.exports = {
       },
     },
     screens: {
-
-      'sm': {'min': '100px', 'max': '767px'},
+      'xs': {'min': '100px', 'max': '420px'},
+      'sm': {'min': '421px', 'max': '767px'},
       // => @media (min-width: 640px and max-width: 767px) { ... }
 
       'md': {'min': '768px', 'max': '1023px'},

@@ -7,7 +7,7 @@ const animeSchema = mongoose.Schema({
     videoUrl: String,
     episode:String,
     source:String,
-    watchLink:String
+    watchLink:String,
 })
 
 const animeModal = mongoose.model("cardData", animeSchema)

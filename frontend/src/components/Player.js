@@ -31,11 +31,10 @@ const Player = (props) => {
         className="absolute top-[43px] hover:cursor-pointer hover:text-red-400 text-white right-[35px] font-poppins font-semibold p-1   z-50"
       ></div>
       <div className="absolute  left-[2%] top-[5vh] w-[96%] h-[90vh] text-white z-40">
-        
         <iframe
           className="w-[100%] h-[100%]"
           title="alovera"
-          src={props.video}
+          src={props.video?.includes("https") ? props.video.slice(6):props.video}
           allowFullScreen
           
         ></iframe>
