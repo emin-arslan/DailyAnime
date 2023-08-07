@@ -12,7 +12,6 @@ async function setAnimeDatas () {
     console.log("babahere")
     let turkAnimeCards = [];
     const resultCardArray = [];
-    
     try {
       turkAnimeCards = await TurkAnime();
     } catch (error) {
