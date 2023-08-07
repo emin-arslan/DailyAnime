@@ -25,7 +25,7 @@ async function setAnimeDatas () {
   await Anime.insertMany(resultCardArray);
 }
 
-setInterval(setAnimeDatas(),300000)
+setInterval(setAnimeDatas,300000)
 
 app.get("/animeCards", async (req, resp) => {
   resp.status(200).json({ body: await Anime.find({}) });
