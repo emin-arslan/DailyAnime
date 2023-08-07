@@ -1,7 +1,9 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const puppeteer = require("puppeteer");
-const animeCards = []
+const chromium = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
+const animeCards = [];
+
 async function AnimeXin(url = "https://animexin.vip/") {
   console.log("here");
   try {
@@ -16,7 +18,7 @@ async function AnimeXin(url = "https://animexin.vip/") {
       const imageUrl = $(element).find("img").attr("src");
       const watchLink = $(element).find("a").attr("href");
       console.log(title);
-      console.log(watchLink)
+      console.log(watchLink);
 
       const videoUrl = await getVideoUrlAnimeXin(watchLink);
 
@@ -30,7 +32,10 @@ async function AnimeXin(url = "https://animexin.vip/") {
         source: "AnimeXin",
       };
 
-      if (!animeCards.find((card) => card.title === title) && animeCard.videoUrl != null) {
+      if (
+        !animeCards.find((card) => card.title === title) &&
+        animeCard.videoUrl != null
+      ) {
         animeCards.push(animeCard);
       }
 
@@ -47,9 +52,12 @@ async function AnimeXin(url = "https://animexin.vip/") {
   }
 }
 
-
 async function getVideoUrlAnimeXin(url) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+  });
   const page = await browser.newPage();
 
   let maxRetryCount = 3; // En fazla 3 kez tekrar deneme yapacak
@@ -60,15 +68,17 @@ async function getVideoUrlAnimeXin(url) {
       await page.goto(url);
 
       const desiredOptionNames = [
-        'All Sub Player Daylimotion (have much ads from video player)',
-        'All Sub Player Daylimotion',
-        'All Sub Player Dailymotion'
+        "All Sub Player Daylimotion (have much ads from video player)",
+        "All Sub Player Daylimotion",
+        "All Sub Player Dailymotion",
       ];
 
       const selectElement = await page.waitForSelector("select.mirror");
       const options = await page.evaluate(() => {
-        const optionElements = Array.from(document.querySelectorAll("select.mirror option"));
-        return optionElements.map(option => ({
+        const optionElements = Array.from(
+          document.querySelectorAll("select.mirror option")
+        );
+        return optionElements.map((option) => ({
           name: option.innerText.trim(),
           value: option.value,
         }));
@@ -112,7 +122,7 @@ async function getVideoUrlAnimeXin(url) {
       if (currentRetry < maxRetryCount) {
         // Hata alındı, bekleyip tekrar deneme yapalım
         console.log(`Retrying... Attempt ${currentRetry}`);
-        await new Promise(resolve => setTimeout(resolve, 500)); // 3 saniye bekleyelim
+        await new Promise((resolve) => setTimeout(resolve, 500)); // 3 saniye bekleyelim
       } else {
         // Max tekrar deneme sayısını aştık, tarayıcıyı kapatıp null döndürelim
         console.log("Max retry count exceeded. Giving up.");
@@ -123,5 +133,4 @@ async function getVideoUrlAnimeXin(url) {
   }
 }
 
-  module.exports = AnimeXin;
-  
+module.exports = AnimeXin;
