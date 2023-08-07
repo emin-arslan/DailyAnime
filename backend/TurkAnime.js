@@ -1,5 +1,4 @@
-const chromium = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const getCoverImage = require("./getCoverImage")
 
 function extractEpisodeNumber(text) {
