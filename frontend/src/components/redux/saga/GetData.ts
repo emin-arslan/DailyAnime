@@ -3,7 +3,7 @@ import { SET_ANIME_DATA } from "../actions/actionTypes";
 
 export function* getCardDatas(): Generator<any, void, any> {
   try {
-    let response = yield fetch("http://localhost:5000/animeCards");
+    let response = yield fetch("daily-animebe.vercel.app/animeCards");
     let reader = response.body.getReader();
     
     let result = yield reader.read();
