@@ -10,7 +10,7 @@ const animeSchema = mongoose.Schema({
     watchLink:String,
 })
 
-const animeModal = mongoose.model("cardDatas", animeSchema)
+const animeModal = mongoose.model("animeTable", animeSchema)
 
 module.exports = animeModal
 
