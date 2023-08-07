@@ -11,11 +11,5 @@
       "src":"/(.*)",
       "dest":"/"
     }
-  ],
-  "crons": [
-    {
-      "path": "/cronJobTwo",
-      "schedule": "*/5 * * * *"
-    }
   ]
 }
