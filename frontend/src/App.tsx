@@ -18,7 +18,7 @@ function App() {
   const [video, setVideo] = useState("")
   return (
     <div className="w-full  relative transition-all">
-     <Player modal={modal} video={video} setModal={setModal} />
+      <Player modal={modal} video={video} setModal={setModal} />
       <Navi />
       <div className="flex justify-center w-full items-center pb-8">
         {
@@ -36,7 +36,7 @@ function App() {
                   const color = card.source == "Chinese" ? "from-green-900" : "from-red-900"
                   return (
                     <div className="max-w-[220px]">
-                      
+
                       <div className="relative hover:cursor-pointer hover:z-20 hover:scale-[1.17] transition-all ">
                         <img onClick={() => {
                           setVideo(card.videoUrl)
