@@ -2,9 +2,10 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const chromium = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
-const animeCards = []
+
 async function AnimeXin(url = "https://animexin.vip/") {
-  console.log("here");
+  const animeCards = [];
+
   try {
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
@@ -16,8 +17,6 @@ async function AnimeXin(url = "https://animexin.vip/") {
       const subtitle = $(element).find(".sb.Sub").text();
       const imageUrl = $(element).find("img").attr("src");
       const watchLink = $(element).find("a").attr("href");
-      console.log(title);
-      console.log(watchLink)
 
       const videoUrl = await getVideoUrlAnimeXin(watchLink);
 
@@ -31,7 +30,10 @@ async function AnimeXin(url = "https://animexin.vip/") {
         source: "AnimeXin",
       };
 
-      if (!animeCards.find((card) => card.title === title) && animeCard.videoUrl != null) {
+      if (
+        !animeCards.find((card) => card.title === title) &&
+        animeCard.videoUrl != null
+      ) {
         animeCards.push(animeCard);
       }
 
@@ -48,9 +50,12 @@ async function AnimeXin(url = "https://animexin.vip/") {
   }
 }
 
-
 async function getVideoUrlAnimeXin(url) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+  });
   const page = await browser.newPage();
 
   let maxRetryCount = 3; // En fazla 3 kez tekrar deneme yapacak

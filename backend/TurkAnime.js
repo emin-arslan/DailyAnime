@@ -1,6 +1,6 @@
 const chromium = require("chrome-aws-lambda");
 const puppeteer = require("puppeteer-core");
-const getCoverImage = require("./getCoverImage")
+const getCoverImage = require("./getCoverImage");
 
 function extractEpisodeNumber(text) {
   const regex = /(\d{1,3})\.\s*Bölüm/i;
@@ -13,8 +13,14 @@ function extractEpisodeNumber(text) {
 }
 
 async function TurkAnime() {
+  const browser = await puppeteer.launch({
+    executablePath: await chromium.executablePath, // executablePath belirtin
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    headless: chromium.headless,
+  });
+
   const url = "https://www.turkanime.co";
-  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const cookies = [{}];
   console.log("sea");
@@ -38,20 +44,11 @@ async function TurkAnime() {
     const link = await thumbnailElement.evaluate((el) =>
       el.getAttribute("href")
     );
-    const fansub = await element.$eval(".row .bold.media-object", (el) =>
-      el.textContent.trim()
-    );
-    const translator = await element.$eval(
-      ".row .media-object:last-child a",
-      (el) => el.getAttribute("href")
-    );
-    const dateAdded = await element.$eval(".row .fa-clock", (el) =>
-      el.getAttribute("data-original-title")
-    );
+    
+    // ... Diğer verileri çekme işlemleri ...
 
     const videoUrl = await getVideoSrc(link);
-    console.log("title22," ,title.match(/^(.*?)(?=\d+\.\s)/)[0])
-    const orginalImageUrl =  await getCoverImage(title.match(/^(.*?)(?=\d+\.\s)/)[0]);
+    const orginalImageUrl = await getCoverImage(title.match(/^(.*?)(?=\d+\.\s)/)[0]);
     const animeCard = {
       title: title,
       imageUrl: orginalImageUrl ? orginalImageUrl : imageUrl,
