@@ -8,8 +8,8 @@ dependencies:
     specifier: 1.0.0-rc.12
     version: 1.0.0-rc.12
   chrome-aws-lambda:
-    specifier: 9.0.0
-    version: 9.0.0(puppeteer-core@9.0.0)
+    specifier: 6.0.0
+    version: 6.0.0(puppeteer-core@6.0.0)
   cors:
     specifier: ^2.8.5
     version: 2.8.5
@@ -32,8 +32,8 @@ dependencies:
     specifier: ^20.9.0
     version: 20.9.0
   puppeteer-core:
-    specifier: 9.0.0
-    version: 9.0.0
+    specifier: 6.0.0
+    version: 6.0.0
   supervisor:
     specifier: ^0.12.0
     version: 0.12.0
@@ -309,14 +309,14 @@ packages:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
     dev: false
 
-  /chrome-aws-lambda@9.0.0(puppeteer-core@9.0.0):
-    resolution: {integrity: sha512-9+ZgDNAHlQ18pJL2QpBbPK7Knad/a23IaNYQO3AuJQsjW/XKGQdt8mgyKpP85x0iD3WN1ZDdMgibumCz27jT7Q==}
+  /chrome-aws-lambda@6.0.0(puppeteer-core@6.0.0):
+    resolution: {integrity: sha512-XnFo6AaE5ZYpHYmOmMoj1yCYFeRTx6uFCpJnVuDREWzXevzZvo3gzkyQ6qSKsPW91VGWeQI7wQgnOpW50e+Dzg==}
     engines: {node: '>= 10.16'}
     peerDependencies:
-      puppeteer-core: ^9.0.0
+      puppeteer-core: 6.0.x
     dependencies:
       lambdafs: 2.1.1
-      puppeteer-core: 9.0.0
+      puppeteer-core: 6.0.0
     dev: false
 
   /chromium-bidi@0.4.16(devtools-protocol@0.0.1147663):
@@ -492,8 +492,8 @@ packages:
     resolution: {integrity: sha512-hyWmRrexdhbZ1tcJUGpO95ivbRhWXz++F4Ko+n21AY5PNln2ovoJw+8ZMNDTtip+CNFQfrtLVh/w4009dXO/eQ==}
     dev: false
 
-  /devtools-protocol@0.0.869402:
-    resolution: {integrity: sha512-VvlVYY+VDJe639yHs5PHISzdWTLL3Aw8rO4cvUtwvoxFd6FHbE4OpHHcde52M6096uYYazAmd4l0o5VuFRO2WA==}
+  /devtools-protocol@0.0.842839:
+    resolution: {integrity: sha512-iI3v9uuGUW02vPUXTvxl4ijnCPL/RGRVR9I+U8s7+9OG9An/bvExjQ0KrXE9V0QBLra7wANhZctB00FKBSn1gw==}
     dev: false
 
   /dom-serializer@2.0.0:
@@ -1357,12 +1357,12 @@ packages:
       - utf-8-validate
     dev: false
 
-  /puppeteer-core@9.0.0:
-    resolution: {integrity: sha512-cgrnFLg5td0ciW3seGmLPlAf7e2jlIEjZlBOij/byS4iD3DRMHxItzVHv5OwEntkC1eamZqt8+WJJpAaGk6zPw==}
+  /puppeteer-core@6.0.0:
+    resolution: {integrity: sha512-Mm4lVSM8CJUrHSLt2zHjlW9B2D5B3JRbkbmxzGaGTauaB9gTrM+r7gk88xfRWuaBy81pRG+nTtCBdMPzO7pjqg==}
     engines: {node: '>=10.18.1'}
     dependencies:
       debug: 4.3.4
-      devtools-protocol: 0.0.869402
+      devtools-protocol: 0.0.842839
       extract-zip: 2.0.1
       https-proxy-agent: 5.0.1
       node-fetch: 2.6.12
