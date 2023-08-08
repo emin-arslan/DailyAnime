@@ -36,7 +36,7 @@ async function setAnimeDatas () {
       imageUrl:"bilinmez",
       episode:"String",
       source:"String",
-      watchLink:"String",
+      watchLink:"String98",
     })
   } catch (error) {
     await Anime.insertMany({
