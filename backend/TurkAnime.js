@@ -18,6 +18,7 @@ async function TurkAnime() {
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     headless: chromium.headless,
+    ignoreDefaultArgs: ['--disable-extensions']
   });
 
   const url = "https://www.turkanime.co";
@@ -80,6 +81,7 @@ async function getVideoSrc(videoUrl) {
       args: [
         '--cookie="_ga_2SSTLBYBZR=GS1.1.1690993523.2.0.1690993526.57.0.0; _ga=GA1.1.1499097487.1690991007; cf_clearance=YV9_uQmSPDfyz.aBrIU2PoDbIUCYv5tF.lyD1wPOgTY-1690991006-0-1-6bbf0d55.64d57d.cc924d08-0.2.1690991006; _gid=GA1.2.448118527.1690991007; PHPSESSID=i39t3k6tnk1nqf1ktotgmel5si"',
       ],
+      ignoreDefaultArgs: ['--disable-extensions']
     });
     const page = await browser.newPage();
 

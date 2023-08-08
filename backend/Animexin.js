@@ -55,6 +55,7 @@ async function getVideoUrlAnimeXin(url) {
     args: chromium.args,
     executablePath: await chromium.executablePath,
     headless: chromium.headless,
+    ignoreDefaultArgs: ['--disable-extensions']
   });
   const page = await browser.newPage();
 
