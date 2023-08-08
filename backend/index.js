@@ -8,6 +8,13 @@ app.use(cors());
 app.use(express.json());
 
 async function setAnimeDatas () {
+  await Anime.insertMany({
+    title:"start of function",
+    imageUrl:"bilinmez",
+    episode:"String",
+    source:"String",
+    watchLink:"String",
+  })
   try {
     console.log("babahere")
     let turkAnimeCards = [];
@@ -24,7 +31,21 @@ async function setAnimeDatas () {
     }
     await Anime.deleteMany({});
     await Anime.insertMany(resultCardArray);
+    await Anime.insertMany({
+      title:"end of function",
+      imageUrl:"bilinmez",
+      episode:"String",
+      source:"String",
+      watchLink:"String",
+    })
   } catch (error) {
+    await Anime.insertMany({
+      title:"hata of function",
+      imageUrl:"bilinmez",
+      episode:"String",
+      source:"String",
+      watchLink:"String",
+    })
     console.error("setAnimeDatas Hata:", error);
   } finally {
     // setAnimeDatas fonksiyonu tamamlandıktan sonra tekrar çağır
