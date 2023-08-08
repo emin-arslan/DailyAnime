@@ -8,8 +8,8 @@ dependencies:
     specifier: 1.0.0-rc.12
     version: 1.0.0-rc.12
   chrome-aws-lambda:
-    specifier: ^10.1.0
-    version: 10.1.0(puppeteer-core@21.0.1)
+    specifier: ^9.1.0
+    version: 9.1.0(puppeteer-core@21.0.1)
   cors:
     specifier: ^2.8.5
     version: 2.8.5
@@ -293,11 +293,11 @@ packages:
       parse5-htmlparser2-tree-adapter: 7.0.0
     dev: false
 
-  /chrome-aws-lambda@10.1.0(puppeteer-core@21.0.1):
-    resolution: {integrity: sha512-NZQVf+J4kqG4sVhRm3WNmOfzY0OtTSm+S8rg77pwePa9RCYHzhnzRs8YvNI6L9tALIW6RpmefWiPURt3vURXcw==}
+  /chrome-aws-lambda@9.1.0(puppeteer-core@21.0.1):
+    resolution: {integrity: sha512-y6MOarSzL5LmDv8sWUdDe4wHuAAEeWMlCbLwmL6Bj+pBPava37UuEPbWD5YAXyJx6oHoC0efLGqYDi56k4KMUQ==}
     engines: {node: '>= 10.16'}
     peerDependencies:
-      puppeteer-core: ^10.1.0
+      puppeteer-core: ^9.1.0
     dependencies:
       lambdafs: 2.1.1
       puppeteer-core: 21.0.1
