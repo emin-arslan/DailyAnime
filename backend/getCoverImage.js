@@ -1,4 +1,5 @@
-const puppeteer = require("puppeteer");
+const chromium = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 
 const baseUrl = "https://myanimelist.net/search/all?q=";
 
