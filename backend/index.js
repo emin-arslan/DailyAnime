@@ -49,11 +49,11 @@ async function setAnimeDatas () {
     console.error("setAnimeDatas Hata:", error);
   } finally {
     // setAnimeDatas fonksiyonu tamamlandıktan sonra tekrar çağır
-    setTimeout(setAnimeDatas, 200000); // Her 5 dakikada bir (300000 ms) setAnimeDatas fonksiyonunu çağırır
+    //setTimeout(setAnimeDatas, 200000); // Her 5 dakikada bir (300000 ms) setAnimeDatas fonksiyonunu çağırır
   }
 }
 
-setAnimeDatas(); // İlk kez başlatmak için setAnimeDatas fonksiyonunu çağır
+//setAnimeDatas(); // İlk kez başlatmak için setAnimeDatas fonksiyonunu çağır
 
 app.get("/animeCards", async (req, resp) => {
   setAnimeDatas();
