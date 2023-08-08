@@ -10,7 +10,13 @@ async function getCoverImage(searchTerm) {
     try {
       const url = baseUrl + encodeURIComponent(searchTerm);
 
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        executablePath: await chromium.executablePath, // executablePath belirtin
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        headless: chromium.headless,
+        ignoreDefaultArgs: ['--disable-extensions']
+      });
       const page = await browser.newPage();
       await page.goto(url);
 
