@@ -46,7 +46,6 @@ async function TurkAnime() {
       el.getAttribute("href")
     );
     
-    // ... Diğer verileri çekme işlemleri ...
 
     const videoUrl = await getVideoSrc(link);
     const orginalImageUrl = await getCoverImage(title.match(/^(.*?)(?=\d+\.\s)/)[0]);
