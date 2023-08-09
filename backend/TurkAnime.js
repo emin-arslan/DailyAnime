@@ -14,11 +14,11 @@ function extractEpisodeNumber(text) {
 
 async function TurkAnime() {
   const browser = await puppeteer.launch({
-    executablePath: await chromium.executablePath, // executablePath belirtin
-    args: chromium.args,
+    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
     defaultViewport: chromium.defaultViewport,
-    headless: chromium.headless,
-    ignoreDefaultArgs: ['--disable-extensions']
+    executablePath: await chromium.executablePath,
+    headless: true,
+    ignoreHTTPSErrors: true,
   });
 
   const url = "https://www.turkanime.co";
@@ -77,11 +77,11 @@ async function getVideoSrc(videoUrl) {
 
   try {
     const browser = await puppeteer.launch({
-      executablePath: await chromium.executablePath, // executablePath belirtin
-      args: chromium.args,
+      args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
       defaultViewport: chromium.defaultViewport,
-      headless: chromium.headless,
-      ignoreDefaultArgs: ['--disable-extensions']
+      executablePath: await chromium.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
 

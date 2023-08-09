@@ -52,10 +52,11 @@ async function AnimeXin(url = "https://animexin.vip/") {
 
 async function getVideoUrlAnimeXin(url) {
   const browser = await puppeteer.launch({
-    args: chromium.args,
+    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+    defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath,
-    headless: chromium.headless,
-    ignoreDefaultArgs: ['--disable-extensions']
+    headless: true,
+    ignoreHTTPSErrors: true,
   });
   const page = await browser.newPage();
 
