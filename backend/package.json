@@ -18,6 +18,6 @@
     "supervisor": "^0.12.0"
   },
   "engines": {
-    "node": "^14"
+    "node": "^18.x"
   }
 }
