@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
+const puppeteer = require("puppeteer")
 
 async function AnimeXin(url = "https://animexin.vip/") {
   const animeCards = [];
@@ -50,11 +51,7 @@ async function AnimeXin(url = "https://animexin.vip/") {
 
 async function getVideoUrlAnimeXin(url) {
   const browser = await puppeteer.launch({
-    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
     headless: true,
-    ignoreHTTPSErrors: true,
   });
   const page = await browser.newPage();
 

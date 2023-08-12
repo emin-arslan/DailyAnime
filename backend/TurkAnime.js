@@ -1,4 +1,5 @@
 const getCoverImage = require("./getCoverImage");
+const puppeteer = require("puppeteer")
 
 function extractEpisodeNumber(text) {
   const regex = /(\d{1,3})\.\s*Bölüm/i;
@@ -12,11 +13,7 @@ function extractEpisodeNumber(text) {
 
 async function TurkAnime() {
   const browser = await puppeteer.launch({
-    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
     headless: true,
-    ignoreHTTPSErrors: true,
   });
 
   const url = "https://www.turkanime.co";
@@ -75,11 +72,7 @@ async function getVideoSrc(videoUrl) {
 
   try {
     const browser = await puppeteer.launch({
-      args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
       headless: true,
-      ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
 
