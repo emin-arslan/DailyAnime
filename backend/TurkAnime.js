@@ -22,7 +22,6 @@ async function TurkAnime() {
 
   const url = "https://www.turkanime.co";
   const page = await browser.newPage();
-  const cookies = [{}];
   console.log("sea");
   await page.goto(url);
   console.log("ase");
