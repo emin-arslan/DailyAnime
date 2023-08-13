@@ -60,4 +60,4 @@ app.get("/animeCards", async (req, resp) => {
   resp.status(200).json({ body: await Anime.find({}) });
 });
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);

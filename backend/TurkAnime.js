@@ -13,7 +13,10 @@ function extractEpisodeNumber(text) {
 
 async function TurkAnime() {
   const browser = await puppeteer.launch({
-    headless: true,
+    args:[
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+    ]
   });
 
   const url = "https://www.turkanime.co";
@@ -72,7 +75,10 @@ async function getVideoSrc(videoUrl) {
 
   try {
     const browser = await puppeteer.launch({
-      headless: true,
+      args:[
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ]
     });
     const page = await browser.newPage();
 
