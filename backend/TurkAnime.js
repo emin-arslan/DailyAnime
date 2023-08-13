@@ -1,6 +1,6 @@
 const getCoverImage = require("./getCoverImage");
-const puppeteer = require("puppeteer")
-
+const puppeteer = require("puppeteer-core")
+const chromium = require('chrome-aws-lambda');
 function extractEpisodeNumber(text) {
   const regex = /(\d{1,3})\.\s*Bölüm/i;
   const match = text.match(regex);
@@ -12,11 +12,12 @@ function extractEpisodeNumber(text) {
 }
 
 async function TurkAnime() {
-  const browser = await puppeteer.launch({
-    args:[
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
-    ]
+  const browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
   });
 
   const url = "https://www.turkanime.co";
@@ -74,11 +75,12 @@ async function getVideoSrc(videoUrl) {
   const url = videoUrl;
 
   try {
-    const browser = await puppeteer.launch({
-      args:[
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-      ]
+    const browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
 

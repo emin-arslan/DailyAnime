@@ -1,6 +1,6 @@
 
-const puppeteer = require("puppeteer");
-
+const puppeteer = require("puppeteer-core")
+const chromium = require("chrome-aws-lambda")
 const baseUrl = "https://myanimelist.net/search/all?q=";
 
 async function getCoverImage(searchTerm) {
@@ -11,11 +11,12 @@ async function getCoverImage(searchTerm) {
     try {
       const url = baseUrl + encodeURIComponent(searchTerm);
 
-      const browser = await puppeteer.launch({
-        args:[
-          '--no-sandbox',
-          '--disable-setuid-sandbox'
-        ]
+      const browser = await chromium.puppeteer.launch({
+        args: chromium.args,
+          defaultViewport: chromium.defaultViewport,
+          executablePath: await chromium.executablePath,
+          headless: chromium.headless,
+          ignoreHTTPSErrors: true,
       });
       const page = await browser.newPage();
       await page.goto(url);

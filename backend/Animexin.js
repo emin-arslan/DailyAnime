@@ -1,7 +1,7 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const puppeteer = require("puppeteer")
-
+const puppeteer = require("puppeteer-core")
+const chromium = require("chrome-aws-lambda")
 async function AnimeXin(url = "https://animexin.vip/") {
   const animeCards = [];
 
@@ -50,12 +50,14 @@ async function AnimeXin(url = "https://animexin.vip/") {
 }
 
 async function getVideoUrlAnimeXin(url) {
-  const browser = await puppeteer.launch({
-    args:[
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
-    ]
+  const browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
   });
+
   const page = await browser.newPage();
 
   let maxRetryCount = 3; // En fazla 3 kez tekrar deneme yapacak
