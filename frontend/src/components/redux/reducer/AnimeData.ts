@@ -10,6 +10,7 @@ interface IState {
 const initialState: IState = {
   cards: [
     {
+      _id:"0",
       title:"sa",
       imageUrl:"sa",
       videoUrl:"asda",

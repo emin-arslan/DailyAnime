@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import AnimeCardState from "./components/redux/state/AnimeCardState";
 import Navi from "./components/navi/Navi";
 import Player from "./components/Player";
+import Star from "./components/Star";
 
 interface IState {
   cards: AnimeCardState[]
@@ -13,9 +14,24 @@ interface IAnime {
 }
 
 function App() {
+  const favoriAnimes = localStorage.getItem("favoriAnimes");
+  if(!favoriAnimes)
+  {
+    let animeArray:string[] = []
+    localStorage.setItem("favoriAnimes",JSON.stringify(animeArray))
+  }
+
+
   const animeCards: IAnime = useSelector((state: IAnime) => state);
   const [modal, setModal] = useState(false)
   const [video, setVideo] = useState("")
+
+
+  const addWatchedEpisode = (anime: AnimeCardState) => {
+    setVideo(anime.videoUrl)
+    setModal(true)
+    
+  }
   return (
     <div className="w-full  relative transition-all">
       <Player modal={modal} video={video} setModal={setModal} />
@@ -36,16 +52,14 @@ function App() {
                   const color = card.source == "Chinese" ? "from-green-900" : "from-red-900"
                   return (
                     <div className="max-w-[220px]">
-
                       <div className="relative hover:cursor-pointer hover:z-20 hover:scale-[1.17] transition-all ">
                         <img onClick={() => {
-                          setVideo(card.videoUrl)
-                          setModal(true)
+                          addWatchedEpisode(card)
                         }} alt="resim" src={card.imageUrl} className="w-full h-72 rounded-xl "></img>
 
                         <div className="absolute space-y-2 font-poppins bg-[rgba(48,57,73,.6)] rounded-b-xl  bottom-0 text-sm font-semibold  p-2 py-3 w-full text-gray-100 bg-gradient-to-t  from-black">
                           <div className="">
-                            <p className="text-md line-clamp-1 w-full font-light">{card.title}</p>
+                            <p className="text-md line-clamp-1 w-full font-light">{card.title}  </p>
                           </div>
                           <div className="w-full flex">
                             <div className="w-6/12 font-light text-orange-300"> <span>Turkish</span> </div>
@@ -57,7 +71,10 @@ function App() {
 
                         <div
                           onClick={() => window.open(card.watchLink, "_blank")} className={`absolute top-0 right-0 p-1 px-2 bg-gradient-to-b  z-0 text-xs text-white ${color} hover:animate-pulse font-semibold rounded-tr-xl`}>{card.source}</div>
-
+                        <div  className="absolute top-1 left-1"><Star anime={card._id}/> </div>
+                        <div  className="absolute w-full bg-[#07002159] text-center top-[50%]">
+                          <span className="text-gray-400 font-poppins text-xs ">Daha önce izlendi.</span>
+                        </div>
                       </div>
 
                     </div>
