@@ -1,8 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import animeDataReducer from "../reducer/AnimeData"
+import animeReducer from "./AnimeReducer"
 
 const rootReducer = combineReducers({
-    animeDataReducer
+    animeReducer
 });
 
 export default rootReducer;

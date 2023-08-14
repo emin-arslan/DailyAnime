@@ -1,4 +1,4 @@
-export default interface AnimeCardState{
+export interface animeCard{
     _id:string;
     title: string;
     imageUrl: string;
@@ -7,4 +7,10 @@ export default interface AnimeCardState{
     episode:string;
     source:string;
     watchLink:string;
+}
+
+export interface AnimeState {
+    cards: animeCard[];
+    favoriAnimes: any[];
+    watchedAnimes: any[];
 }

@@ -16,11 +16,11 @@ async function AnimeXin(url = "https://animexin.vip/") {
       const subtitle = $(element).find(".sb.Sub").text();
       const imageUrl = $(element).find("img").attr("src");
       const watchLink = $(element).find("a").attr("href");
-
+      const animeName = $(element).find(".eggtitle").text();
       const videoUrl = await getVideoUrlAnimeXin(watchLink);
 
       const animeCard = {
-        title,
+        title: animeName,
         subtitle,
         episode,
         imageUrl,
