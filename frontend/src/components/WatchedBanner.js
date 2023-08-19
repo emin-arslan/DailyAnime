@@ -11,7 +11,10 @@ const WatchedBanner = ({ anime }) => {
       if (found) {
         if (found.animeEpisode !== anime.episode) {
           console.log("hello");
-          return <span className="text-green-200">Yeni Bölüm!</span>;
+          let foundEpisode = found.animeEpisode.match(/Episode (\d+)/)[1]
+          let lastEpisode = anime.episode.match(/Episode (\d+)/)[1]
+
+          return <span className="text-green-200">{ lastEpisode - foundEpisode > 1 ? `${lastEpisode - foundEpisode} Yeni bölüm! Son izlenen: ${foundEpisode}`:"Yeni Bölüm!" }</span>;
         } else if (found.animeEpisode === anime.episode && !found.isWatchedAnime)
           return (
             <span className="text-yellow-400">

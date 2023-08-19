@@ -3,6 +3,7 @@ const axios = require("axios");
 const puppeteer = require("puppeteer")
 
 async function AnimeXin(url = "https://animexin.vip/") {
+  console.log("animeXin içi")
   const animeCards = [];
 
   try {

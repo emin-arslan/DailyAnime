@@ -34,15 +34,16 @@ const HomePage = ({ setVideo, setModal }: any) => {
 
     return (
         <div className="flex justify-center w-full items-center pb-8">
-
             {
                 anime.cards.length ?
                     <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1  min-w-[220px] w-auto  place-content-center ">
                         {
                             anime.cards.map(card => {
+                               
                                 const color = card.source == "Chinese" ? "from-green-900" : "from-red-900"
                                 return (
                                     <div key={card._id} className="max-w-[220px]">
+                                         
                                         <div className="relative hover:cursor-pointer hover:z-20 hover:scale-[1.17] transition-all ">
                                             <img onClick={() => {
                                                 addWatchedEpisode(card)

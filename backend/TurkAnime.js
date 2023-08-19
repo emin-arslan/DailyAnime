@@ -11,10 +11,11 @@ function extractEpisodeNumber(text) {
 }
 
 async function TurkAnime() {
+  console.log("here2")
   const browser = await puppeteer.launch({
     headless: true,
   });
-
+  console.log("here3")
   const url = "https://www.turkanime.co";
   const page = await browser.newPage();
   console.log("sea");
@@ -39,11 +40,16 @@ async function TurkAnime() {
       el.getAttribute("href")
     );
     
-
+    console.log("here99")
     const videoUrl = await getVideoSrc(link);
-    const orginalImageUrl = await getCoverImage(title.match(/^(.*?)(?=\d+\.\s)/)[0]);
+    console.log(await videoUrl)
+    console.log("here101")
+    let orginalImageUrl;
+    let matchedTitle = title.match(/^(.*?)(?=\d+\.\s)/) ? title.match(/^(.*?)(?=\d+\.\s)/)[0] : title
+    orginalImageUrl = await getCoverImage(matchedTitle);
+    console.log("here102")
     const animeCard = {
-      title: title.match(/^(.*?)(?=\d+\.\s)/)[0],
+      title: matchedTitle,
       imageUrl: orginalImageUrl ? orginalImageUrl : imageUrl,
       videoUrl: videoUrl,
       episode: "Episode " + extractEpisodeNumber(title),
@@ -55,7 +61,7 @@ async function TurkAnime() {
   }
 
   await browser.close();
-
+  console.log("here")
   return animeCards;
 }
 
@@ -66,11 +72,11 @@ async function preparePageForTests(page) {
 }
 
 async function getVideoSrc(videoUrl) {
+ 
   const url = videoUrl;
-
   try {
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: true
     });
     const page = await browser.newPage();
 
@@ -95,11 +101,12 @@ async function getVideoSrc(videoUrl) {
     try {
       // Try to find HDVID button
       const hdVidButton = await page.waitForXPath(
-        "//button[contains(., ' HDVID')]",
+        "//button[contains(., ' FILEMOON')]",
         { timeout: 5000 }
       );
       await page.evaluate((button) => button.click(), hdVidButton);
       // Wait for the content to load
+      await page.waitForTimeout(2000);
       const mainIframe = await page.waitForSelector(".video-icerik iframe");
 
       if (mainIframe) {
@@ -110,7 +117,7 @@ async function getVideoSrc(videoUrl) {
         // If HDVID button not found, try FILEMOON
         console.log("HDVID button not found, trying FILEMOON...");
         const filemoonButton = await page.waitForXPath(
-          "//button[contains(., ' FILEMOON')]",
+          "//button[contains(., ' CLONE')]",
           { timeout: 5000 }
         );
         await page.evaluate((button) => button.click(), filemoonButton);
@@ -125,7 +132,7 @@ async function getVideoSrc(videoUrl) {
           // If FILEMOON button not found, try ALUCARD
           console.log("FILEMOON button not found, trying ALUCARD...");
           const alucardButton = await page.waitForXPath(
-            "//button[contains(., ' ALUCARD')]",
+            "//button[contains(., ' MAIL')]",
             { timeout: 5000 }
           );
           await page.evaluate((button) => button.click(), alucardButton);
@@ -151,7 +158,25 @@ async function getVideoSrc(videoUrl) {
               iframeSrc = await mainIframe.evaluate((iframe) => iframe.src);
             }
           } catch (error) {
-            console.log("GDRIVE button not found.");
+            try {
+              // If ALUCARD button not found, try GDRIVE
+              console.log("ALUCARD button not found, trying GDRIVE...");
+              const gdriveButton = await page.waitForXPath(
+                "//button[contains(., ' ODNOKLASSNIKI')]",
+                { timeout: 5000 }
+              );
+              await page.evaluate((button) => button.click(), gdriveButton);
+              // Wait for the content to load
+              const mainIframe = await page.waitForSelector(".video-icerik iframe");
+  
+              if (mainIframe) {
+                iframeSrc = await mainIframe.evaluate((iframe) => iframe.src);
+              }
+            }
+              catch(error)
+              {
+                console.log("hepsi denendi ve hiçbirşey bulunamadı")
+              }
           }
         }
       }
