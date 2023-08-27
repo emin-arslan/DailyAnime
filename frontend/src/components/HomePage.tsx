@@ -36,11 +36,11 @@ const HomePage = ({ setVideo, setModal }: any) => {
         const list = [];
         for (let i = 1; i < 3; i++) {
             list.push(
-                <div className="dark:bg-slate-200 ring-1 ring-slate-200/5 rounded-lg shadow-lg max-w-xs min-w-[220px] h-72 ">
-                    <div className="flex w-full h-full animate-pulse relative justify-start items-end rounded-xl">
+                <div className="dark:bg-slate-200 ring-1 ring-slate-200/5 rounded-lg shadow-lg h-72 max-w-[220px] w-auto">
+                    <div className="flex h-full animate-pulse relative justify-start items-end rounded-xl">
                         <div className='absolute right-0 w-20 h-6 from-gray-500 rounded-b-sm to-gray-300 bg-gradient-to-b top-0 rounded-tr-xl'> </div>
                         <div className='absolute left-0 w-8 h-8 rounded-full bg-gray-400 top-0 ml-1 mt-1'> </div>
-                        <div className='w-full h-20 bg-gray-400 rounded-b-xl flex flex-col p-2'>
+                        <div className='h-20 bg-gray-400 rounded-b-xl flex flex-col p-2 w-[220px]'>
                             <div className='w-14 bg-gray-500 h-3 rounded-md'> </div>
                             <div className='justify-between items-end h-12 flex'>
                                 <div className='w-20 h-4 bg-gray-800/30 rounded-md'></div>
