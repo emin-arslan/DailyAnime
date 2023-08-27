@@ -41,8 +41,8 @@ const HomePage = ({ setVideo, setModal }: any) => {
                         <div className='absolute right-0 w-20 h-6 from-gray-500 rounded-b-sm to-gray-300 bg-gradient-to-b top-0 rounded-tr-xl'> </div>
                         <div className='absolute left-0 w-8 h-8 rounded-full bg-gray-400 top-0 ml-1 mt-1'> </div>
                         <div className='h-20 bg-gray-400 rounded-b-xl flex flex-col p-2 w-[220px]'>
-                            <div className='w-14 bg-gray-500 h-3 rounded-md'> </div>
-                            <div className='justify-between items-end h-12 flex'>
+                            <div className='w-24 bg-gray-500 h-4 rounded-md mt-4'> </div>
+                            <div className='justify-between items-end h-8 flex'>
                                 <div className='w-20 h-4 bg-gray-800/30 rounded-md'></div>
                                 <div className='w-20 h-4 bg-gray-800/30 rounded-md'></div>
                             </div>
