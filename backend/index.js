@@ -56,7 +56,7 @@ async function setAnimeDatas () {
 //setAnimeDatas(); // İlk kez başlatmak için setAnimeDatas fonksiyonunu çağır
 
 app.get("/animeCards", async (req, resp) => {
-  //await setAnimeDatas();
+  await setAnimeDatas();
   resp.status(200).json({ body: await Anime.find({}) });
 });
 
