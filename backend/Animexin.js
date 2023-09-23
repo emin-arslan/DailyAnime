@@ -3,7 +3,9 @@ const axios = require("axios");
 const puppeteer = require("puppeteer");
 const animeCards = []
 async function AnimeXin(url = "https://animexin.vip/") {
-  console.log("here");
+  console.log("animeXin içi");
+  const animeCards = [];
+
   try {
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
@@ -11,7 +13,7 @@ async function AnimeXin(url = "https://animexin.vip/") {
 
     for (const element of articles) {
       const title = $(element).find("h2[itemprop='headline']").text();
-      const episode = $(element).find(".eggepisode").text();
+      const episode = $(element).find(".epx").text();
       const subtitle = $(element).find(".sb.Sub").text();
       const imageUrl = $(element).find("img").attr("src");
       const watchLink = $(element).find("a").attr("href");
@@ -112,7 +114,7 @@ async function getVideoUrlAnimeXin(url) {
       if (currentRetry < maxRetryCount) {
         // Hata alındı, bekleyip tekrar deneme yapalım
         console.log(`Retrying... Attempt ${currentRetry}`);
-        await new Promise(resolve => setTimeout(resolve, 500)); // 3 saniye bekleyelim
+        await new Promise(resolve => setTimeout(resolve, 100)); // 3 saniye bekleyelim
       } else {
         // Max tekrar deneme sayısını aştık, tarayıcıyı kapatıp null döndürelim
         console.log("Max retry count exceeded. Giving up.");

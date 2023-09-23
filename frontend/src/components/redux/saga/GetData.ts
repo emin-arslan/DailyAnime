@@ -2,6 +2,7 @@ import { put } from "redux-saga/effects";
 import { SET_ANIME_DATA } from "../actions/actionTypes";
 
 export function* getCardDatas(): Generator<any, void, any> {
+  console.log('sea')
   try {
     let response = yield fetch("https://daily-animebe.vercel.app/animeCards");
     let reader = response.body.getReader();
