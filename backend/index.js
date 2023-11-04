@@ -19,7 +19,7 @@ async function setAnimeDatas () {
     console.error("setAnimeDatas Hata:", error);
   } finally {
     // setAnimeDatas fonksiyonu tamamlandıktan sonra tekrar çağır
-    setTimeout(setAnimeDatas, 800000); // Her 5 dakikada bir (300000 ms) setAnimeDatas fonksiyonunu çağırır
+    //setTimeout(setAnimeDatas, 2000000); // Her 5 dakikada bir (300000 ms) setAnimeDatas fonksiyonunu çağırır
   }
 }
 
