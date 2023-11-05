@@ -4,7 +4,7 @@ import { SET_ANIME_DATA } from "../actions/actionTypes";
 export function* getCardDatas(): Generator<any, void, any> {
   console.log('sea')
   try {
-    let response = yield fetch("https://anime-daily-b7w3ovdin-emin-arslan.vercel.app/animeCards");
+    let response = yield fetch("https://daily-anime-omega.vercel.app/animeCards");
     let reader = response.body.getReader();
     let result = yield reader.read();
     
