@@ -1,4 +1,4 @@
-import { GET_ANIME_CARDS, REQUEST_SET_FAVORI_ANIMES, SET_ANIME_DATA, SET_WATCHED_ANIMES } from "./actionTypes";
+import { REQUEST_SET_FAVORI_ANIMES, SET_ANIME_DATA, SET_WATCHED_ANIMES } from "./actionTypes";
 import {animeCard} from "../../../types/Anime";
 
 export interface SetAnimeAction {
@@ -12,10 +12,6 @@ export interface updateFavoriAnimes {
 
 export interface updateWatchedAnimes {
   type: typeof SET_WATCHED_ANIMES;
-}
-
-export interface getAnimeData {
-  type: typeof GET_ANIME_CARDS;
 }
 
 
@@ -33,12 +29,6 @@ export const setFavoriAnimes = () : updateFavoriAnimes =>{
   }
 }
 
-export const getAnimeDatas = () : getAnimeData => {
-  console.log('sasadas')
-  return{
-    type:GET_ANIME_CARDS
-  }
-}
 
 export const setWatchedAnimes = () : updateWatchedAnimes =>{
   return{
