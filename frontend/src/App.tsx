@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAnimeDatas } from "./components/redux/actions/action";
 import { getAnimeCards } from "./components/redux/selector";
 import HomePage from "./components/HomePage";
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ function App() {
       <Player modal={modal} video={video} setModal={setModal} />
       <Navi searchTxt={searchTxt} handleSearch={handleSearch} setModal={setModal}/>
       <HomePage setModal={setModal} setVideo={setVideo} filteredAnimes={filteredAnimes} />
+      <Analytics />
     </div>
   );
 }
