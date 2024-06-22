@@ -5,6 +5,5 @@ import { getCardDatas } from "./GetData";
 export function* rootSaga() {
   yield all([
     takeEvery(GET_ANIME_CARDS,getCardDatas)
-    // Add other sagas here if you have more
   ]);
 }

@@ -1,4 +1,4 @@
-export interface animeCard{
+export interface AnimeCard{
     _id:string;
     title: string;
     imageUrl: string;
@@ -10,11 +10,20 @@ export interface animeCard{
 }
 
 export interface AnimeState {
-    cards: animeCard[];
-    favoriAnimes: any[];
-    watchedAnimes: any[];
+    cards: AnimeCard[];
+    favoriAnimes: FavoriteAnimeCard[];
 }
 
 export interface IState {
     animeReducer: AnimeState
+}
+
+export interface FavoriteAnimeCard extends AnimeCard {
+    isWatchedAnime: boolean;
+}
+
+export interface HomePageProps {
+    setVideo: (arg1:string) => void;
+    setModal: (arg1:boolean) => void;
+    filteredAnimes: AnimeCard[];
 }

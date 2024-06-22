@@ -15,7 +15,3 @@ export const getFavoriAnimes = createSelector(
   (animes) => animes.favoriAnimes
 );
 
-export const getWatchedAnimes = createSelector(
-  [selectAnimes],
-  (animes) => animes.watchedAnimes
-);

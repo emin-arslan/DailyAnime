@@ -1,26 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import IconSVG from "../icons/IconSVG";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setFavoriAnimes } from "./redux/actions/action";
 
-const Star = ({ fill, animeTitle, animeEpisode, isWatchedAnime }) => {
+const Star = ({ fill, anime}) => {
   const dispacth = useDispatch();
-  const anime = {
-    animeTitle,
-    animeEpisode,
-    isWatchedAnime,
-  };
 
-  const setFavoriAnime = (anime) => {
+  const FavoriteAnime = (anime) => {
     const getItems = localStorage.getItem("favoriAnimes");
     if (getItems) {
       let array = Array.from(JSON.parse(getItems));
       const found = array.find(
-        (animeCard) => animeCard.animeTitle === anime.animeTitle
+        (animeCard) => animeCard.title === anime.title
       );
       if (found) {
-        console.log("girdi")
-        const tempArray = array.filter((e) => e.animeTitle !== anime.animeTitle);
+        const tempArray = array.filter((e) => e.title !== anime.title);
         localStorage.setItem("favoriAnimes", JSON.stringify(tempArray));
       }
       else
@@ -30,26 +24,12 @@ const Star = ({ fill, animeTitle, animeEpisode, isWatchedAnime }) => {
       }
     }
     dispacth(setFavoriAnimes());
-    // if (getItems) {
-    //   let array = Array.from(JSON.parse(getItems));
-
-    //   if (array.indexOf(anime) < 0) {
-    //     
-    //   } else {
-    //     const tempArray = array.filter((e) => e !== anime);
-    //     localStorage.setItem("favoriAnimes", JSON.stringify(tempArray));
-    //   }
-    // } else {
-    //   let favoriAnimes = [anime];
-    //   localStorage.setItem("favoriAnimes", JSON.stringify(favoriAnimes));
-    // }
-    // dispacth(setFavoriAnimes());
   };
 
   return (
     <div className="w-10 h-10 centered-items z-50 select-none">
       <div
-        onClick={() => setFavoriAnime(anime)}
+        onClick={() => FavoriteAnime(anime)}
         className={`w-8 h-8 rounded-full h-cursor-p hover:animate-pulse flex items-center justify-center transition-all ${
           fill
             ? "active:bg-[#f3b12e9e] dark:active:bg-[#f3b12e9e]"

@@ -1,38 +1,39 @@
-import React from 'react'
-import { AnimeState, IState, animeCard } from '../types/Anime'
+import { AnimeCard, FavoriteAnimeCard, HomePageProps } from '../types/Anime'
 import { useDispatch, useSelector } from 'react-redux'
 import Star from './Star'
 import WatchedBanner from './WatchedBanner'
 import { setFavoriAnimes } from './redux/actions/action'
-import { getAnimeCards, getFavoriAnimes, getWatchedAnimes } from './redux/selector'
+import { getAnimeCards, getFavoriAnimes } from './redux/selector'
 
-const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: any) => {
+const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: HomePageProps) => {
 
     let cards = useSelector(getAnimeCards);
     const favoriAnimes = useSelector(getFavoriAnimes);
-    const watchedAnimes = useSelector(getWatchedAnimes);
 
     const dispatch = useDispatch();
     cards = filteredAnimes.length > 0 ? filteredAnimes : cards
 
-    console.log("Filtered Array", filteredAnimes);
-    const addWatchedEpisode = (animeData: animeCard) => {
-        if (favoriAnimes) {
-            const found = favoriAnimes.findIndex((animeCard: any) => animeCard.animeTitle === animeData.title)
-            if (found !== -1) {
-                let tempAnimeCard = {
-                    animeTitle: animeData.title,
-                    animeEpisode: animeData.episode,
-                    isWatchedAnime: true,
-                }
-                let tempArray = favoriAnimes;
-                tempArray[found] = tempAnimeCard;
-                localStorage.setItem("favoriAnimes", JSON.stringify(tempArray))
-                dispatch(setFavoriAnimes())
-            }
+    const addWatchedEpisode = (animeData: AnimeCard) => {
+
+        const found = favoriAnimes.findIndex((animeCard: FavoriteAnimeCard ) => animeCard.title === animeData.title)
+        if(found === -1)
+        {
+            return;
         }
-        setVideo(animeData.videoUrl)
-        setModal(true)
+        let tempAnimeCard = {
+            ...animeData,
+            isWatchedAnime: true
+        }
+        let tempArray = favoriAnimes;
+        tempArray[found] = tempAnimeCard;
+        localStorage.setItem("favoriAnimes", JSON.stringify(tempArray))
+        dispatch(setFavoriAnimes())
+    }
+
+    const startAnimePlayer = (animeData: AnimeCard) =>{
+        setVideo(animeData.videoUrl);
+        setModal(true);
+        addWatchedEpisode(animeData);
     }
 
     const handleWaitForDatas = () => {
@@ -52,7 +53,8 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: any) => {
                         </div>
 
                     </div>
-                </div>)
+                </div>
+            )
 
         }
         return <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1  min-w-[220px] w-auto  place-content-center ">{list}</div>
@@ -65,17 +67,16 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: any) => {
                     <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1  min-w-[220px] w-auto  place-content-center ">
                         {
                             cards.map(card => {
-
                                 const color = card.source === "Chinese" ? "from-green-900" : "from-red-900"
+
                                 return (
                                     <div key={card._id} className="max-w-[220px]">
-
                                         <div className="relative hover:cursor-pointer hover:z-20 hover:scale-[1.17] transition-all ">
                                             <img onClick={() => {
-                                                addWatchedEpisode(card)
-                                            }} alt="resim" src={card.imageUrl} className="w-full h-72 rounded-xl "></img>
+                                                startAnimePlayer(card)
+                                            }} alt="resim" src={card.imageUrl} className="w-full h-72 rounded-xl" />
                                             <div className="absolute space-y-2 font-poppins bg-[rgba(48,57,73,.6)] rounded-b-xl  bottom-0 text-sm font-semibold  p-2 py-3 w-full text-gray-100 bg-gradient-to-t  from-black">
-                                                <div className="">
+                                                <div>
                                                     <p className="text-md line-clamp-1 w-full font-light">{card.title}  </p>
                                                 </div>
                                                 <div className="w-full flex">
@@ -85,15 +86,15 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: any) => {
                                             </div>
                                             <div
                                                 onClick={() => window.open(card.watchLink, "_blank")} className={`absolute top-0 right-0 p-1 px-2 bg-gradient-to-b  z-0 text-xs text-white ${color} hover:animate-pulse font-semibold rounded-tr-xl`}>{card.source}</div>
-                                            <div className="absolute top-1 left-1"><Star fill={favoriAnimes.find((animeCard) => animeCard.animeTitle === card.title)} animeTitle={card.title} animeEpisode={card.episode} isWatchedAnime={false} /> </div>
+                                            <div className="absolute top-1 left-1"><Star fill={favoriAnimes.find((animeCard) => animeCard.title === card.title)} anime={card} /> </div>
                                             <WatchedBanner anime={card} />
                                         </div>
-
                                     </div>
                                 )
                             })
                         }
-                    </div> : handleWaitForDatas()
+                    </div>
+                : handleWaitForDatas()
             }
         </div>
     )

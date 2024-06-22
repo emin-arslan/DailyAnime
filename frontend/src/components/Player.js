@@ -1,25 +1,30 @@
 import React, { useEffect } from "react";
 
 const Player = (props) => {
+
   useEffect(() => {
     const handleBackButton = (event) => {
       event.preventDefault();
       props.setModal(false)
     };
 
-    if (props.modal) {
-      // Modal açıkken geri tuşuna basıldığında handleBackButton fonksiyonu çağrılacak.
+    if (props.modal) 
+    {
       window.history.pushState(null, null, window.location.href);
       window.addEventListener('popstate', handleBackButton);
-    } else {
+    } 
+    else 
+    {
       window.removeEventListener('popstate', handleBackButton);
     }
 
     return () => {
       window.removeEventListener('popstate', handleBackButton);
     };
-  }, [props.modal]);
+  }, [props, props.modal]);
+
   if (!props.modal) return null;
+
   return (
     <div className="items-center justify-center sticky top-0 z-50">
       

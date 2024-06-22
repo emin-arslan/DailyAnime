@@ -1,21 +1,21 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { getFavoriAnimes } from "./redux/selector";
 
 const WatchedBanner = ({ anime }) => {
-  const favoriAnimes = useSelector((state) => state.animeReducer.favoriAnimes);
+  const favoriAnimes = useSelector(getFavoriAnimes);
   const checkIsWatchedEpisode = () => {
     if (favoriAnimes) {
       const found = favoriAnimes.find(
-        (animeCard) => animeCard.animeTitle === anime.title
+        (animeCard) => animeCard.title === anime.title
       );
       if (found) {
-        if (found.animeEpisode !== anime.episode) {
-          console.log("hello");
-          let foundEpisode = found.animeEpisode.match(/Episode (\d+)/)[1]
+        if (found.episode !== anime.episode) {
+          let foundEpisode = found.episode.match(/Episode (\d+)/)[1]
           let lastEpisode = anime.episode.match(/Episode (\d+)/)[1]
 
           return <span className="text-green-200">{ lastEpisode - foundEpisode > 1 ? `${lastEpisode - foundEpisode} Yeni bölüm! Son izlenen: ${foundEpisode}`:"Yeni Bölüm!" }</span>;
-        } else if (found.animeEpisode === anime.episode && !found.isWatchedAnime)
+        } else if (found.episode === anime.episode && !found.isWatchedAnime)
           return (
             <span className="text-yellow-400">
               Favori animen! Henüz izlemedin.

@@ -14,13 +14,13 @@ function App() {
   
   const anime = useSelector(getAnimeCards);
 
-  const handleSearch = (e:any) => {
+  const handleSearch = (e:React.ChangeEvent<HTMLInputElement>) => {
     setSearchTxt(e.target.value);
   }
 
   useEffect(()=>{
     dispatch(getAnimeDatas());
-  },[])
+  },[dispatch])
 
   const filteredAnimes = searchTxt.length > 0 ? anime.filter((animeItem) => animeItem.title.toLowerCase().includes(searchTxt.toLowerCase())) : [];
 
