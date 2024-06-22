@@ -27,9 +27,9 @@ const Star = ({ fill, anime}) => {
   };
 
   return (
-    <div className="w-10 h-10 centered-items z-50 select-none">
+    <div className="w-10 h-10 centered-items z-50 select-none hover:cursor-pointer">
       <div
-        onClick={() => FavoriteAnime(anime)}
+        onClick={(e) => {FavoriteAnime(anime); e.stopPropagation();}}
         className={`w-8 h-8 rounded-full h-cursor-p hover:animate-pulse flex items-center justify-center transition-all ${
           fill
             ? "active:bg-[#f3b12e9e] dark:active:bg-[#f3b12e9e]"

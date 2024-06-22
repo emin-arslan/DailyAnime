@@ -6,35 +6,28 @@ import { setFavoriAnimes } from './redux/actions/action'
 import { getAnimeCards, getFavoriAnimes } from './redux/selector'
 
 const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: HomePageProps) => {
-
     let cards = useSelector(getAnimeCards);
     const favoriAnimes = useSelector(getFavoriAnimes);
 
     const dispatch = useDispatch();
-    cards = filteredAnimes.length > 0 ? filteredAnimes : cards
+    cards = filteredAnimes.length > 0 ? filteredAnimes : cards;
 
     const addWatchedEpisode = (animeData: AnimeCard) => {
-
-        const found = favoriAnimes.findIndex((animeCard: FavoriteAnimeCard ) => animeCard.title === animeData.title)
-        if(found === -1)
-        {
-            return;
+        const found = favoriAnimes.findIndex((animeCard: FavoriteAnimeCard) => animeCard.title === animeData.title);
+        if (found !== -1) {
+            let tempAnimeCard = {...animeData, isWatchedAnime: true};
+            let tempArray = [...favoriAnimes];
+            tempArray[found] = tempAnimeCard;
+            localStorage.setItem("favoriAnimes", JSON.stringify(tempArray));
+            dispatch(setFavoriAnimes());
         }
-        let tempAnimeCard = {
-            ...animeData,
-            isWatchedAnime: true
-        }
-        let tempArray = favoriAnimes;
-        tempArray[found] = tempAnimeCard;
-        localStorage.setItem("favoriAnimes", JSON.stringify(tempArray))
-        dispatch(setFavoriAnimes())
-    }
+    };
 
-    const startAnimePlayer = (animeData: AnimeCard) =>{
+    const startAnimePlayer = (animeData: AnimeCard) => {
         setVideo(animeData.videoUrl);
         setModal(true);
         addWatchedEpisode(animeData);
-    }
+    };
 
     const handleWaitForDatas = () => {
         const list = [];
@@ -55,49 +48,40 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: HomePageProps) =>
                     </div>
                 </div>
             )
-
+    
         }
         return <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1  min-w-[220px] w-auto  place-content-center ">{list}</div>
     }
-
+    
     return (
-        <div className="flex justify-center w-full items-center pb-8">
+        <div className="flex justify-center w-full items-center bg-gray-900 text-white py-8">
             {
                 cards.length ?
-                    <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1  min-w-[220px] w-auto  place-content-center ">
-                        {
-                            cards.map(card => {
-                                const color = card.source === "Chinese" ? "from-green-900" : "from-red-900"
-
-                                return (
-                                    <div key={card._id} className="max-w-[220px]">
-                                        <div className="relative hover:cursor-pointer hover:z-20 hover:scale-[1.17] transition-all ">
-                                            <img onClick={() => {
-                                                startAnimePlayer(card)
-                                            }} alt="resim" src={card.imageUrl} className="w-full h-72 rounded-xl" />
-                                            <div className="absolute space-y-2 font-poppins bg-[rgba(48,57,73,.6)] rounded-b-xl  bottom-0 text-sm font-semibold  p-2 py-3 w-full text-gray-100 bg-gradient-to-t  from-black">
-                                                <div>
-                                                    <p className="text-md line-clamp-1 w-full font-light">{card.title}  </p>
-                                                </div>
-                                                <div className="w-full flex">
-                                                    <div className="w-6/12 font-light text-orange-300"> <span>Turkish</span> </div>
-                                                    <div className="w-6/12 flex justify-end font-light text-xs items-center text-blue-300"> <span>{card.episode}</span></div>
-                                                </div>
-                                            </div>
-                                            <div
-                                                onClick={() => window.open(card.watchLink, "_blank")} className={`absolute top-0 right-0 p-1 px-2 bg-gradient-to-b  z-0 text-xs text-white ${color} hover:animate-pulse font-semibold rounded-tr-xl`}>{card.source}</div>
-                                            <div className="absolute top-1 left-1"><Star fill={favoriAnimes.find((animeCard) => animeCard.title === card.title)} anime={card} /> </div>
-                                            <WatchedBanner anime={card} />
-                                        </div>
+                    <div className="grid grid-cols-6 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4 px-4">
+                        {cards.map((card) => (
+                            <div key={card._id} className="relative group">
+                                <img onClick={() => startAnimePlayer(card)} alt="AnimeImage" src={card.imageUrl} className="w-full h-72 rounded-xl transition duration-500 ease-in-out transform group-hover:scale-105" />
+                                <div onClick={() => startAnimePlayer(card)} className="absolute inset-0 flex flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                                    <p className="text-lg font-bold truncate">{card.title}</p>
+                                    <p className="text-sm">{`Episode: ${card.episode}`}</p>
+                                    <div className="flex justify-between items-center pt-2">
+                                        <span onClick={(e) => {
+                                            e.stopPropagation();
+                                            window.open(card.watchLink, "_blank");
+                                        }} className="bg-blue-500 text-xs hover:cursor-pointer rounded-full px-2 py-1 opacity-90">{card.source}</span>
+                                        <Star fill={favoriAnimes.some((animeCard) => animeCard.title === card.title)} anime={card} />
                                     </div>
-                                )
-                            })
-                        }
+                                </div>
+                                <WatchedBanner anime={card} />
+                            </div>
+                        ))}
                     </div>
                 : handleWaitForDatas()
             }
         </div>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;
+
+
