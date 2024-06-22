@@ -1,23 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navi from "./components/navi/Navi";
 import Player from "./components/Player";
 import HomePage from "./components/HomePage";
-import { useDispatch } from "react-redux";
-import { GET_ANIME_CARDS } from "./components/redux/actions/actionTypes";
+import { useDispatch, useSelector } from "react-redux";
 import { getAnimeDatas } from "./components/redux/actions/action";
+import { getAnimeCards } from "./components/redux/selector";
 
 function App() {
   const dispatch = useDispatch();
   const [video, setVideo] = useState("")
   const [modal, setModal] = useState(false)
+  const [searchTxt, setSearchTxt] = useState("");
+  
+  const anime = useSelector(getAnimeCards);
+
+  const handleSearch = (e:any) => {
+    setSearchTxt(e.target.value);
+  }
+
+  useEffect(()=>{
+    dispatch(getAnimeDatas());
+  },[])
+
+  const filteredAnimes = searchTxt.length > 0 ? anime.filter((animeItem) => animeItem.title.toLowerCase().includes(searchTxt.toLowerCase())) : [];
+
   const favoriAnimes = localStorage.getItem("favoriAnimes");
+
   !favoriAnimes && localStorage.setItem("favoriAnimes", JSON.stringify([]));
-  dispatch(getAnimeDatas());
+
   return (
     <div className="w-full relative transition-all">
       <Player modal={modal} video={video} setModal={setModal} />
-      <Navi />
-      <HomePage setModal={setModal} setVideo={setVideo} />
+      <Navi searchTxt={searchTxt} handleSearch={handleSearch}/>
+      <HomePage setModal={setModal} setVideo={setVideo} filteredAnimes={filteredAnimes} />
     </div>
   );
 }

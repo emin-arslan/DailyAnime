@@ -34,7 +34,6 @@ export const setFavoriAnimes = () : updateFavoriAnimes =>{
 }
 
 export const getAnimeDatas = () : getAnimeData => {
-  console.log('sasadas')
   return{
     type:GET_ANIME_CARDS
   }

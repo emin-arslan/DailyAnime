@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-const Navi = () => {
+const Navi = ({searchTxt, handleSearch}) => {
   return (
     <div className="w-full drop-shadow-md bg-white sticky top-0 z-30">
       <div className=" min-w-fit ">
@@ -9,6 +9,10 @@ const Navi = () => {
           </span>
           
         </div>
+        <input 
+        value={searchTxt}
+        onChange={handleSearch}
+        ></input>
       </div>
     </div>
   );

@@ -14,3 +14,7 @@ export interface AnimeState {
     favoriAnimes: any[];
     watchedAnimes: any[];
 }
+
+export interface IState {
+    animeReducer: AnimeState
+}

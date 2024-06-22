@@ -1,28 +1,31 @@
 import React from 'react'
-import { AnimeState, animeCard } from '../types/Anime'
+import { AnimeState, IState, animeCard } from '../types/Anime'
 import { useDispatch, useSelector } from 'react-redux'
 import Star from './Star'
 import WatchedBanner from './WatchedBanner'
 import { setFavoriAnimes } from './redux/actions/action'
+import { getAnimeCards, getFavoriAnimes, getWatchedAnimes } from './redux/selector'
 
-interface IState {
-    animeReducer: AnimeState
-}
+const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: any) => {
 
-const HomePage = ({ setVideo, setModal }: any) => {
+    let cards = useSelector(getAnimeCards);
+    const favoriAnimes = useSelector(getFavoriAnimes);
+    const watchedAnimes = useSelector(getWatchedAnimes);
+
     const dispatch = useDispatch();
-    const anime: AnimeState = useSelector((state: IState) => state.animeReducer);
+    cards = filteredAnimes.length > 0 ? filteredAnimes : cards
 
+    console.log("Filtered Array", filteredAnimes);
     const addWatchedEpisode = (animeData: animeCard) => {
-        if (anime.favoriAnimes) {
-            const found = anime.favoriAnimes.findIndex((animeCard: any) => animeCard.animeTitle === animeData.title)
+        if (favoriAnimes) {
+            const found = favoriAnimes.findIndex((animeCard: any) => animeCard.animeTitle === animeData.title)
             if (found !== -1) {
                 let tempAnimeCard = {
                     animeTitle: animeData.title,
                     animeEpisode: animeData.episode,
                     isWatchedAnime: true,
                 }
-                let tempArray = anime.favoriAnimes;
+                let tempArray = favoriAnimes;
                 tempArray[found] = tempAnimeCard;
                 localStorage.setItem("favoriAnimes", JSON.stringify(tempArray))
                 dispatch(setFavoriAnimes())
@@ -58,10 +61,10 @@ const HomePage = ({ setVideo, setModal }: any) => {
     return (
         <div className="flex justify-center w-full items-center pb-8">
             {
-                anime.cards.length ?
+                cards.length ?
                     <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1  min-w-[220px] w-auto  place-content-center ">
                         {
-                            anime.cards.map(card => {
+                            cards.map(card => {
 
                                 const color = card.source === "Chinese" ? "from-green-900" : "from-red-900"
                                 return (
@@ -82,7 +85,7 @@ const HomePage = ({ setVideo, setModal }: any) => {
                                             </div>
                                             <div
                                                 onClick={() => window.open(card.watchLink, "_blank")} className={`absolute top-0 right-0 p-1 px-2 bg-gradient-to-b  z-0 text-xs text-white ${color} hover:animate-pulse font-semibold rounded-tr-xl`}>{card.source}</div>
-                                            <div className="absolute top-1 left-1"><Star fill={anime.favoriAnimes.find((animeCard) => animeCard.animeTitle === card.title)} animeTitle={card.title} animeEpisode={card.episode} isWatchedAnime={false} /> </div>
+                                            <div className="absolute top-1 left-1"><Star fill={favoriAnimes.find((animeCard) => animeCard.animeTitle === card.title)} animeTitle={card.title} animeEpisode={card.episode} isWatchedAnime={false} /> </div>
                                             <WatchedBanner anime={card} />
                                         </div>
 
@@ -91,13 +94,6 @@ const HomePage = ({ setVideo, setModal }: any) => {
                             })
                         }
                     </div> : handleWaitForDatas()
-
-                // <div className="flex w-full h-[60vh] justify-center items-center">
-                //     <svg className="animate-spin -ml-1 mr-3 h-9 w-9 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                //         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                //         <path className="opacity-75" fill="black" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                //     </svg>
-                // </div>
             }
         </div>
     )
