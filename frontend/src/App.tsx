@@ -25,9 +25,13 @@ function App() {
 
   let filteredAnimes = anime;
 
-  const favoriAnimesJson = localStorage.getItem("favoriAnimes") || '[]';
+  const favoriAnimesJson = localStorage.getItem("favoriAnimes") ?? "";
   const favoriAnimes: FavoriteAnimeCard[] = JSON.parse(favoriAnimesJson);
-  !favoriAnimes && localStorage.setItem("favoriAnimes", JSON.stringify([]));
+  
+  if(!favoriAnimes)
+  {
+    localStorage.setItem("favoriAnimes", JSON.stringify([]));
+  }
 
   switch(animeListingType)
   {
