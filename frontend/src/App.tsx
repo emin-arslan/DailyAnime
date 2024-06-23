@@ -25,10 +25,10 @@ function App() {
 
   let filteredAnimes = anime;
 
-  const favoriAnimesJson = localStorage.getItem("favoriAnimes") ?? "";
+  const favoriAnimesJson = localStorage.getItem("favoriAnimes") ?? "[]";
   const favoriAnimes: FavoriteAnimeCard[] = JSON.parse(favoriAnimesJson);
-  
-  if(!favoriAnimes)
+
+  if(favoriAnimes.length < 1)
   {
     localStorage.setItem("favoriAnimes", JSON.stringify([]));
   }
