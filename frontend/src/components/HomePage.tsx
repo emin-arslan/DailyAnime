@@ -5,7 +5,7 @@ import WatchedBanner from './WatchedBanner'
 import { setFavoriAnimes } from './redux/actions/action'
 import { getAnimeCards, getFavoriAnimes } from './redux/selector'
 
-const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: HomePageProps) => {
+const HomePage = ({ setVideo, setModal, filteredAnimes = [], isFound }: HomePageProps) => {
     let cards = useSelector(getAnimeCards);
     const favoriAnimes = useSelector(getFavoriAnimes);
 
@@ -15,7 +15,7 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: HomePageProps) =>
     const addWatchedEpisode = (animeData: AnimeCard) => {
         const found = favoriAnimes.findIndex((animeCard: FavoriteAnimeCard) => animeCard.title === animeData.title);
         if (found !== -1) {
-            let tempAnimeCard = {...animeData, isWatchedAnime: true};
+            let tempAnimeCard = { ...animeData, isWatchedAnime: true };
             let tempArray = [...favoriAnimes];
             tempArray[found] = tempAnimeCard;
             localStorage.setItem("favoriAnimes", JSON.stringify(tempArray));
@@ -48,13 +48,19 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: HomePageProps) =>
                     </div>
                 </div>
             )
-    
+
         }
         return <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1  min-w-[220px] w-auto  place-content-center ">{list}</div>
     }
-    
+
     return (
-        <div className="flex justify-center w-full items-center bg-gray-900 text-white py-8">
+        <div className={`flex flex-col justify-center w-full items-center bg-gray-900 text-white ${isFound ? 'py-5':'py-1'}`}>
+            {
+                        !isFound &&
+                        <div className="p-4 max-w-md w-full text-center bg-gray-800 text-white rounded-lg shadow-lg mb-2">
+                            <span>We couldn't find any results for your search.</span>
+                        </div>
+            }
             {
                 cards.length ?
                     <div className="grid grid-cols-6 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4 px-4">
@@ -76,9 +82,10 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [] }: HomePageProps) =>
                             </div>
                         ))}
                     </div>
-                : handleWaitForDatas()
+                    : handleWaitForDatas()
             }
         </div>
+
     );
 };
 

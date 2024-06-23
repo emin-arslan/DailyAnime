@@ -26,4 +26,5 @@ export interface HomePageProps {
     setVideo: (arg1:string) => void;
     setModal: (arg1:boolean) => void;
     filteredAnimes: AnimeCard[];
+    isFound: boolean
 }
