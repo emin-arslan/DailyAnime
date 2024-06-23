@@ -56,33 +56,36 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [], isFound }: HomePage
     return (
         <div className={`flex flex-col justify-center w-full items-center bg-gray-900 text-white ${isFound ? 'py-5':'py-1'}`}>
             {
-                        !isFound &&
-                        <div className="p-4 max-w-md w-full text-center bg-gray-800 text-white rounded-lg shadow-lg mb-2">
-                            <span>We couldn't find any results for your search.</span>
-                        </div>
+                        
             }
             {
                 cards.length ?
-                    <div className="grid grid-cols-6 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4 px-4">
-                        {cards.map((card) => (
-                            <div key={card._id} className="relative group">
-                                <img onClick={() => startAnimePlayer(card)} alt="AnimeImage" src={card.imageUrl} className="w-full h-72 rounded-xl transition duration-500 ease-in-out transform group-hover:scale-105" />
-                                <div onClick={() => startAnimePlayer(card)} className="absolute inset-0 flex flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                                    <p className="text-lg font-bold truncate">{card.title}</p>
-                                    <p className="text-sm">{`Episode: ${card.episode}`}</p>
-                                    <div className="flex justify-between items-center pt-2">
-                                        <span onClick={(e) => {
-                                            e.stopPropagation();
-                                            window.open(card.watchLink, "_blank");
-                                        }} className="bg-blue-500 text-xs hover:cursor-pointer rounded-full px-2 py-1 opacity-90">{card.source}</span>
-                                        <Star fill={favoriAnimes.some((animeCard) => animeCard.title === card.title)} anime={card} />
-                                    </div>
-                                </div>
-                                <WatchedBanner anime={card} />
-                            </div>
-                        ))}
+                !isFound ?
+                    <div className="p-4 max-w-md w-full text-center bg-gray-800 text-white rounded-lg shadow-lg mb-2">
+                        <span>We couldn't find any results for your search.</span>
                     </div>
-                    : handleWaitForDatas()
+                :
+                <div className="grid grid-cols-6 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-4 px-4">
+                    {cards.map((card) => (
+                        <div key={card._id} className="relative group">
+                            <img onClick={() => startAnimePlayer(card)} alt="AnimeImage" src={card.imageUrl} className="w-full h-72 rounded-xl transition duration-500 ease-in-out transform group-hover:scale-105" />
+                            <div onClick={() => startAnimePlayer(card)} className="absolute inset-0 flex flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+                                <p className="text-lg font-bold truncate">{card.title}</p>
+                                <p className="text-sm">{`Episode: ${card.episode}`}</p>
+                                <div className="flex justify-between items-center pt-2">
+                                    <span onClick={(e) => {
+                                        e.stopPropagation();
+                                        window.open(card.watchLink, "_blank");
+                                    }} className="bg-blue-500 text-xs hover:cursor-pointer rounded-full px-2 py-1 opacity-90">{card.source}</span>
+                                    <Star fill={favoriAnimes.some((animeCard) => animeCard.title === card.title)} anime={card} />
+                                </div>
+                            </div>
+                            <WatchedBanner anime={card} />
+                        </div>
+                    ))}
+                </div>
+                : handleWaitForDatas()
+                 
             }
         </div>
 
