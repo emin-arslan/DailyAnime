@@ -62,13 +62,12 @@ function MainPage() {
   else if (filteredAnimes.length > 0 && !isFound) setIsFound(true);
 
   return (
-    <div className="w-full relative transition-all bg-gray-900 h-screen">
-      <Player modal={modal} video={video} setModal={setModal} />
-      <Navi searchTxt={searchTxt} setSearchTxt={setSearchTxt} setModal={setModal} animeListingType={animeListingType} setAnimeListingType={setAnimeListingType} />
+    <>
+    <Player modal={modal} video={video} setModal={setModal} />
       <HomePage setModal={setModal} setVideo={setVideo} filteredAnimes={filteredAnimes} isFound={isFound} />
       <Analytics />
-
-    </div>
+    </>
+    
   );
 }
 

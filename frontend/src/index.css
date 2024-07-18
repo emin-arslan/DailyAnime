@@ -48,3 +48,24 @@
 .-translate-x-full {
   transform: translateX(-100%);
 }
+
+/* styles.css */
+
+::-webkit-scrollbar {
+  width: 8px; /* Scrollbar genişliği */
+}
+
+::-webkit-scrollbar-track {
+  background: #2d2d2d; /* Scrollbar arka planı */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a4a4a; /* Scrollbar tutacağı */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6a6a6a; /* Hover durumunda Scrollbar tutacağı */
+}
+

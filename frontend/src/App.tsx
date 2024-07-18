@@ -11,6 +11,7 @@ import { FavoriteAnimeCard } from "./types/Anime";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AnimeForm from "./components/AnimeForm";
 import MainPage from "./components/MainPage";
+import AnimeInfo from "./components/AnimeInfo";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +32,10 @@ function App() {
     {
       path: 'anime',
       element: <AnimeForm/>
+    },
+    {
+      path: 'animeInfo',
+      element: <AnimeInfo />
     }
     
   ]);
@@ -79,7 +84,11 @@ function App() {
   else if(filteredAnimes.length > 0 && !isFound) setIsFound(true);
 
   return (
-    <RouterProvider router={router}/>
+    <div className="w-full relative transition-all bg-gray-900 h-screen">
+      <Navi searchTxt={searchTxt} setSearchTxt={setSearchTxt} setModal={setModal} animeListingType={animeListingType} setAnimeListingType={setAnimeListingType} />
+      <RouterProvider router={router}/>
+    </div>
+   
   );
 }
 
