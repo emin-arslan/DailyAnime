@@ -85,7 +85,7 @@ function App() {
 
   return (
     <div className="w-full relative transition-all bg-gray-900 h-screen">
-      <Navi searchTxt={searchTxt} setSearchTxt={setSearchTxt} setModal={setModal} animeListingType={animeListingType} setAnimeListingType={setAnimeListingType} />
+      
       <RouterProvider router={router}/>
     </div>
    

@@ -63,11 +63,12 @@ function MainPage() {
 
   return (
     <>
-    <Player modal={modal} video={video} setModal={setModal} />
+      <Player modal={modal} video={video} setModal={setModal} />
+      <Navi searchTxt={searchTxt} setSearchTxt={setSearchTxt} setModal={setModal} animeListingType={animeListingType} setAnimeListingType={setAnimeListingType} />
       <HomePage setModal={setModal} setVideo={setVideo} filteredAnimes={filteredAnimes} isFound={isFound} />
       <Analytics />
     </>
-    
+
   );
 }
 
