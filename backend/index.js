@@ -53,7 +53,7 @@ async function setAnimeDatas() {
 //setAnimeDatas(); // İlk kez başlatmak için setAnimeDatas fonksiyonunu çağır
 
 // GET endpoint: /animeCards
-app.get("/animeCards", async (req, resp) => {
+app.get("/animeCards", ipFilter , async (req, resp) => {
   try {
     const animeCards = await Anime.find({});
     resp.status(200).json({ body: animeCards });
@@ -63,7 +63,7 @@ app.get("/animeCards", async (req, resp) => {
 });
 
 // POST endpoint: /addAnime
-app.post("/addAnime", async (req, resp) => {
+app.post("/addAnime",ipFilter , async (req, resp) => {
   try {
     console.log(req.body);
     const newAnime = req.body; // Gelen veri
@@ -81,7 +81,7 @@ app.post("/addAnime", async (req, resp) => {
   }
 });
 
-app.get("/animeInfos", async (req, resp) => {
+app.get("/animeInfos",ipFilter ,async (req, resp) => {
   console.log('sa');
   try {
     // Fetch specified fields, '_id' is included by default unless explicitly excluded
@@ -93,7 +93,7 @@ app.get("/animeInfos", async (req, resp) => {
 });
 
 // Yeni POST endpoint: /addEpisode
-app.post("/addEpisode", async (req, resp) => {
+app.post("/addEpisode", ipFilter,async (req, resp) => {
   try {
     const newEpisode = req.body; // Gelen veri
     if (!newEpisode.ANIME_ID || !newEpisode.EPISODE_NUMBER) {
@@ -110,7 +110,7 @@ app.post("/addEpisode", async (req, resp) => {
 });
 
 // Yeni GET endpoint: /episodesbycount
-app.get("/episodesbycount", async (req, resp) => {
+app.get("/episodesbycount",ipFilter ,async (req, resp) => {
   try {
     const { id } = req.query; // Extract 'id' from query parameters
     const query = {};
@@ -126,7 +126,7 @@ app.get("/episodesbycount", async (req, resp) => {
 });
 
 // Yeni GET endpoint: /episodes
-app.get("/episodes", async (req, resp) => {
+app.get("/episodes",ipFilter ,async (req, resp) => {
   try {
     const { id, count } = req.query; // Extract 'id' and 'count' from query parameters
 
