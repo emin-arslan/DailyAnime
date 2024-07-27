@@ -157,7 +157,7 @@ const AnimeForm = () => {
         </div>
         <div
           className={`relative overflow-hidden transition-all duration-500 ease-in-out max-h-screen ${
-            showAddEpisodeForm ? "h-96" : "min-h-[800px]"
+            showAddEpisodeForm ? "min-h-[600px]" : "min-h-[800px]"
           }`}
         >
           <div
@@ -184,7 +184,7 @@ const AnimeForm = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Anime Bölüm Video URL'si
+                    Anime Bölüm Video URL'si 1
                   </label>
                   <input
                     type="text"
@@ -194,6 +194,38 @@ const AnimeForm = () => {
                       setEpisodeData({
                         ...episodeData,
                         WATCH_LINK_1: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Anime Bölüm Video URL'si 2
+                  </label>
+                  <input
+                    type="text"
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    value={episodeData.WATCH_LINK_2}
+                    onChange={(e) => {
+                      setEpisodeData({
+                        ...episodeData,
+                        WATCH_LINK_2: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Anime Bölüm Video URL'si 3
+                  </label>
+                  <input
+                    type="text"
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    value={episodeData.WATCH_LINK_3}
+                    onChange={(e) => {
+                      setEpisodeData({
+                        ...episodeData,
+                        WATCH_LINK_3: e.target.value,
                       });
                     }}
                   />
@@ -263,7 +295,7 @@ const AnimeForm = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Anime Banner Fotoğrafı SRC URL'si
+                    Anime Küçük Fotoğrafı SRC URL'si
                   </label>
                   <input
                     type="text"

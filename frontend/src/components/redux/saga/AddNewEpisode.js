@@ -4,7 +4,7 @@ import { ADD_ANIME_SUCCESS, SET_ANIME_DATA } from "../actions/actionTypes";
 export function* addNewEpisode({animeEpisode}) {
    console.log(animeEpisode, "bölüm ekleme");
   try {
-    let response = yield fetch("http://localhost:5000/addEpisode", {
+    let response = yield fetch("https://daily-anime-omega.vercel.app/addEpisode", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

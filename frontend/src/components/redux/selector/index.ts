@@ -25,3 +25,8 @@ export const getEpisodesInfosById = createSelector(
   (animeState) => animeState.animeEpisodesById
 )
 
+export const getEpisodesByCount = createSelector(
+  [selectAnimes],
+  (animeState) => animeState.animeEpisodesById
+)
+

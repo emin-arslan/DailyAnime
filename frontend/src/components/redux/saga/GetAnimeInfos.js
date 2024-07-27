@@ -3,7 +3,7 @@ import { GET_ANIME_INFOS_REQUEST, SET_ANIME_DATA, SET_ANIME_INFOS, SET_ANIME_INF
 
 export function* getAnimeInfos(){
   try {
-    let response = yield fetch("http://localhost:5000/animeInfos");
+    let response = yield fetch("https://daily-anime-omega.vercel.app/animeInfos");
     let reader = response.body.getReader();
     let result = yield reader.read();
     

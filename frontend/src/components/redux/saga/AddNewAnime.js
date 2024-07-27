@@ -3,7 +3,7 @@ import { ADD_ANIME_SUCCESS, SET_ANIME_DATA } from "../actions/actionTypes";
 
 export function* addNewAnime({animeData}) {
   try {
-    let response = yield fetch("http://localhost:5000/addAnime", {
+    let response = yield fetch("https://daily-anime-omega.vercel.app/addAnime", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

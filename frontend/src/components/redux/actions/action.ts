@@ -1,4 +1,4 @@
-import { ADD_ANIME_REQUEST, ADD_NEW_EPISODE_REQUEST, GET_ANIME_CARDS, GET_ANIME_EPISODES_BYID_REQUEST, GET_ANIME_INFOS_REQUEST, REQUEST_SET_FAVORI_ANIMES, SET_ANIME_DATA, SET_ANIME_EPISODESBYID, SET_ANIME_INFOS, SET_ANIME_INFOS_REQUEST } from "./actionTypes";
+import { ADD_ANIME_REQUEST, ADD_NEW_EPISODE_REQUEST, GET_ANIME_CARDS, GET_ANIME_EPISODES_BYID_REQUEST, GET_ANIME_EPISODESBYCOUNT, GET_ANIME_INFOS_REQUEST, REQUEST_SET_FAVORI_ANIMES, SET_ANIME_DATA, SET_ANIME_EPISODESBYCOUNT, SET_ANIME_EPISODESBYID, SET_ANIME_INFOS, SET_ANIME_INFOS_REQUEST } from "./actionTypes";
 import {Anime, AnimeCard, AnimeEpisodes, AnimeInfos} from "../../../types/Anime";
 
 export interface SetAnimeAction {
@@ -32,6 +32,11 @@ export interface setAnimeEpisodesById{
 export interface addNewEpisodeRequest{
   type: typeof ADD_NEW_EPISODE_REQUEST;
   animeEpisode: AnimeEpisodes
+}
+
+export interface setAnimeEpisodesByCount{
+  type: typeof GET_ANIME_EPISODESBYCOUNT,
+  count: Number
 }
 
 export const setAnimeData = (cards: AnimeCard[]): SetAnimeAction => {
@@ -92,4 +97,11 @@ export const addNewEpisodeRequest = (animeEpisode : AnimeEpisodes) : addNewEpiso
     type: ADD_NEW_EPISODE_REQUEST,
     animeEpisode
     }
+}
+
+export const setAnimeEpisodesByCount = (count : Number) : setAnimeEpisodesByCount =>{
+  return{
+    type: GET_ANIME_EPISODESBYCOUNT,
+    count
+  }
 }
