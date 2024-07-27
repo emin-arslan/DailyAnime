@@ -93,8 +93,10 @@ function App() {
   useEffect(() => {
     const checkAccess = async () => {
       try {
-        await axios.get('https://daily-anime-omega.vercel.app'); // Backend URL
+        console.log("oy")
+        await axios.get('https://daily-anime-omega.vercel.app/'); // Backend URL
       } catch (error:any) {
+        console.log(error)
         if (error.response && error.response.status === 400) {
           setAccessDenied(true);
         }
