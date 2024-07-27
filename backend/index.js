@@ -10,7 +10,7 @@ const AnimeXin = require("./Animexin");
 app.use(cors());
 app.use(express.json());
 
-const allowedIPs = ['192.168.1.1', '88.230.141.180']; // Örnek IP adresleri
+const allowedIPs = []; // Boş IP listesi
 
 // Proxy arkasında çalışırken gerçek IP'yi almak için trust proxy ayarı
 app.set('trust proxy', true);
