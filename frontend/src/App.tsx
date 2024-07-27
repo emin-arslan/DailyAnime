@@ -13,7 +13,7 @@ import AnimeForm from "./components/AnimeForm";
 import MainPage from "./components/MainPage";
 import AnimeInfo from "./components/AnimeInfo";
 import axios from "axios";
-import AccessDenied from "./components/AccesDenides";
+import AccessDenied from "./components/AccesDenided";
 
 function App() {
   const dispatch = useDispatch();
@@ -95,7 +95,7 @@ function App() {
       try {
         await axios.get('https://daily-anime-omega.vercel.app'); // Backend URL
       } catch (error:any) {
-        if (error.response && error.response.status === 200 && error.response.data.includes('access_denied.jpg')) {
+        if (error.response && error.response.status === 400) {
           setAccessDenied(true);
         }
       }
@@ -107,6 +107,7 @@ function App() {
   if (accessDenied) {
     return <AccessDenied />;
   }
+
 
   return (
     <div className="w-full relative transition-all bg-gray-900 h-screen">

@@ -10,22 +10,22 @@ const AnimeXin = require("./Animexin");
 app.use(cors());
 app.use(express.json());
 
-const allowedIPs = []; // Boş IP listesi
+const allowedIPs = ['88.230.141.180']; // Boş IP listesi
 
 // Proxy arkasında çalışırken gerçek IP'yi almak için trust proxy ayarı
 app.set('trust proxy', true);
 
 // IP kontrolü yapan middleware
 const ipFilter = (req, res, next) => {
-  const clientIp = req.ip;
+  const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   if (allowedIPs.includes(clientIp)) {
     next(); // İzin verilen IP, işleme devam et
   } else {
-    // İzin verilmeyen IP, özel bir resim göster
-    res.sendFile(path.join(__dirname, 'access_denied.png')); // access_denied.jpg dosyasını proje kök dizinine koyun
+    res.status(400).json({ error: 'Erişim engellendi' }); // 400 hata kodu ve mesaj dön
   }
 };
+
 
 // Middleware'i en üst düzeyde uygulayın
 app.use(ipFilter);
@@ -150,6 +150,7 @@ app.get("/episodes", async (req, resp) => {
 
 // Index sayfasına erişimi engelleyen endpoint
 app.get("/", (req, res) => {
+  console.log('selam')
   res.sendFile(path.join(__dirname, 'access_denied.jpg')); // access_denied.jpg dosyasını proje kök dizinine koyun
 });
 

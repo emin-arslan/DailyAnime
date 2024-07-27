@@ -3,9 +3,8 @@ import React from 'react';
 import block from '../assets/block.png';
 const AccessDenied = () => {
   return (
-    <div>
-      <img src={block} alt="Access Denied" />
-      <p>Bu sayfaya erişiminiz kısıtlanmıştır.</p>
+    <div className='bg-[#ededed] w-screen h-screen'>
+      <img src={block} alt="Access Denied" className='w-auto h-screen mx-auto' />
     </div>
   );
 };
