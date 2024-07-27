@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import naruto from "../assets/naruto.jpg"; // .jpg uzantısı ile resim
 import naruto2 from "../assets/naruto2.jpg"; // .jpg uzantısı ile diğer resim
+import { useDispatch } from 'react-redux';
+import { getAnimeInfosAction } from './redux/actions/action';
 
 const AnimeInfo = () => {
   const [isHovered, setIsHovered] = useState(false);

@@ -7,11 +7,21 @@ const selectAnimes = (state: IState) => state.animeReducer;
 // Kullanışlı selectorler oluşturmak için reselect kütüphanesini kullanabiliriz
 export const getAnimeCards = createSelector(
   [selectAnimes],
-  (animes) => animes.cards
+  (animeState) => animeState.cards
 );
 
 export const getFavoriAnimes = createSelector(
   [selectAnimes],
-  (animes) => animes.favoriAnimes
+  (animeState) => animeState.favoriAnimes
 );
+
+export const getAnimeInfosSelector = createSelector(
+  [selectAnimes],
+  (animeState) => animeState.animeInfos
+);
+
+export const getEpisodesInfosById = createSelector(
+  [selectAnimes],
+  (animeState) => animeState.animeEpisodesById
+)
 
