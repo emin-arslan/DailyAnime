@@ -9,6 +9,22 @@ const AnimeXin = require("./Animexin");
 app.use(cors());
 app.use(express.json());
 
+const allowedIPs = ['192.168.1.1', '88.230.141.180']; // Örnek IP adresleri
+
+const ipFilter = (req, res, next) => {
+  const clientIp = req.ip;
+
+  if (allowedIPs.includes(clientIp)) {
+    next(); // İzin verilen IP, işleme devam et
+  } else {
+    // İzin verilmeyen IP, özel bir resim göster
+    res.sendFile(path.join(__dirname, 'access_denied.jpg')); // access_denied.jpg dosyasını projenize ekleyin
+  }
+};
+
+
+app.use(ipFilter);
+
 async function setAnimeDatas() {
   try {
     const resultCardArray = [];
