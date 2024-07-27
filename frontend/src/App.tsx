@@ -12,6 +12,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AnimeForm from "./components/AnimeForm";
 import MainPage from "./components/MainPage";
 import AnimeInfo from "./components/AnimeInfo";
+import axios from "axios";
+import AccessDenied from "./components/AccesDenides";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +23,11 @@ function App() {
   const [animeListingType, setAnimeListingType] = useState("All");
   const [isFound, setIsFound] = useState(true);
   
+  const [accessDenied, setAccessDenied] = useState(false);
+
   const anime = useSelector(getAnimeCards);
+
+
 
   const router = createBrowserRouter([
     {
@@ -82,6 +88,25 @@ function App() {
   }
 
   else if(filteredAnimes.length > 0 && !isFound) setIsFound(true);
+
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        await axios.get('https://daily-anime-omega.vercel.app'); // Backend URL
+      } catch (error:any) {
+        if (error.response && error.response.status === 200 && error.response.data.includes('access_denied.jpg')) {
+          setAccessDenied(true);
+        }
+      }
+    };
+
+    checkAccess();
+  }, []);
+
+  if (accessDenied) {
+    return <AccessDenied />;
+  }
 
   return (
     <div className="w-full relative transition-all bg-gray-900 h-screen">
