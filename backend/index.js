@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const Anime = require("./db/CardData");
 const AnimeAdd = require("./db/AnimeInfo");
 const AnimeEpisode = require("./db/AnimeEpisode");
@@ -11,6 +12,10 @@ app.use(express.json());
 
 const allowedIPs = ['192.168.1.1', '88.230.141.180']; // Örnek IP adresleri
 
+// Proxy arkasında çalışırken gerçek IP'yi almak için trust proxy ayarı
+app.set('trust proxy', true);
+
+// IP kontrolü yapan middleware
 const ipFilter = (req, res, next) => {
   const clientIp = req.ip;
 
@@ -18,12 +23,15 @@ const ipFilter = (req, res, next) => {
     next(); // İzin verilen IP, işleme devam et
   } else {
     // İzin verilmeyen IP, özel bir resim göster
-    res.sendFile(path.join(__dirname, 'access_denied.jpg')); // access_denied.jpg dosyasını projenize ekleyin
+    res.sendFile(path.join(__dirname, 'public', 'access_denied.jpg')); // Resminizi public klasöründe saklayın
   }
 };
 
-
+// Middleware'i en üst düzeyde uygulayın
 app.use(ipFilter);
+
+// Statik dosyalar için middleware
+app.use(express.static(path.join(__dirname, 'public')));
 
 async function setAnimeDatas() {
   try {
@@ -101,10 +109,11 @@ app.post("/addEpisode", async (req, resp) => {
   }
 });
 
-// Yeni GET endpoint: /episodes
+// Yeni GET endpoint: /episodesbycount
 app.get("/episodesbycount", async (req, resp) => {
   try {
     const { id } = req.query; // Extract 'id' from query parameters
+    const query = {};
     if (id) {
       query._id = id; // If 'id' is provided, set it in the query object
     }
@@ -115,7 +124,6 @@ app.get("/episodesbycount", async (req, resp) => {
     resp.status(500).json({ error: 'Bölümler alınırken hata oluştu' });
   }
 });
-
 
 // Yeni GET endpoint: /episodes
 app.get("/episodes", async (req, resp) => {
@@ -143,11 +151,6 @@ app.get("/episodes", async (req, resp) => {
   }
 });
 
-
-
-
 app.listen(process.env.PORT || 5000, () => {
   console.log('Server running on port', process.env.PORT || 5000);
 });
-
-
