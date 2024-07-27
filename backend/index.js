@@ -10,7 +10,7 @@ const AnimeXin = require("./Animexin");
 app.use(cors());
 app.use(express.json());
 
-const allowedIPs = ['192.168.1.1', '']; // Örnek IP adresleri
+const allowedIPs = ['192.168.1.1', '88.230.141.180']; // Örnek IP adresleri
 
 // Proxy arkasında çalışırken gerçek IP'yi almak için trust proxy ayarı
 app.set('trust proxy', true);
@@ -146,6 +146,11 @@ app.get("/episodes", async (req, resp) => {
   } catch (error) {
     resp.status(500).json({ error: 'Bölümler alınırken hata oluştu' });
   }
+});
+
+// Index sayfasına erişimi engelleyen endpoint
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, 'access_denied.jpg')); // access_denied.jpg dosyasını proje kök dizinine koyun
 });
 
 app.listen(process.env.PORT || 5000, () => {
