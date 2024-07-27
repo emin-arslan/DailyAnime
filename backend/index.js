@@ -23,7 +23,7 @@ const ipFilter = (req, res, next) => {
     next(); // İzin verilen IP, işleme devam et
   } else {
     // İzin verilmeyen IP, özel bir resim göster
-    res.sendFile(path.join(__dirname, 'access_denied.jpg')); // access_denied.jpg dosyasını proje kök dizinine koyun
+    res.sendFile(path.join(__dirname, 'access_denied.png')); // access_denied.jpg dosyasını proje kök dizinine koyun
   }
 };
 
