@@ -32,7 +32,7 @@ function MainPage() {
   const favoriAnimesJson = localStorage.getItem("favoriAnimes") ?? "[]";
   const favoriAnimes: FavoriteAnimeCard[] = JSON.parse(favoriAnimesJson);
 
-  if (favoriAnimes.length < 1) {
+  if (favoriAnimes && favoriAnimes.length < 1) {
     localStorage.setItem("favoriAnimes", JSON.stringify([]));
   }
 
@@ -48,18 +48,18 @@ function MainPage() {
       break;
   }
 
-  if (filteredAnimes.length < 1 && isFound) setIsFound(false);
+  if (filteredAnimes&& filteredAnimes.length < 1 && isFound) setIsFound(false);
 
-  if (searchTxt.length > 0) {
+  if (searchTxt&& searchTxt.length > 0) {
     const temp_array = filteredAnimes.filter(anime => anime.title.toLowerCase().includes(searchTxt.toLowerCase()));
-    if (temp_array.length > 0) {
+    if (temp_array && temp_array.length > 0) {
       filteredAnimes = temp_array;
     }
     else if (isFound) setIsFound(false);
-    if (temp_array.length > 0 && !isFound) setIsFound(true);
+    if (temp_array&& temp_array.length > 0 && !isFound) setIsFound(true);
   }
 
-  else if (filteredAnimes.length > 0 && !isFound) setIsFound(true);
+  else if (filteredAnimes && filteredAnimes.length > 0 && !isFound) setIsFound(true);
 
   return (
     <>

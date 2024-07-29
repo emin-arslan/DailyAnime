@@ -65,7 +65,7 @@ const HomePage = ({ setVideo, setModal, filteredAnimes = [], isFound }: HomePage
                         
             }
             {
-                cards.length ?
+                cards && cards.length ?
                 isFound ?
                     <div className="p-4 max-w-md w-full text-center bg-gray-800 text-white rounded-lg shadow-lg mb-2">
                         <span>We couldn't find any results for your search.</span>
