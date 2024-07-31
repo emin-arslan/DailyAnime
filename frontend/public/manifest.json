@@ -23,5 +23,6 @@
   "theme_color": "#000000",
   "background_color": "#ffffff",
   "description": "AnimeElysium: Your ultimate destination for all things anime. Discover, watch, and share your favorite anime.",
-  "lang": "en-US"
+  "lang": "en-US",
+  "langs": ["en-US", "tr-TR"]
 }
