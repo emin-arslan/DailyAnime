@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "AnimeElysium",
+  "name": "Watch Anime on AnimeElysium",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +18,10 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "description": "AnimeElysium: Your ultimate destination for all things anime. Discover, watch, and share your favorite anime.",
+  "lang": "en-US"
 }
