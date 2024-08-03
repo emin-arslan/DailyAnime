@@ -3,7 +3,7 @@ import IconSVG from "../icons/IconSVG";
 import { useDispatch } from "react-redux";
 import { setFavoriAnimes } from "./redux/actions/action";
 
-const Star = ({ fill, anime}) => {
+const Star = ({ fill = "", anime= ""}) => {
   const dispacth = useDispatch();
 
   const FavoriteAnime = (anime) => {
@@ -23,7 +23,7 @@ const Star = ({ fill, anime}) => {
         localStorage.setItem("favoriAnimes", JSON.stringify(array));
       }
     }
-    dispacth(setFavoriAnimes());
+    //dispacth(setFavoriAnimes());
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navi from "./navi/Navi";
 import Player from "./Player";
 
-import { useDispatch, useSelector } from "react-redux";
+/*import { useDispatch, useSelector } from "react-redux";
 import { getAnimeDatas } from "./redux/actions/action";
 import { getAnimeCards } from "./redux/selector";
 import HomePage from "./HomePage";
@@ -71,4 +71,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default MainPage;*/

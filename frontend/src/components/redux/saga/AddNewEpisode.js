@@ -1,4 +1,4 @@
-import { put } from "redux-saga/effects";
+/*import { put } from "redux-saga/effects";
 import { ADD_ANIME_SUCCESS, SET_ANIME_DATA } from "../actions/actionTypes";
 
 export function* addNewEpisode({animeEpisode}) {
@@ -25,4 +25,4 @@ export function* addNewEpisode({animeEpisode}) {
     // Handle the error appropriately
     console.error("Error adding new anime:", error);
   }
-}
+}*/

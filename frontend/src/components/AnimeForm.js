@@ -67,10 +67,8 @@ const AnimeForm = () => {
       const selectedAnime = animeInfos.find(
         (anime) => anime._id === episodeData.ANIME_ID
       );
-      console.log(selectedAnime, "selected");
       if (selectedAnime) {
         dispatch(getAnimeEpisodesByIdAction(selectedAnime._id));
-        console.log("dispatch altı", episodeInfosById);
       } else {
         setEpisodeInput(1);
       }
