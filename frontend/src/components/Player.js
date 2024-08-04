@@ -16,6 +16,7 @@
         if (videoRef.current) {
           videoRef.current.src = ""; // Stop the video when modal closes
         }
+        setSelectedLink("");
       } else if (modal) {
         setEpisodeNumber(activeAnime.activeEpisodeNumber);
       }
