@@ -26,7 +26,7 @@ const App = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getHomePageAnimesAction(5));
+    dispatch(getHomePageAnimesAction(2000));
   }, [dispatch]);
 
   useEffect(() => {

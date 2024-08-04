@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 
 const Player = ({ modal, activeAnime, setModal }) => {
-  console.log(activeAnime ," anime");
   const [episodeNumber, setEpisodeNumber] = useState(-1);
-  const [isEpisodesVisible, setIsEpisodesVisible] = useState(true);
+  const [isEpisodesVisible, setIsEpisodesVisible] = useState(false);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
   const [selectedLink, setSelectedLink] = useState("");
-  const [episodeLinks, setEpisodeLinks] = useState([]); // episodeLinks burada tanımlanıyor
+  const [episodeLinks, setEpisodeLinks] = useState([]);
+  const [showReport, setShowReport] = useState(false);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -15,9 +15,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
       if (videoRef.current) {
         videoRef.current.src = ""; // Stop the video when modal closes
       }
-    }
-    else if(modal)
-    {
+    } else if (modal) {
       setEpisodeNumber(activeAnime.activeEpisodeNumber);
     }
   }, [modal]);
@@ -127,74 +125,68 @@ const Player = ({ modal, activeAnime, setModal }) => {
     <div
       id="modal-background"
       onClick={handleClickOutside}
-      className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black lg:!text-sm sm:text-xs"
+      className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black"
     >
-      <div className="relative w-[90%] h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
+      <div className="relative w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
         <div className="relative w-full h-full flex items-center justify-center">
           <iframe
             ref={videoRef}
             className="w-full h-full rounded-lg"
             title="video-player"
             allowFullScreen
+            onError={() => {
+              if (videoRef.current) {
+                videoRef.current.innerHTML = `
+                  <div class="flex items-center justify-center w-full h-full text-white">
+                    Görünüşe göre video sorun var. Lütfen başka player seçin. Sorunu çözebilmemiz için lütfen bize bildirin.
+                  </div>
+                `;
+              }
+            }}
           ></iframe>
-
-          {/* Dropdown menu for selecting video link */}
-          {isEpisodesVisible && (
-            <div className="absolute top-10 right-36 z-10">
-              <select
-                onChange={(e) => setSelectedLink(e.target.value)}
-                value={selectedLink}
-                className="bg-gray-800 border border-gray-600 text-white rounded-lg shadow-md focus:outline-none focus:ring-2 p-2 w-32 appearance-none"
-              >
-                <option value="" disabled>
-                  Player Seç
-                </option>
-                {episodeLinks.map((link, index) => (
-                  <option key={index} value={link}>
-                    Player {index + 1}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute top-0 right-0 mt-2 mr-2 w-4 h-4 pointer-events-none">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-full h-full text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
-          )}
-
+        </div>
+        <div
+          className={`absolute top-0 right-0 h-full bg-gray-900 bg-opacity-75 shadow-lg transform transition-transform duration-500 ${
+            isEpisodesVisible ? "translate-x-0" : "translate-x-full"
+          }`}
+          style={{ width: "300px" }}
+        >
           <button
             onClick={toggleEpisodesPane}
-            className={`absolute xs:text-xs top-10 right-4 hover:opacity-100 transition-all z-10 p-2 bg-red-500 text-white rounded-lg shadow-md ${
-              isEpisodesVisible ? "opacity-100" : "opacity-50"
-            } transition-opacity duration-300`}
+            className="absolute left-[-30px] top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
           >
-            {isEpisodesVisible ? "Bölümleri Gizle" : "Bölümleri Göster"}
+            {isEpisodesVisible ? (
+              <span className="transform rotate-180">{'>'}</span>
+            ) : (
+              <span>{'<'}</span>
+            )}
           </button>
-        </div>
-
-        <div
-          className={`absolute right-0 top-[10%] h-4/6 bg-transparent overflow-y-auto p-4 transform ${
-            isEpisodesVisible ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-500`}
-        >
-          <div
-            className={`opacity-100 transition-opacity duration-500 ${
-              isEpisodesVisible ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <div className="flex justify-center items-center mb-4">
+          <div className="p-4 flex flex-col space-y-4 h-full overflow-y-auto">
+            <div
+              className="text-white text-lg font-bold mb-4 truncate"
+              title={activeAnime.name}
+            >
+              {activeAnime.name}
+            </div>
+            <div className="text-white text-sm mb-2">Lütfen bir player seçin:</div>
+            <select
+              onChange={(e) => setSelectedLink(e.target.value)}
+              value={selectedLink}
+              className="bg-gray-800 bg-opacity-50 border border-gray-600 text-white text-xs rounded-lg shadow-md focus:outline-none focus:ring-2 p-2 appearance-none"
+            >
+              <option value="" disabled>
+                Player Seç
+              </option>
+              {episodeLinks.map((link, index) => (
+                <option key={index} value={link}>
+                  Player {index + 1}
+                </option>
+              ))}
+            </select>
+            <div className="text-white text-sm mt-4 mb-2">
+              Bölüm numarasını girin ve "Git" butonuna tıklayarak hızlıca o bölüme geçebilirsiniz.
+            </div>
+            <div className="flex flex-col space-y-2">
               <input
                 type="number"
                 value={
@@ -203,17 +195,17 @@ const Player = ({ modal, activeAnime, setModal }) => {
                     : activeAnime.activeEpisodeNumber
                 }
                 onChange={handleEpisodeInputChange}
-                className="w-4/6 text-black p-2 rounded-l-md border border-gray-600"
+                className="w-full text-black p-2 rounded-lg border border-gray-600 bg-opacity-50"
                 placeholder="Bölüm"
               />
               <button
                 onClick={handleEpisodeSelect}
-                className="p-2 bg-red-500 w-2/6 text-white rounded-r-md hover:bg-red-600 transition-colors duration-300"
+                className="bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
               >
                 Git
               </button>
             </div>
-            <ul className="space-y-6">
+            <ul className="flex flex-col space-y-2 overflow-y-auto h-48">
               {activeAnime.episodes?.map((episode, index) => (
                 <li
                   key={episode.episode_number}
@@ -222,7 +214,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
                     setEpisodeNumber(episode.episode_number);
                     setCurrentEpisodeIndex(index);
                   }}
-                  className={`bg-gradient-to-r from-gray-700 opacity-40 border-2 border-gray-800 hover:opacity-100 via-gray-800 to-gray-900 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer ${
+                  className={`bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-gray-600 transition-all duration-300 cursor-pointer ${
                     index === currentEpisodeIndex ? "bg-gray-600" : ""
                   } ${
                     episodeNumber >= 0
@@ -235,40 +227,58 @@ const Player = ({ modal, activeAnime, setModal }) => {
                       : ""
                   }`}
                 >
-                  <div className="flex items-center p-4 space-x-6">
-                    <img
-                      src={activeAnime.second_image}
-                      alt={`Episode ${episode.episode_number}`}
-                      className="w-20 h-20 lg:w-10 lg:h-10 md:h-8 md:w-8 sm:w-5 sm:h-5 xs:w-5 xs:h-5 rounded-full border-4 border-gray-600 shadow-md transition-transform duration-300 transform hover:scale-110"
-                    />
-                    <div className="text-white">
-                      <p className="text-2xl lg:text-sm sm:text-sm xs:text-xs md:text-sm font-bold mb-1">
-                        {episode.episode_number}. Bölüm
-                      </p>
-                      <p className="text-sm text-gray-300">
-                        Bu bölümün özeti...
-                      </p>
-                    </div>
-                  </div>
+                  {episode.episode_number}. Bölüm
                 </li>
               ))}
             </ul>
+            <div className="flex flex-col space-y-2 mt-4">
+              <div className="flex space-x-2">
+                <button
+                  onClick={handlePreviousEpisode}
+                  className="flex-1 p-2 bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
+                >
+                  Önceki Bölüm
+                </button>
+                <button
+                  onClick={handleNextEpisode}
+                  className="flex-1 p-2 bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
+                >
+                  Sonraki Bölüm
+                </button>
+              </div>
+              {activeAnime.categories.length > 0 && (
+                <div className="text-white text-sm mt-4">
+                  <div className="font-bold mb-2">Kategoriler:</div>
+                  <ul className="list-disc pl-4 text-xs">
+                    {activeAnime.categories.map((category, index) => (
+                      <li key={index}>{category}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        <div className="absolute bottom-[8%] right-0 w-2/12 flex justify-end space-x-2 bg-transparent">
-          <button
-            onClick={handlePreviousEpisode}
-            className="p-4 flex items-center justify-center bg-gray-800 text-white text-sm xs:text-xs xs:p-2 shadow-lg opacity-70 hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
-          >
-            Önceki Bölüm
-          </button>
-          <button
-            onClick={handleNextEpisode}
-            className="p-4 flex items-center justify-center bg-gray-800 text-white text-sm xs:text-xs xs:p-2 shadow-lg opacity-70 hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
-          >
-            Sonraki Bölüm
-          </button>
-        </div>
+        <button
+          onClick={() => setShowReport(true)}
+          className="fixed bottom-4 right-4 bg-red-600 text-white p-2 rounded-full shadow-md hover:bg-red-700 transition-all duration-300 z-60"
+        >
+          Bildir
+        </button>
+        {showReport && (
+          <div className="fixed bottom-4 right-4 bg-white text-black p-4 rounded-lg shadow-md z-70">
+            <div className="font-bold mb-2">Sorun Bildirimi</div>
+            <p>
+              Görünüşe göre video sorun var. Lütfen başka player seçin. Sorunu çözebilmemiz için lütfen bize bildirin.
+            </p>
+            <button
+              onClick={() => setShowReport(false)}
+              className="mt-2 bg-gray-800 text-white p-2 rounded-lg hover:bg-gray-700 transition-all duration-300"
+            >
+              Kapat
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
