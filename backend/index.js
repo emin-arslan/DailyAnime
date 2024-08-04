@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // IP kontrolü
-const allowedIPs = ["88.230.139.177"];
+const allowedIPs = ["88.230.139.177","188.132.133.94"];
 
 app.set('trust proxy', true);
 

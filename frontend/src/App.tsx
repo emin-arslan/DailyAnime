@@ -83,7 +83,7 @@ const App = () => {
   ]);
 
   return (
-    <div className="w-full h-auto relative transition-all bg-gray-900">
+    <div className="w-full h-full relative transition-all bg-gray-900">
       <ToastContainer />
       <Navi />
       <Player modal={modal} activeAnime={activeAnime} setModal={setModal} />

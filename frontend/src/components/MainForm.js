@@ -9,16 +9,16 @@ const MainForm = () => {
   const [activeForm, setActiveForm] = useState('addAnime');
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-gray-900">
+    <div className="relative w-full h-full flex items-center justify-center bg-gray-900">
      
       {/* Form Konteyneri */}
-      <div className="relative w-1/3 h-[95%] bg-gray-800 rounded-md shadow-lg p-6 flex flex-col overflow-hidden">
+      <div className="relative w-1/3 h-[850px] bg-gray-800 rounded-md shadow-lg p-6 flex flex-col overflow-hidden lg:w-2/3 xl:w-6/12 md:w-2/3 sm:w-full xs:w-full ">
         
         {/* Form Geçiş Butonları */}
-        <div className="flex justify-around mb-4">
+        <div className="flex justify-around mb-4 md:!text-sm sm:!text-sm xs:!text-xs">
           <button
             onClick={() => setActiveForm('addAnime')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="px-4 xs:px-1 py-2  bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             Add Anime
           </button>
