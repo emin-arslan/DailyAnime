@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getHomePageAnimesSelector, getRequestStatus } from './components/redux/selector';
 import AnimeInfo from './components/AnimeInfo';
 import MainForm from './components/MainForm';
+import { ErrorPage } from './components/ErrorPage';
 
 const App = () => {
   const [activeAnime, setActiveAnime] = useState({});
@@ -62,7 +63,7 @@ const App = () => {
           <Container>
             <HomePage homePageAnimes={homePageAnimes} setActiveAnime={setActiveAnime} setModal={setModal} />
           </Container>
-          <Player modal={modal} activeAnime={activeAnime} setModal={setModal} />
+          
           <Analytics />
         </>
       ),
@@ -75,12 +76,17 @@ const App = () => {
       path: "animeInfo/name",
       element: <AnimeInfo  setModal={setModal} setActiveAnime={setActiveAnime}/>,
     },
+    {
+      path: '*',
+      element: <ErrorPage />
+    }
   ]);
 
   return (
     <div className="w-full h-auto relative transition-all bg-gray-900">
       <ToastContainer />
       <Navi />
+      <Player modal={modal} activeAnime={activeAnime} setModal={setModal} />
       <RouterProvider router={router} />
     </div>
   );

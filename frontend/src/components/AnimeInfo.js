@@ -22,7 +22,7 @@ const AnimeInfo = ({setModal, setActiveAnime}) => {
 
   const startAnimePlayer = (anime,index) => {
     console.log('selam',index)
-    setActiveAnime({anime, activeEpisodeNumber:index-1});
+    setActiveAnime({...anime, activeEpisodeNumber:index - 1});
     setModal(true);
 };
 
@@ -81,7 +81,7 @@ const AnimeInfo = ({setModal, setActiveAnime}) => {
                 <h1 className="text-4xl font-bold text-gray-100">{anime.title}</h1>
                 <p className="mt-2 text-lg">{anime.description}</p>
                 <p className="mt-2 text-sm text-gray-400">Episodes: {anime.episodeCount}</p>
-                <p className="text-sm text-gray-400">Released: {anime.releasedCount}</p>
+                <p className="text-sm text-gray-400">Released: {anime.episodes?.length}</p>
               </div>
             </div>
           </div>

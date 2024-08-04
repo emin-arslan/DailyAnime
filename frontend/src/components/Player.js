@@ -1,16 +1,26 @@
 import React, { useEffect, useState, useRef } from "react";
 
 const Player = ({ modal, activeAnime, setModal }) => {
+  console.log(activeAnime ," anime");
   const [episodeNumber, setEpisodeNumber] = useState(-1);
   const [isEpisodesVisible, setIsEpisodesVisible] = useState(true);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
   const [selectedLink, setSelectedLink] = useState("");
+  const [episodeLinks, setEpisodeLinks] = useState([]); // episodeLinks burada tanımlanıyor
   const videoRef = useRef(null);
 
   useEffect(() => {
-    setEpisodeNumber(-1);
-    console.log("degisti.");
-  }, [activeAnime, modal]);
+    if (!modal) {
+      setEpisodeNumber(-1);
+      if (videoRef.current) {
+        videoRef.current.src = ""; // Stop the video when modal closes
+      }
+    }
+    else if(modal)
+    {
+      setEpisodeNumber(activeAnime.activeEpisodeNumber);
+    }
+  }, [modal]);
 
   useEffect(() => {
     const handleBackButton = (event) => {
@@ -48,6 +58,24 @@ const Player = ({ modal, activeAnime, setModal }) => {
   }, []);
 
   useEffect(() => {
+    const episodeIndex =
+      episodeNumber !== -1
+        ? activeAnime.episodes?.findIndex(
+            (episode) => episode.episode_number === episodeNumber
+          )
+        : currentEpisodeIndex;
+
+    const links = [
+      activeAnime.episodes?.[episodeIndex]?.watch_link_1,
+      activeAnime.episodes?.[episodeIndex]?.watch_link_2,
+      activeAnime.episodes?.[episodeIndex]?.watch_link_3,
+    ].filter((link) => link);
+
+    setEpisodeLinks(links);
+    setSelectedLink(links.length > 0 ? links[0] : "");
+  }, [episodeNumber, currentEpisodeIndex, activeAnime]);
+
+  useEffect(() => {
     if (videoRef.current) {
       videoRef.current.src = selectedLink;
     }
@@ -74,14 +102,6 @@ const Player = ({ modal, activeAnime, setModal }) => {
     setIsEpisodesVisible((prev) => !prev);
   };
 
-  const handlePreviousEpisode = () => {
-    setCurrentEpisodeIndex((prevIndex) => {
-      const newIndex = Math.min(prevIndex + 1, activeAnime.episodes?.length - 1 || 0);
-      setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
-      return newIndex;
-    });
-  };
-
   const handleNextEpisode = () => {
     setCurrentEpisodeIndex((prevIndex) => {
       const newIndex = Math.max(prevIndex - 1, 0);
@@ -90,21 +110,16 @@ const Player = ({ modal, activeAnime, setModal }) => {
     });
   };
 
-  const episodeIndex = 
-    episodeNumber !== -1
-      ? activeAnime.episodes?.findIndex(
-          (episode) => episode.episode_number === episodeNumber
-        )
-      : currentEpisodeIndex;
-
-  const episodeLinks = [
-    activeAnime.episodes?.[episodeIndex]?.watch_link_1,
-    activeAnime.episodes?.[episodeIndex]?.watch_link_2,
-    activeAnime.episodes?.[episodeIndex]?.watch_link_3,
-  ].filter((link) => link);
-
-  // Fallback to empty string if no link is selected
-  const linkToUse = episodeLinks.length > 0 ? episodeLinks[0] : "";
+  const handlePreviousEpisode = () => {
+    setCurrentEpisodeIndex((prevIndex) => {
+      const newIndex = Math.min(
+        prevIndex + 1,
+        activeAnime.episodes?.length - 1 || 0
+      );
+      setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
+      return newIndex;
+    });
+  };
 
   if (!modal) return null;
 
@@ -120,7 +135,6 @@ const Player = ({ modal, activeAnime, setModal }) => {
             ref={videoRef}
             className="w-full h-full rounded-lg"
             title="video-player"
-            src={linkToUse}
             allowFullScreen
           ></iframe>
 
@@ -229,7 +243,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
                     />
                     <div className="text-white">
                       <p className="text-2xl lg:text-sm sm:text-sm xs:text-xs md:text-sm font-bold mb-1">
-                        {episode.episode_number}.Bölüm
+                        {episode.episode_number}. Bölüm
                       </p>
                       <p className="text-sm text-gray-300">
                         Bu bölümün özeti...

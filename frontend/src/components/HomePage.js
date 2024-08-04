@@ -1,15 +1,15 @@
-import React from 'react';// Arayüzlerin tanımlandığı dosyayı import edin
+import React from 'react'; // Arayüzlerin tanımlandığı dosyayı import edin
 import { Anime, PlayerInterface } from '../types/Anime';
 import Star from './Star';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
-
   const navigate = useNavigate();
+
   const startAnimePlayer = (anime) => {
-    setActiveAnime({...anime, activeEpisodeNumber:anime.episodes[0].episode_number });
+    setActiveAnime({ ...anime, activeEpisodeNumber: anime.episodes[0].episode_number });
     setModal(true);
-};
+  };
 
   const handleWaitForDatas = () => {
     const placeholderItems = Array.from({ length: 6 }).map((_, index) => (
@@ -30,9 +30,9 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
     return <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1 min-w-[220px] w-auto place-content-center">{placeholderItems}</div>;
   };
 
-  const handleAnimeInfo = (name) =>{
+  const handleAnimeInfo = (name) => {
     navigate(`/animeInfo/name?query=${encodeURIComponent(name)}`);
-  }
+  };
 
   return (
     <div className="w-full relative transition-all bg-gray-900 h-full py-5 px-4 cursor-pointer xs:px-0">
@@ -53,10 +53,12 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
                 <p className="text-sm text-gray-300">{`Episodes: ${anime.episodes[0].episode_number}`}</p>
                 <div className="flex justify-between items-center pt-2">
                   <span
-                    onClick={() => handleAnimeInfo(anime.name)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Bu butonun tıklama olayının üst öğelere yayılmasını engeller
+                      handleAnimeInfo(anime.name);
+                    }}
                     className="bg-blue-500 text-xs hover:cursor-pointer rounded-full px-2 py-1 opacity-90 text-white"
                   >
-                    
                     Animeye Git
                   </span>
                   <Star />
