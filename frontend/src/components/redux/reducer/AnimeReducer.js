@@ -1,14 +1,16 @@
 import { Anime, HomePageAnime } from "../../../types/Anime";
 import { SetHomePageAnimes } from "../actions/action";
-import { SET_HOMEPAGE_ANIMES } from "../actions/actionTypes";
+import { SET_ANIME_INFO, SET_ANIMES, SET_HOMEPAGE_ANIMES } from "../actions/actionTypes";
 
-const initialState: HomePageAnime = {
-  homePageAnimes: [] as Anime[],
+const initialState = {
+  homePageAnimes: [],
+  animes: [],
+  animeInfo: {}
 };
 
 const AnimeReducer = (
   state = initialState,
-  action: SetHomePageAnimes
+  action
 ) => {
   switch (action.type) {
     case SET_HOMEPAGE_ANIMES:
@@ -16,6 +18,16 @@ const AnimeReducer = (
         ...state,
         homePageAnimes: action.payload,
       };
+    case SET_ANIMES:
+      return{
+        ...state,
+        animes: action.payload,
+      }
+    case SET_ANIME_INFO:
+      return{
+        ...state,
+        animeInfo: action.payload
+      }
     default:
       return state;
   }

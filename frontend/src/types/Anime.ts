@@ -29,3 +29,12 @@ export interface AnimeReducer{
 export interface PlayerInterface extends Anime{
     activeEpisodeNumber: Number
 }
+
+export interface RequestStatusReducer{
+    requestStatusReducer: RequestStatusInterface
+}
+
+export interface RequestStatusInterface{
+    isSuccessful: boolean,
+    message: string
+}

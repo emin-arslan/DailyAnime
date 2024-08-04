@@ -1,44 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import naruto from "../assets/naruto.jpg"; // .jpg uzantısı ile resim
 import naruto2 from "../assets/naruto2.jpg"; // .jpg uzantısı ile diğer resim
-import { useDispatch } from 'react-redux';
-import { getAnimeInfosAction } from './redux/actions/action';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAnimeAction, getAnimeInfosAction } from './redux/actions/action';
+import { useLocation, useParams } from 'react-router-dom';
+import { getAnime } from './redux/saga/GetAnime';
+import { searchAnime } from './redux/selector';
 
-const AnimeInfo = () => {
+const AnimeInfo = ({setModal, setActiveAnime}) => {
+
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const name = queryParams.get('query');
   const [isHovered, setIsHovered] = useState(false);
+  const animeInfo = useSelector(searchAnime);
+
+  useEffect(()=>{
+    dispatch(getAnimeAction(name))
+  },[])
+
+  const startAnimePlayer = (anime,index) => {
+    console.log('selam',index)
+    setActiveAnime({anime, activeEpisodeNumber:index-1});
+    setModal(true);
+};
 
   const anime = {
-    title: "Naruto",
-    description: "Naruto description goes here. This description can be longer and provide more details about the anime.",
-    episodeCount: 24,
-    releasedCount: 20,
-    largeImage: naruto, // Büyük arka plan resmi
-    smallImage: naruto2, // Küçük resim
-    episodes: [
-      { title: "Episode 1", description: "Description of episode 1" },
-      { title: "Episode 2", description: "Description of episode 2" },
-      { title: "Episode 3", description: "Description of episode 3" },
-      { title: "Episode 4", description: "Description of episode 4" },
-      { title: "Episode 5", description: "Description of episode 5" },
-      { title: "Episode 6", description: "Description of episode 6" },
-      { title: "Episode 1", description: "Description of episode 1" },
-      { title: "Episode 2", description: "Description of episode 2" },
-      { title: "Episode 3", description: "Description of episode 3" },
-      { title: "Episode 4", description: "Description of episode 4" },
-      { title: "Episode 5", description: "Description of episode 5" },
-      { title: "Episode 6", description: "Description of episode 6" },
-      { title: "Episode 1", description: "Description of episode 1" },
-      { title: "Episode 2", description: "Description of episode 2" },
-      { title: "Episode 3", description: "Description of episode 3" },
-      { title: "Episode 4", description: "Description of episode 4" },
-      { title: "Episode 5", description: "Description of episode 5" },
-      { title: "Episode 6", description: "Description of episode 6" },
-      // Daha fazla bölüm ekleyebilirsiniz
-    ]
+    title: animeInfo.name,
+    description: animeInfo.description,
+    episodeCount: animeInfo.total_episodes,
+    releasedCount: 0,
+    largeImage: animeInfo.second_image, // Büyük arka plan resmi
+    smallImage: animeInfo.first_image, // Küçük resim
+    episodes:animeInfo.episodes
   };
 
   return (
-    <div className="sm:w-11/12 md:w-10/12 lg:w-8/12 xl:w-8/12 mx-auto mt-12 w-2/4">
+    <div className="sm:w-11/12 md:w-10/12 lg:w-8/12 xl:w-8/12 mx-auto mt-5 w-2/4 h-screen">
       <div 
         className="relative bg-gray-900 text-gray-200 rounded-lg overflow-hidden shadow-lg cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
@@ -67,18 +66,18 @@ const AnimeInfo = () => {
         </div>
 
         {/* Küçük Resim ve Bilgiler */}
-        <div className="absolute inset-x-0 bottom-0 p-6 rounded-t-lg relative">
+        <div className="inset-x-0 bottom-0 p-6 rounded-t-lg relative">
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-800 to-transparent opacity-80 rounded-t-lg" />
           <div className="relative">
-            <div className="flex items-end">
-              <div className="relative">
+            <div className="flex items-center">
+              <div className="relative w-1/6 h-6/6">
                 <img
                   src={anime.smallImage}
                   alt="Anime Thumbnail"
-                  className="w-32 h-32 object-cover rounded-lg border-4 border-gray-600 shadow-md"
+                  className="w-full h-full object-cover rounded-lg border-4 border-gray-600 shadow-md"
                 />
               </div>
-              <div className="ml-6">
+              <div className="ml-6 text-sm w-5/6">
                 <h1 className="text-4xl font-bold text-gray-100">{anime.title}</h1>
                 <p className="mt-2 text-lg">{anime.description}</p>
                 <p className="mt-2 text-sm text-gray-400">Episodes: {anime.episodeCount}</p>
@@ -93,13 +92,15 @@ const AnimeInfo = () => {
       <div className="bg-gray-800 p-6 mt-6 rounded-lg shadow-md max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-600">
         <h2 className="text-3xl font-semibold text-gray-100 mb-4">Episodes</h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3">
-          {anime.episodes.map((episode, index) => (
-            <div key={index} className="relative bg-gray-700 p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-600">
+          {anime.episodes?.map((episode, index) => (
+            <div 
+            onClick={()=>startAnimePlayer( anime, episode.episode_number)}
+            key={index} className="relative bg-gray-700 p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:bg-gray-600">
               <div className="absolute top-0 right-0 bg-yellow-500 text-white font-semibold text-xs px-2 py-1 rounded-bl-lg">
                 {index + 1}
               </div>
               <h3 className="text-sm font-semibold text-gray-100">{episode.title}</h3>
-              <p className="text-gray-300 mt-1">{episode.description}</p>
+              <p className="text-gray-300 mt-1 xl:text-sm md:text-sm lg:text-sm xs:text-sm">{episode.description}</p>
             </div>
           ))}
         </div>

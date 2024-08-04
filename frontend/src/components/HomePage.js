@@ -1,17 +1,12 @@
 import React from 'react';// Arayüzlerin tanımlandığı dosyayı import edin
 import { Anime, PlayerInterface } from '../types/Anime';
 import Star from './Star';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-interface HomePageProps {
-  homePageAnimes: Anime[],
-  setActiveAnime: (arg1:PlayerInterface) => void,
-  setModal: (arg1:boolean) => void;
-}
+const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
 
-
-const HomePage: React.FC<HomePageProps> = ({ homePageAnimes, setActiveAnime, setModal }) => {
-
-  const startAnimePlayer = (anime: Anime) => {
+  const navigate = useNavigate();
+  const startAnimePlayer = (anime) => {
     setActiveAnime({...anime, activeEpisodeNumber:anime.episodes[0].episode_number });
     setModal(true);
 };
@@ -35,6 +30,10 @@ const HomePage: React.FC<HomePageProps> = ({ homePageAnimes, setActiveAnime, set
     return <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1 min-w-[220px] w-auto place-content-center">{placeholderItems}</div>;
   };
 
+  const handleAnimeInfo = (name) =>{
+    navigate(`/animeInfo/name?query=${encodeURIComponent(name)}`);
+  }
+
   return (
     <div className="w-full relative transition-all bg-gray-900 h-full py-5 px-4 cursor-pointer xs:px-0">
       {homePageAnimes.length > 0 ? (
@@ -43,7 +42,7 @@ const HomePage: React.FC<HomePageProps> = ({ homePageAnimes, setActiveAnime, set
             <div key={anime.id} className="relative group">
               <img
                 alt={anime.name}
-                src={anime.second_image}
+                src={anime.first_image}
                 className="w-full h-72 object-cover rounded-xl transition duration-500 ease-in-out transform group-hover:scale-105"
               />
               <div
@@ -54,14 +53,11 @@ const HomePage: React.FC<HomePageProps> = ({ homePageAnimes, setActiveAnime, set
                 <p className="text-sm text-gray-300">{`Episodes: ${anime.episodes[0].episode_number}`}</p>
                 <div className="flex justify-between items-center pt-2">
                   <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(anime.name, '_blank');
-                    }}
+                    onClick={() => handleAnimeInfo(anime.name)}
                     className="bg-blue-500 text-xs hover:cursor-pointer rounded-full px-2 py-1 opacity-90 text-white"
                   >
                     
-                    {anime.name}
+                    Animeye Git
                   </span>
                   <Star />
                 </div>

@@ -2,8 +2,9 @@ import { put, call } from "redux-saga/effects";
 import { SET_HOMEPAGE_ANIMES } from "../actions/actionTypes";
 
 export function* GetHomePageAnimes({ count }) {
+  const API_URL = process.env.REACT_APP_API_URL;
   try {
-    const response = yield call(fetch, `http://localhost:5000/getHomePageAnimes/${count}`);
+    const response = yield call(fetch, `${API_URL}/getHomePageAnimes/${count}`);
     if (!response.ok) {
       throw new Error('Failed to fetch');
     }

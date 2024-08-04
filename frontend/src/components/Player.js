@@ -8,6 +8,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
 
   useEffect(() => {
     setEpisodeNumber(-1);
+    console.log('degisti.');
   }, [activeAnime, modal]);
 
   useEffect(() => {

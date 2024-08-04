@@ -1,16 +1,16 @@
 import { put } from 'redux-saga/effects';
 import { SET_REQUEST_STATUS } from '../actions/actionTypes';
 
-export function* addNewEpisode(paylaod) {
+export function* UpdateAnime(paylaod) {
   const API_URL = process.env.REACT_APP_API_URL;
 
   try {
-    const response = yield fetch(`${API_URL}/addNewEpisode`, {
-      method: "POST",
+    const response = yield fetch(`${API_URL}/updateAnime`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({...paylaod}),
+      body: JSON.stringify(paylaod),
     });
 
     if (!response.ok) {
@@ -29,14 +29,14 @@ export function* addNewEpisode(paylaod) {
     } else {
       // Başarılı yanıtı JSON olarak parse et
       const result = yield response.json();
-      console.log("Episode added successfully:", result);
+      console.log("Episode updated successfully:", result);
 
       // Başarı durumunda STATE güncelle
       yield put({
         type: SET_REQUEST_STATUS,
         payload: {
           isSuccessful: true,
-          message: "Episode added successfully",
+          message: "Episode updatedsuccessfully",
         },
       });
     }
