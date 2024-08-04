@@ -1,61 +1,40 @@
-export interface AnimeCard{
-    _id:string;
-    title: string;
-    imageUrl: string;
-    videoUrl: string;
-    description?: string;
-    episode:string;
-    source:string;
-    watchLink:string;
+export interface Anime{
+    id: string,
+    name: string,
+    description: string,
+    first_image: string,
+    second_image:string,
+    categories: [],
+    episodes: Episode[]
+    total_episodes: Number,
 }
 
-export interface AnimeState {
-    cards: AnimeCard[];
-    favoriAnimes: FavoriteAnimeCard[];
-    animeInfos: AnimeInfos[];
-    animeEpisodesById: AnimeEpisodes[];
+export interface Episode{
+    id: string,
+    anime_id: string,
+    watch_link_1: string,
+    watch_link_2: string,
+    watch_link_3: string,
+    episode_number: number,
 }
 
-export interface IState {
-    animeReducer: AnimeState
+export interface HomePageAnime{
+    homePageAnimes: Anime[],
 }
 
-export interface FavoriteAnimeCard extends AnimeCard {
-    isWatchedAnime: boolean;
+export interface AnimeReducer{
+    animeReducer: HomePageAnime,
 }
 
-export interface AnimeEpisodes{
-    _id: string,
-    ANIME_ID: string,
-    WATCH_LINK_1: string,
-    WATCH_LINK_2: string,
-    WATCH_LINK_3: string,
-    EPISODE_NUMBER: string,
+export interface PlayerInterface extends Anime{
+    activeEpisodeNumber: Number
 }
 
-export interface AnimeInfos{
-    _id:string;
-    NAME:string,
-    DESCRIPTION:string,
-    TOTAL_EPISODES:string,
-    FIRST_IMAGE:string,
-    SECOND_IMAGE:string,
-    CATEGORIES: []
+export interface RequestStatusReducer{
+    requestStatusReducer: RequestStatusInterface
 }
 
-export interface Anime {
-    _id: string,
-    NAME: string;
-    DESCRIPTION: string;
-    TOTAL_EPISODES: number;
-    FIRST_IMAGE: string;
-    SECOND_IMAGE: string;
-    CATEGORIES: string[];
-  }
-
-export interface HomePageProps {
-    setVideo: (arg1:string) => void;
-    setModal: (arg1:boolean) => void;
-    filteredAnimes: AnimeCard[];
-    isFound: boolean
+export interface RequestStatusInterface{
+    isSuccessful: boolean,
+    message: string
 }

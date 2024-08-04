@@ -1,19 +1,21 @@
 import { all, take, takeEvery } from "redux-saga/effects";
-import { ADD_ANIME_REQUEST, ADD_NEW_EPISODE_REQUEST, GET_ANIME_CARDS, GET_ANIME_EPISODES_BYID_REQUEST, GET_ANIME_EPISODESBYCOUNT, GET_ANIME_INFOS_REQUEST } from "../actions/actionTypes";
-import { getCardDatas } from "./GetData";
-import { addNewAnime } from "./AddNewAnime";
+import { ADD_NEW_ANIME_REQUEST, ADD_NEW_EPISODE_REQUEST, GET_ANIME_REQUEST, GET_ANIMES, GET_HOMEPAGE_ANIMES, UPDATE_ANIME_REQUEST, UPDATE_EPISODE_REQUEST } from "../actions/actionTypes";
+import { GetHomePageAnimes } from "./GetHomePageAnimes";
+import { AddNewAnime } from "./AddNewAnime";
 import { getAnimeInfos } from "./GetAnimeInfos";
-import { getEpisodeInfoById } from "./GetEpisodeInfoById";
 import { addNewEpisode } from "./AddNewEpisode";
-import { getEpisodeInfoByCount } from "./getEpisodesByCount";
+import { updateEpisode } from "./updateEpisode";
+import { UpdateAnime } from "./UpdateAnime";
+import { getAnime } from "./GetAnime";
 
 export function* rootSaga() {
   yield all([
-    takeEvery(GET_ANIME_CARDS,getCardDatas),
-    takeEvery(ADD_ANIME_REQUEST, addNewAnime),
-    takeEvery(GET_ANIME_INFOS_REQUEST, getAnimeInfos),
-    takeEvery(GET_ANIME_EPISODES_BYID_REQUEST, getEpisodeInfoById),
+    takeEvery(GET_HOMEPAGE_ANIMES, GetHomePageAnimes),
+    takeEvery(ADD_NEW_ANIME_REQUEST, AddNewAnime),
+    takeEvery(GET_ANIMES, getAnimeInfos),
     takeEvery(ADD_NEW_EPISODE_REQUEST, addNewEpisode),
-    takeEvery(GET_ANIME_EPISODESBYCOUNT, getEpisodeInfoByCount)
+    takeEvery(UPDATE_EPISODE_REQUEST, updateEpisode),
+    takeEvery(UPDATE_ANIME_REQUEST, UpdateAnime),
+    takeEvery(GET_ANIME_REQUEST, getAnime),
   ]);
 }

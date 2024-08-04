@@ -1,12 +1,20 @@
 import { put } from "redux-saga/effects";
+import { SET_ANIME_INFO } from "../actions/actionTypes";
 
-export function* getAnimeInfos() {
+export function* getAnime(payload) {
   const API_URL = process.env.REACT_APP_API_URL;
   try {
-    console.log('Fetching anime infos...', API_URL);
+    console.log('Fetching anime infos...');
     
     // API çağrısını yap
-    let response = yield fetch(`${API_URL}/animes`);
+    let response = yield fetch(`${API_URL}/searchAnime`,{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    });
+
     
     // Yanıtın JSON formatında olduğunu varsayalım
     if (!response.ok) {
@@ -14,11 +22,11 @@ export function* getAnimeInfos() {
     }
     
     let data = yield response.json();
-    
-    console.log(data, "SAGA");
+    console.log(data, "SAGAsss");
+    yield put({ type: SET_ANIME_INFO, payload:  data});
     
     // Geriye bir action gönderelim
-    yield put({ type: 'SET_ANIMES', payload: data });
+    //yield put({ type: 'SET_ANIMES', payload: data });
     
   } catch (error) {
     console.error('Error fetching anime infos:', error);

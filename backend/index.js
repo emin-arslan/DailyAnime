@@ -1,157 +1,276 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
-const Anime = require("./db/CardData");
-const AnimeAdd = require("./db/AnimeInfo");
+const mongoose = require("mongoose");
+const AnimeInfo = require("./db/AnimeInfo");
 const AnimeEpisode = require("./db/AnimeEpisode");
+require("./db/config")
 const app = express();
-const AnimeXin = require("./Animexin");
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-const allowedIPs = ['']; // Boş IP listesi
+// IP kontrolü
+const allowedIPs = ["88.230.139.177"];
 
-// Proxy arkasında çalışırken gerçek IP'yi almak için trust proxy ayarı
 app.set('trust proxy', true);
 
-// IP kontrolü yapan middleware
 const ipFilter = (req, res, next) => {
-  const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  // x-forwarded-for başlığını kontrol et
+  const forwardedFor = req.headers['x-forwarded-for'];
+  let clientIp = forwardedFor ? forwardedFor.split(',').shift().trim() : req.connection.remoteAddress;
 
-  if (allowedIPs.includes(clientIp)) {
-    next(); // İzin verilen IP, işleme devam et
+  // Eğer IP yerel IP ise (localhost), bunu kontrol et
+  if (clientIp === '::1' || clientIp === '127.0.0.1') {
+    clientIp = 'localhost';
+  }
+
+  // IP'yi logla
+  console.log("Client IP:", clientIp);
+
+  // IP kontrolü
+  if (allowedIPs.includes(clientIp) || clientIp === 'localhost') {
+    next();
   } else {
-    res.status(400).json({ error: 'Erişim engellendi' }); // 400 hata kodu ve mesaj dön
+    res.status(403).json({ message: 'Erişim engellendi' }); // 403 hata kodu
   }
 };
 
 
-// Middleware'i en üst düzeyde uygulayın
-app.use(ipFilter);
+// Endpoint oluşturma
+app.get('/getHomePageAnimes/:count', async (req, res) => {
+  const count = parseInt(req.params.count, 10);
 
-async function setAnimeDatas() {
   try {
-    const resultCardArray = [];
-    const chineseAnimeCards = await AnimeXin();
-    for (let index = 0; index < 18; index++) {
-      if (chineseAnimeCards[index].title != null && chineseAnimeCards[index].title != "") resultCardArray.push(chineseAnimeCards[index]);
-    }
-    await Anime.deleteMany({});
-    await Anime.insertMany(resultCardArray);
+    // Son eklenen bölümleri al
+    const recentEpisodes = await AnimeEpisode.find().sort({ _id: -1 }).limit(count);
+
+    // Anime ID'leriyle eşleşen anime bilgilerini al
+    const animeIds = recentEpisodes.map(episode => episode.ANIME_ID);
+    const animeInfos = await AnimeInfo.find({ _id: { $in: animeIds } });
+
+    // Bölümleri anime bilgileriyle eşleştir
+    const result = animeInfos.map(anime => {
+      const episodes = recentEpisodes.filter(episode => episode.ANIME_ID.toString() === anime._id.toString());
+
+      return {
+        id: anime._id,
+        name: anime.NAME,
+        description: anime.DESCRIPTION,
+        first_image: anime.FIRST_IMAGE,
+        second_image: anime.SECOND_IMAGE,
+        categories: anime.CATEGORIES,
+        total_episodes: anime.TOTAL_EPISODES,
+        episodes: episodes.map(ep => ({
+          episode_number: ep.EPISODE_NUMBER,
+          watch_link_1: ep.WATCH_LINK_1,
+          watch_link_2: ep.WATCH_LINK_2,
+          watch_link_3: ep.WATCH_LINK_3
+        }))
+      };
+    });
+
+    res.json(result);
   } catch (error) {
-    console.error("setAnimeDatas Hata:", error);
-  } finally {
-    // setAnimeDatas fonksiyonu tamamlandıktan sonra tekrar çağır
-    //setTimeout(setAnimeDatas, 2000000); // Her 5 dakikada bir (300000 ms) setAnimeDatas fonksiyonunu çağırır
-  }
-}
-
-//setAnimeDatas(); // İlk kez başlatmak için setAnimeDatas fonksiyonunu çağır
-
-// GET endpoint: /animeCards
-app.get("/animeCards", async (req, resp) => {
-  try {
-    const animeCards = await Anime.find({});
-    resp.status(200).json({ body: animeCards });
-  } catch (error) {
-    resp.status(500).json({ error: 'Veriler alınırken hata oluştu' });
-  }
-});
-
-// POST endpoint: /addAnime
-app.post("/addAnime", async (req, resp) => {
-  try {
-    console.log(req.body);
-    const newAnime = req.body; // Gelen veri
-    console.log(newAnime.NAME, newAnime.DESCRIPTION, newAnime.TOTAL_EPISODES);
-    if (!newAnime.NAME || !newAnime.DESCRIPTION || !newAnime.TOTAL_EPISODES) {
-      return resp.status(400).json({ error: 'Gerekli alanlar eksik' });
-    }
-
-    // Yeni anime verisini MongoDB'ye ekle
-    const addedAnime = await AnimeAdd.create(newAnime);
-    resp.status(201).json({ message: 'Anime başarıyla eklendi', data: addedAnime });
-  } catch (error) {
-    console.error("addAnime Hata:", error);
-    resp.status(500).json({ error: 'Anime eklenirken hata oluştu' });
+    console.error('Hata:', error);
+    res.status(500).json({ error: 'Sunucu hatası' });
   }
 });
 
-app.get("/animeInfos", async (req, resp) => {
-  console.log('sa');
+app.get('/animes', async (req, res) => {
   try {
-    // Fetch specified fields, '_id' is included by default unless explicitly excluded
-    const animeNames = await AnimeAdd.find({});
-    resp.status(200).json({ body: animeNames });
+    // Tüm anime bilgilerini çek
+    const animes = await AnimeInfo.find().exec();
+
+    // Anime'ye ait en son bölümü bul ve anime bilgilerine ekle
+    const animesWithLastEpisode = await Promise.all(animes.map(async (anime) => {
+      // Anime'ye ait en yüksek bölüm numarasını bul
+      const lastEpisode = await AnimeEpisode.findOne({ ANIME_ID: anime._id })
+        .sort({ EPISODE_NUMBER: -1 })
+        .exec();
+
+      // Anime bilgilerine en son yayınlanan bölüm numarasını ekle
+      return {
+        ...anime.toObject(),
+        LAST_PUBLISHED_EPISODE: lastEpisode ? lastEpisode.EPISODE_NUMBER : 0
+      };
+    }));
+
+    res.json(animesWithLastEpisode);
   } catch (error) {
-    resp.status(500).json({ error: 'Animelerin isimleri alınırken hata oluştu' });
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-// Yeni POST endpoint: /addEpisode
-app.post("/addEpisode", async (req, resp) => {
+// Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
+app.post('/addNewAnime', ipFilter, async (req, res) => {
+  const { NAME, DESCRIPTION, TOTAL_EPISODES, FIRST_IMAGE, SECOND_IMAGE, CATEGORIES } = req.body;
+  console.log(req.body)
   try {
-    const newEpisode = req.body; // Gelen veri
-    if (!newEpisode.ANIME_ID || !newEpisode.EPISODE_NUMBER) {
-      return resp.status(400).json({ error: 'Gerekli alanlar eksik' });
+    // Aynı isimde anime olup olmadığını kontrol et
+    const existingAnime = await AnimeInfo.findOne({ NAME });
+    if (existingAnime) {
+      return res.status(400).json({ message: 'Anime with the same name already exists' });
     }
 
-    // Yeni bölüm verisini MongoDB'ye ekle
-    const addedEpisode = await AnimeEpisode.create(newEpisode);
-    resp.status(201).json({ message: 'Bölüm başarıyla eklendi', data: addedEpisode });
+    const newAnime = new AnimeInfo({
+      NAME,
+      DESCRIPTION,
+      TOTAL_EPISODES,
+      FIRST_IMAGE,
+      SECOND_IMAGE,
+      CATEGORIES,
+    });
+
+    const savedAnime = await newAnime.save();
+    res.status(201).json(savedAnime);
   } catch (error) {
-    console.error("addEpisode Hata:", error);
-    resp.status(500).json({ error: 'Bölüm eklenirken hata oluştu' });
+    res.status(500).json({ message: 'Server error', error });
   }
 });
 
-// Yeni GET endpoint: /episodesbycount
-app.get("/episodesbycount", async (req, resp) => {
+// Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
+app.post('/addNewEpisode', ipFilter, async (req, res) => {
+  const { animeId, watchLink1, watchLink2, watchLink3, episodeNumber } = req.body.payload;
+
   try {
-    const { id } = req.query; // Extract 'id' from query parameters
-    const query = {};
-    if (id) {
-      query._id = id; // If 'id' is provided, set it in the query object
+    // Anime'nin var olup olmadığını kontrol et
+    console.log(req.body)
+    const animeExists = await AnimeInfo.findById(animeId);
+    if (!animeExists) {
+      return res.status(404).json({ message: 'Anime not found' });
     }
 
-    const episodes = await AnimeEpisode.find(query); // Fetch episodes based on the query
-    resp.status(200).json({ body: episodes });
+    // Aynı bölüm numarasına sahip bir bölüm olup olmadığını kontrol et
+    const existingEpisode = await AnimeEpisode.findOne({ ANIME_ID: animeId, EPISODE_NUMBER: episodeNumber });
+    if (existingEpisode) {
+      return res.status(400).json({ message: 'Episode number already exists for this anime' });
+    }
+
+    // Yeni bölümü ekle
+    const newEpisode = new AnimeEpisode({
+      ANIME_ID: animeId,
+      WATCH_LINK_1: watchLink1,
+      WATCH_LINK_2: watchLink2,
+      WATCH_LINK_3: watchLink3,
+      EPISODE_NUMBER: episodeNumber
+    });
+
+    await newEpisode.save();
+    res.status(201).json(newEpisode);
   } catch (error) {
-    resp.status(500).json({ error: 'Bölümler alınırken hata oluştu' });
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-// Yeni GET endpoint: /episodes
-app.get("/episodes", async (req, resp) => {
-  try {
-    const { id, count } = req.query; // Extract 'id' and 'count' from query parameters
+// Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
+app.put('/updateEpisode', ipFilter, async (req, res) => {
+  const { animeId, watchLink1, watchLink2, watchLink3, episodeNumber } = req.body.payload;
 
-    let episodes = [];
-    
-    if (id) {
-      // If 'id' is provided, find episodes with matching ANIME_ID
-      episodes = await AnimeEpisode.find({ ANIME_ID: id });
-    } else if (count) {
-      // If 'count' is provided, find the first 'count' episodes while skipping those with the same ANIME_ID
-      episodes = await AnimeEpisode.aggregate([
-        { $group: { _id: "$ANIME_ID", episodes: { $push: "$$ROOT" } } },
-        { $unwind: "$episodes" },
-        { $replaceRoot: { newRoot: "$episodes" } },
-        { $limit: parseInt(count) }
-      ]);
+  try {
+    // Find the episode by animeId and episodeNumber
+    const episode = await AnimeEpisode.findOne({
+      ANIME_ID: animeId,
+      EPISODE_NUMBER: episodeNumber
+    });
+
+    if (!episode) {
+      return res.status(404).json({ message: 'Episode not found' });
     }
 
-    resp.status(200).json({ body: episodes });
+    // Update the fields if the values are provided
+    if (watchLink1) episode.WATCH_LINK_1 = watchLink1;
+    if (watchLink2) episode.WATCH_LINK_2 = watchLink2;
+    if (watchLink3) episode.WATCH_LINK_3 = watchLink3;
+
+    // Save the updated episode
+    await episode.save();
+
+    res.status(200).json({ message: 'Episode updated successfully', episode });
   } catch (error) {
-    resp.status(500).json({ error: 'Bölümler alınırken hata oluştu' });
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+// Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
+app.put('/updateAnime', ipFilter, async (req, res) => {
+  const { id ,name, description, totalEpisodes, smallImage, largeImage, categories } = req.body.payload;
+
+  try {
+    const updateFields = {};
+
+    // Gelen değerleri kontrol et ve sadece dolu olanları güncelle
+    if (name) updateFields.NAME = name;
+    if (description) updateFields.DESCRIPTION = description;
+    if (totalEpisodes || totalEpisodes === 0) updateFields.TOTAL_EPISODES = totalEpisodes;
+    if (smallImage) updateFields.FIRST_IMAGE = smallImage;
+    if (largeImage) updateFields.SECOND_IMAGE = largeImage;
+    if (categories) updateFields.CATEGORIES = categories;
+
+    // Anime bilgilerini güncelle
+    const updatedAnime = await AnimeInfo.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true });
+
+    if (!updatedAnime) {
+      return res.status(404).json({ message: 'Anime not found' });
+    }
+
+    res.status(200).json(updatedAnime);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+app.post('/searchAnime', async (req, res) => {
+  const name  = req.body.payload; // Anime ismini body'den al
+  console.log(req.body.payload);
+  if (!name) {
+    return res.status(400).json({ error: 'Anime ismi gereklidir' });
+  }
+  const animeName = name.toLowerCase(); // Anime ismini küçük harfe dönüştür
+
+  try {
+    // Anime ismiyle anime bilgilerini arama (case-insensitive)
+    const anime = await AnimeInfo.findOne({
+      NAME: { $regex: new RegExp('^' + animeName + '$', 'i') }
+    });
+
+    if (!anime) {
+      return res.status(404).json({ error: 'Anime bulunamadı' });
+    }
+
+    // Bulunan anime ID'si ile bölümleri arama
+    const episodes = await AnimeEpisode.find({ ANIME_ID: anime._id });
+
+    // Anime bilgilerini ve bölümleri döndür
+    res.json({
+        id: anime._id,
+        name: anime.NAME,
+        description: anime.DESCRIPTION,
+        total_episodes: anime.TOTAL_EPISODES,
+        first_image: anime.FIRST_IMAGE,
+        second_image: anime.SECOND_IMAGE,
+        categories: anime.CATEGORIES,
+        episodes: episodes.map(ep => ({
+          id: ep._id,
+          episode_number: ep.EPISODE_NUMBER,
+          watch_link_1: ep.WATCH_LINK_1,
+          watch_link_2: ep.WATCH_LINK_2,
+          watch_link_3: ep.WATCH_LINK_3
+        }))      
+    });
+  } catch (error) {
+    console.error('Hata:', error);
+    res.status(500).json({ error: 'Sunucu hatası' });
   }
 });
 
 // Index sayfasına erişimi engelleyen endpoint
 app.get("/", (req, res) => {
-  console.log('selam')
-  res.sendFile(path.join(__dirname, 'access_denied.jpg')); // access_denied.jpg dosyasını proje kök dizinine koyun
+  console.log('Erişim engellendi');
+  res.status(403).send("Erişim engellendi");
 });
 
 app.listen(process.env.PORT || 5000, () => {

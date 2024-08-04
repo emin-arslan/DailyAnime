@@ -1,7 +1,7 @@
 // MediaPlayer.js
 import React, { useRef, useState, useEffect } from "react";
 
-const MediaPlayer = ({ videoSrc, onClose }) => {
+const MediaPlayer = ({ videoSrc = "", onClose="" }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);

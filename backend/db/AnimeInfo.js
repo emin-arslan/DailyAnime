@@ -5,15 +5,15 @@ const Schema = mongoose.Schema;
 const animeInfoSchema = new Schema({
   NAME: {
     type: String,
-    required: true
+    required: false
   },
   DESCRIPTION: {
     type: String,
-    required: true
+    required: false
   },
   TOTAL_EPISODES: {
     type: Number,
-    required: true
+    required: false
   },
   FIRST_IMAGE: {
     type: String,

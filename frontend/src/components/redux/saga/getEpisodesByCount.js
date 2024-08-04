@@ -1,4 +1,4 @@
-import { put } from "redux-saga/effects";
+/*import { put } from "redux-saga/effects";
 import { GET_ANIME_INFOS_REQUEST, SET_ANIME_DATA, SET_ANIME_EPISODESBYCOUNT, SET_ANIME_EPISODESBYID, SET_ANIME_INFOS, SET_ANIME_INFOS_REQUEST } from "../actions/actionTypes";
 
 export function* getEpisodeInfoByCount({count}) {
@@ -19,5 +19,5 @@ export function* getEpisodeInfoByCount({count}) {
   } catch (error) {
     console.error('Error fetching episode info:', error);
   }
-}
+}*/
 

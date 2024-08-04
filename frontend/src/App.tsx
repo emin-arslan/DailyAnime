@@ -1,114 +1,89 @@
-import React, { useEffect, useState } from "react";
-import Navi from "./components/navi/Navi";
-import Player from "./components/Player";
-
-import { useDispatch, useSelector } from "react-redux";
-import { getAnimeDatas } from "./components/redux/actions/action";
-import { getAnimeCards } from "./components/redux/selector";
-import HomePage from "./components/HomePage";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import { getAnimes, getHomePageAnimesAction } from './components/redux/actions/action';
 import { Analytics } from "@vercel/analytics/react";
-import { FavoriteAnimeCard } from "./types/Anime";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AnimeForm from "./components/AnimeForm";
-import MainPage from "./components/MainPage";
-import AnimeInfo from "./components/AnimeInfo";
-import axios from "axios";
-import AccessDenied from "./components/AccesDenided";
+import Navi from './components/navi/Navi';
+import Container from './components/Container';
+import Player from './components/Player';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getHomePageAnimesSelector, getRequestStatus } from './components/redux/selector';
+import AnimeInfo from './components/AnimeInfo';
+import MainForm from './components/MainForm';
 
-function App() {
-  const dispatch = useDispatch();
-  const [video, setVideo] = useState("");
+const App = () => {
+  const [activeAnime, setActiveAnime] = useState({});
   const [modal, setModal] = useState(false);
-  const [searchTxt, setSearchTxt] = useState("");
-  const [animeListingType, setAnimeListingType] = useState("All");
-  const [isFound, setIsFound] = useState(true);
-  const [accessDenied, setAccessDenied] = useState(false);
-
-  const anime = useSelector(getAnimeCards);
+  const dispatch = useDispatch();
+  const homePageAnimes = useSelector(getHomePageAnimesSelector);
+  const requestStatus = useSelector(getRequestStatus);
 
   useEffect(() => {
-    dispatch(getAnimeDatas());
+    dispatch(getAnimes());
   }, [dispatch]);
 
-  let filteredAnimes = anime || [];
-
-  const favoriAnimesJson = localStorage.getItem("favoriAnimes") ?? "[]";
-  const favoriAnimes: FavoriteAnimeCard[] = JSON.parse(favoriAnimesJson);
-
-  if (favoriAnimes != null && favoriAnimes.length < 1) {
-    localStorage.setItem("favoriAnimes", JSON.stringify([]));
-  }
-
-  switch (animeListingType) {
-    case "Favorites":
-      filteredAnimes = favoriAnimes;
-      break;
-    case "WatchedList":
-      filteredAnimes = favoriAnimes.filter((animeItem) => animeItem.isWatchedAnime);
-      break;
-    case "All":
-      filteredAnimes = anime;
-      break;
-    default:
-      filteredAnimes = anime;
-      break;
-  }
-
-  if (filteredAnimes != null && filteredAnimes.length < 1 && isFound) setIsFound(false);
-
-  if (searchTxt.length > 0) {
-    const temp_array = filteredAnimes.filter((anime) => anime.title.toLowerCase().includes(searchTxt.toLowerCase()));
-    if (temp_array && temp_array.length > 0) {
-      filteredAnimes = temp_array;
-    } else if (isFound) setIsFound(false);
-    if (temp_array.length > 0 && !isFound) setIsFound(true);
-  } else if (filteredAnimes != null && filteredAnimes.length > 0 && !isFound) setIsFound(true);
+  useEffect(() => {
+    dispatch(getHomePageAnimesAction(5));
+  }, [dispatch]);
 
   useEffect(() => {
-    const checkAccess = async () => {
-      try {
-        await axios.get("https://daily-anime-omega.vercel.app/"); // Backend URL
-      } catch (error: any) {
-        if (error.response && error.response.status === 400) {
-          setAccessDenied(true);
-        }
-      }
-    };
-
-    checkAccess();
-  }, []);
+    if (requestStatus.isSuccessful) {
+      toast(requestStatus.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else if (requestStatus.isSuccessful === false) {
+      toast(requestStatus.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  }, [requestStatus]);
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <MainPage />,
+      element: (
+        <>
+          <Container>
+            <HomePage homePageAnimes={homePageAnimes} setActiveAnime={setActiveAnime} setModal={setModal} />
+          </Container>
+          <Player modal={modal} activeAnime={activeAnime} setModal={setModal} />
+          <Analytics />
+        </>
+      ),
     },
     {
-      path: "anime",
-      element: <AnimeForm />,
+      path: "animePanel",
+      element: <MainForm />,
     },
     {
-      path: "animeInfo",
-      element: <AnimeInfo />,
+      path: "animeInfo/name",
+      element: <AnimeInfo  setModal={setModal} setActiveAnime={setActiveAnime}/>,
     },
   ]);
 
-  if (accessDenied) {
-    return <AccessDenied />;
-  }
-
   return (
-    <div className="w-full relative transition-all bg-gray-900 h-screen">
-      <Navi
-        searchTxt={searchTxt}
-        setSearchTxt={setSearchTxt}
-        setModal={setModal}
-        animeListingType={animeListingType}
-        setAnimeListingType={setAnimeListingType}
-      />
+    <div className="w-full h-auto relative transition-all bg-gray-900">
+      <ToastContainer />
+      <Navi />
       <RouterProvider router={router} />
     </div>
   );
-}
+};
 
 export default App;
