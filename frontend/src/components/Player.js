@@ -4,11 +4,12 @@ const Player = ({ modal, activeAnime, setModal }) => {
   const [episodeNumber, setEpisodeNumber] = useState(-1);
   const [isEpisodesVisible, setIsEpisodesVisible] = useState(true);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
+  const [selectedLink, setSelectedLink] = useState("");
   const videoRef = useRef(null);
 
   useEffect(() => {
     setEpisodeNumber(-1);
-    console.log('degisti.');
+    console.log("degisti.");
   }, [activeAnime, modal]);
 
   useEffect(() => {
@@ -46,6 +47,12 @@ const Player = ({ modal, activeAnime, setModal }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.src = selectedLink;
+    }
+  }, [selectedLink]);
+
   const handleClickOutside = (event) => {
     if (event.target.id === "modal-background") {
       setModal(false);
@@ -69,25 +76,35 @@ const Player = ({ modal, activeAnime, setModal }) => {
 
   const handlePreviousEpisode = () => {
     setCurrentEpisodeIndex((prevIndex) => {
-      const newIndex = Math.min(prevIndex + 1, activeAnime.episodes.length - 1);
-      setEpisodeNumber(activeAnime.episodes[newIndex]?.episode_number || -1);
+      const newIndex = Math.min(prevIndex + 1, activeAnime.episodes?.length - 1 || 0);
+      setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
       return newIndex;
     });
   };
 
   const handleNextEpisode = () => {
-
     setCurrentEpisodeIndex((prevIndex) => {
       const newIndex = Math.max(prevIndex - 1, 0);
-      setEpisodeNumber(activeAnime.episodes[newIndex]?.episode_number || -1);
+      setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
       return newIndex;
     });
-    
   };
 
-  const episodeIndex = episodeNumber !== -1
-    ? activeAnime.episodes.findIndex((episode) => episode.episode_number === episodeNumber)
-    : currentEpisodeIndex;
+  const episodeIndex = 
+    episodeNumber !== -1
+      ? activeAnime.episodes?.findIndex(
+          (episode) => episode.episode_number === episodeNumber
+        )
+      : currentEpisodeIndex;
+
+  const episodeLinks = [
+    activeAnime.episodes?.[episodeIndex]?.watch_link_1,
+    activeAnime.episodes?.[episodeIndex]?.watch_link_2,
+    activeAnime.episodes?.[episodeIndex]?.watch_link_3,
+  ].filter((link) => link);
+
+  // Fallback to empty string if no link is selected
+  const linkToUse = episodeLinks.length > 0 ? episodeLinks[0] : "";
 
   if (!modal) return null;
 
@@ -103,11 +120,46 @@ const Player = ({ modal, activeAnime, setModal }) => {
             ref={videoRef}
             className="w-full h-full rounded-lg"
             title="video-player"
-            src={activeAnime.episodes[episodeIndex]?.watch_link_1?.includes("https")
-              ? activeAnime.episodes[episodeIndex]?.watch_link_1?.slice(6)
-              : activeAnime.episodes[episodeIndex]?.watch_link_1}
+            src={linkToUse}
             allowFullScreen
           ></iframe>
+
+          {/* Dropdown menu for selecting video link */}
+          {isEpisodesVisible && (
+            <div className="absolute top-10 right-36 z-10">
+              <select
+                onChange={(e) => setSelectedLink(e.target.value)}
+                value={selectedLink}
+                className="bg-gray-800 border border-gray-600 text-white rounded-lg shadow-md focus:outline-none focus:ring-2 p-2 w-32 appearance-none"
+              >
+                <option value="" disabled>
+                  Player Seç
+                </option>
+                {episodeLinks.map((link, index) => (
+                  <option key={index} value={link}>
+                    Player {index + 1}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute top-0 right-0 mt-2 mr-2 w-4 h-4 pointer-events-none">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-full h-full text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
+
           <button
             onClick={toggleEpisodesPane}
             className={`absolute xs:text-xs top-10 right-4 hover:opacity-100 transition-all z-10 p-2 bg-red-500 text-white rounded-lg shadow-md ${
@@ -131,7 +183,11 @@ const Player = ({ modal, activeAnime, setModal }) => {
             <div className="flex justify-center items-center mb-4">
               <input
                 type="number"
-                value={episodeNumber !== -1 ? episodeNumber : activeAnime.activeEpisodeNumber}
+                value={
+                  episodeNumber !== -1
+                    ? episodeNumber
+                    : activeAnime.activeEpisodeNumber
+                }
                 onChange={handleEpisodeInputChange}
                 className="w-4/6 text-black p-2 rounded-l-md border border-gray-600"
                 placeholder="Bölüm"
@@ -144,7 +200,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
               </button>
             </div>
             <ul className="space-y-6">
-              {activeAnime.episodes.map((episode, index) => (
+              {activeAnime.episodes?.map((episode, index) => (
                 <li
                   key={episode.episode_number}
                   id={`episode-${episode.episode_number}`}
@@ -155,7 +211,14 @@ const Player = ({ modal, activeAnime, setModal }) => {
                   className={`bg-gradient-to-r from-gray-700 opacity-40 border-2 border-gray-800 hover:opacity-100 via-gray-800 to-gray-900 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer ${
                     index === currentEpisodeIndex ? "bg-gray-600" : ""
                   } ${
-                    episodeNumber >= 0 ? episodeNumber === episode.episode_number ? "border-2 !border-green-300" : "" : activeAnime.activeEpisodeNumber  === episode.episode_number ? "border-2 !border-green-300" : ""
+                    episodeNumber >= 0
+                      ? episodeNumber === episode.episode_number
+                        ? "border-2 !border-green-300"
+                        : ""
+                      : activeAnime.activeEpisodeNumber ===
+                        episode.episode_number
+                      ? "border-2 !border-green-300"
+                      : ""
                   }`}
                 >
                   <div className="flex items-center p-4 space-x-6">
@@ -168,7 +231,9 @@ const Player = ({ modal, activeAnime, setModal }) => {
                       <p className="text-2xl lg:text-sm sm:text-sm xs:text-xs md:text-sm font-bold mb-1">
                         {episode.episode_number}.Bölüm
                       </p>
-                      <p className="text-sm text-gray-300">Bu bölümün özeti...</p>
+                      <p className="text-sm text-gray-300">
+                        Bu bölümün özeti...
+                      </p>
                     </div>
                   </div>
                 </li>
@@ -176,16 +241,16 @@ const Player = ({ modal, activeAnime, setModal }) => {
             </ul>
           </div>
         </div>
-        <div className="absolute bottom-[8%] right-0 w-2/12 flex justify-end space-x-2 bg-transparent ">
+        <div className="absolute bottom-[8%] right-0 w-2/12 flex justify-end space-x-2 bg-transparent">
           <button
             onClick={handlePreviousEpisode}
-            className="p-4 flex items-center justify-center bg-black text-white text-sm xs:text-xs xs:p-2 shadow-lg opacity-50 hover:opacity-90 transition-all duration-300 hover:bg-gray-800"
+            className="p-4 flex items-center justify-center bg-gray-800 text-white text-sm xs:text-xs xs:p-2 shadow-lg opacity-70 hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
           >
             Önceki Bölüm
           </button>
           <button
             onClick={handleNextEpisode}
-            className="p-4 flex items-center justify-center bg-black text-white text-sm xs:text-xs xs:p-2 shadow-lg opacity-50 hover:opacity-90 hover:bg-gray-800 transition-all duration-300"
+            className="p-4 flex items-center justify-center bg-gray-800 text-white text-sm xs:text-xs xs:p-2 shadow-lg opacity-70 hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
           >
             Sonraki Bölüm
           </button>
