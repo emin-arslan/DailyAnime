@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
-
 const AnimeInfo = ({ setModal, setActiveAnime }) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -84,28 +83,28 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
     ]
   };
 
-  const truncatedDescription = anime.description?.split('\n').slice(0, 3).join('\n');
-  const isDescriptionTruncated = anime.description?.split('\n').length > 3;
+  const truncatedDescription = anime.description?.split('\n').slice(0, 5).join('\n');
+  const isDescriptionTruncated = anime.description?.split('\n').length > 5;
 
   return (
     <div className="h-full min-h-screen bg-[#353636] text-gray-200 relative">
       {
         anime.largeImage &&
         <div className="w-full mx-auto">
-          <div className="relative flex flex-row items-start bg-[#353636] p-6 rounded-lg shadow-md">
-            <div className="absolute inset-0 overflow-hidden rounded-lg">
-              <img src={anime.largeImage} alt="Background" className="w-full h-full object-cover blur-lg opacity-50" />
+          <div className="relative flex flex-row xs:flex-col md:justify-center md:items-center sm:flex-col md:flex-col items-start bg-[#353636] p-6 rounded-lg shadow-md">
+            <div className="absolute inset-0 overflow-hidden rounded-lg ">
+              <img src={anime.largeImage} alt="Background" className="w-full h-full border border-red-400 object-cover blur-lg opacity-50" />
             </div>
-            <div className="z-10 w-4/12 mb-4 lg:mb-0 items-center flex justify-center">
+            <div className="z-10 w-4/12 mb-4 lg:mb-0 items-center flex justify-center sm:w-full xs:w-full lg:w-3/6 md:w-4/6">
               <img
                 src={anime.smallImage}
                 alt="Anime"
                 className="w-4/6 h-4/6 object-cover rounded-lg shadow-lg"
               />
             </div>
-            <div className="relative z-10 w-2/3">
+            <div className="relative z-10 w-2/3 xs:w-full sm:w-full">
               <h2 className="text-4xl font-bold mb-2">{anime.title}</h2>
-              <p className="text-lg mb-4">
+              <p className="text-lg xs:text-sm sm:text-sm mb-4 md:text-sm">
                 {showFullDescription ? anime.description : truncatedDescription}
                 {isDescriptionTruncated && !showFullDescription && (
                   <button
@@ -135,7 +134,7 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
           </div>
 
           <section className="mt-8 p-6 rounded-lg shadow-md bg-[#353636]">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 xs:flex-col">
               <h2 className="text-3xl font-semibold">Bölümler</h2>
               <div className="flex items-center space-x-2">
                 <input

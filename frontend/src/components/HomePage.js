@@ -43,7 +43,7 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
     <div className="w-full relative transition-all h-full py-5 px-4 cursor-pointer xs:px-0">
       {homePageAnimes.length > 0 ? (
         <>
-          <div className="grid grid-cols-6 xs:grid-cols-1 sm:grid-cols-2 xl:grid-cols-4  md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4 xs:gap-2 ">
+          <div className="grid grid-cols-6 xs:grid-cols-1 sm:grid-cols-2 xl:grid-cols-4  md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4 xs:p-4">
             {homePageAnimes.slice(0, visibleAnimes).map((anime) => (
               <div key={anime.id} className="relative group">
                 <img

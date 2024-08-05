@@ -167,7 +167,7 @@
         onClick={handleClickOutside}
         className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black"
       >
-        <div className="relative w-9/12  max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
+        <div className="relative w-9/12  xs:W-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
           <div className="relative w-full h-full flex items-center justify-center">
             <iframe
               ref={videoRef}
@@ -186,7 +186,7 @@
             ></iframe>
           </div>
           <div
-            className={`absolute top-0 right-0 h-full bg-[#353636] bg-opacity-75 shadow-lg transform transition-transform duration-500 ${
+            className={`absolute xs:hidden sm:hidden top-0 right-0 h-full bg-[#353636] bg-opacity-75 shadow-lg transform transition-transform duration-500 ${
               isEpisodesVisible ? "translate-x-0" : "translate-x-full"
             }`}
             style={{ width: "300px" }}
