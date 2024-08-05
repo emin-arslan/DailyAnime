@@ -165,7 +165,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
       onClick={handleClickOutside}
       className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black"
     >
-      <div className="relative w-full xs:w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
+      <div className="relative w-9/12 lg:w-9/12 xs:w-full sm:w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
         <div className="relative w-full h-full flex items-center justify-center">
           <iframe
             ref={videoRef}
