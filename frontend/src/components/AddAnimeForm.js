@@ -28,7 +28,7 @@ const AddAnimeForm = () => {
   const handleAddNewAnime = () =>{
     dispatch(addNewAnimeRequestAction({
       NAME: name,
-      DESCRIPTIN: description,
+      DESCRIPTION: description,
       TOTAL_EPISODES: totalEpisodes,
       FIRST_IMAGE: smallImage,
       SECOND_IMAGE: largeImage,
