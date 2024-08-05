@@ -42,16 +42,31 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
   const count = parseInt(req.params.count, 10);
 
   try {
-    // Son eklenen bölümleri al
-    const recentEpisodes = await AnimeEpisode.find().sort({ _id: -1 }).limit(count);
+    // Son eklenen ve farklı ANIME_ID'lere sahip bölümleri al
+    const recentEpisodes = await AnimeEpisode.aggregate([
+      { $sort: { _id: -1 } },
+      {
+        $group: {
+          _id: "$ANIME_ID",
+          episode: { $first: "$$ROOT" }
+        }
+      },
+      { $limit: count }
+    ]);
 
-    // Anime ID'leriyle eşleşen anime bilgilerini al
-    const animeIds = recentEpisodes.map(episode => episode.ANIME_ID);
+    // Alınan bölümlerden ANIME_ID'leri çıkar
+    const animeIds = recentEpisodes.map(group => group._id);
+
+    // Bu ANIME_ID'lere sahip anime bilgilerini al
     const animeInfos = await AnimeInfo.find({ _id: { $in: animeIds } });
 
+    // Bu ANIME_ID'lere sahip tüm bölümleri al
+    const allEpisodes = await AnimeEpisode.find({ ANIME_ID: { $in: animeIds } });
+
     // Bölümleri anime bilgileriyle eşleştir
-    let result = animeInfos.map(anime => {
-      const episodes = recentEpisodes.filter(episode => episode.ANIME_ID.toString() === anime._id.toString());
+    const result = animeInfos.map(anime => {
+      // Bu animeye ait tüm bölümleri al
+      const episodes = allEpisodes.filter(episode => episode.ANIME_ID.toString() === anime._id.toString());
 
       return {
         id: anime._id,
@@ -61,7 +76,7 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
         second_image: anime.SECOND_IMAGE,
         categories: anime.CATEGORIES,
         total_episodes: anime.TOTAL_EPISODES,
-        episodes: episodes.map(ep => ({
+        episodes: episodes.reverse().map(ep => ({
           episode_number: ep.EPISODE_NUMBER,
           watch_link_1: ep.WATCH_LINK_1,
           watch_link_2: ep.WATCH_LINK_2,
@@ -70,13 +85,18 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
       };
     });
 
-    result = result.reverse();
-    res.json(result);
+    // Son eklenen bölümler sırasına göre döndür
+    res.json(result.sort((a, b) => {
+      const aDate = recentEpisodes.find(ep => ep._id.toString() === a.id.toString()).episode._id.getTimestamp();
+      const bDate = recentEpisodes.find(ep => ep._id.toString() === b.id.toString()).episode._id.getTimestamp();
+      return bDate - aDate;
+    }));
   } catch (error) {
     console.error('Hata:', error);
     res.status(500).json({ error: 'Sunucu hatası' });
   }
 });
+
 
 app.get('/animes', async (req, res) => {
   try {

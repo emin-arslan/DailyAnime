@@ -18,6 +18,7 @@
         }
         setSelectedLink("");
       } else if (modal) {
+        setCurrentEpisodeIndex(0)
         setEpisodeNumber(activeAnime.activeEpisodeNumber);
       }
     }, [modal]);
