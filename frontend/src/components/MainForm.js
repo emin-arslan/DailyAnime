@@ -9,7 +9,7 @@ const MainForm = () => {
   const [activeForm, setActiveForm] = useState('addAnime');
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-gray-900">
+    <div className="relative w-full h-full flex items-center justify-center bg-[#353636]">
      
       {/* Form Konteyneri */}
       <div className="relative w-5/12 h-[850px] bg-gray-800 rounded-md shadow-lg p-6 flex flex-col overflow-hidden lg:w-2/3 xl:w-6/12 md:w-2/3 sm:w-full xs:w-full ">
