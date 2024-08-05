@@ -1,3 +1,7 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt for https://animeelysium.com
+
 User-agent: *
-Disallow:
+Disallow: /animePanel/
+
+# Sitemap location
+Sitemap: https://animeelysium.com/sitemap.xml
