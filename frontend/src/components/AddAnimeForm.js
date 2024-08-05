@@ -10,7 +10,21 @@ const AddAnimeForm = () => {
   const [smallImage, setSmallImage] = useState('');
   const [largeImage, setLargeImage] = useState('');
   const [categories, setCategories] = useState([
-    'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Slice of Life'
+    "Shounen",
+    "Seinen",
+    "Shoujo",
+    "Isekai",
+    "Okul",
+    "Polisiye",
+    "Psikolojik",
+    "Spor",
+    "Tarihi",
+    "Mecha",
+    "Ecchi",
+    "Harem",
+    "Doğaüstü Güçler",
+    "Askeri",
+    "Müzikal"
   ]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 

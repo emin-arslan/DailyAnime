@@ -23,13 +23,23 @@ const UpdateAnimeForm = () => {
   }));
 
   const categoryOptions = [
-    { value: 'Action', label: 'Action' },
-    { value: 'Adventure', label: 'Adventure' },
-    { value: 'Comedy', label: 'Comedy' },
-    { value: 'Drama', label: 'Drama' },
-    { value: 'Fantasy', label: 'Fantasy' },
-    // Add more categories as needed
+    { value: 'Shounen', label: 'Shounen' },
+    { value: 'Seinen', label: 'Seinen' },
+    { value: 'Shoujo', label: 'Shoujo' },
+    { value: 'Isekai', label: 'Isekai' },
+    { value: 'Okul', label: 'Okul' },
+    { value: 'Polisiye', label: 'Polisiye' },
+    { value: 'Psikolojik', label: 'Psikolojik' },
+    { value: 'Spor', label: 'Spor' },
+    { value: 'Tarihi', label: 'Tarihi' },
+    { value: 'Mecha', label: 'Mecha' },
+    { value: 'Ecchi', label: 'Ecchi' },
+    { value: 'Harem', label: 'Harem' },
+    { value: 'Doğaüstü Güçler', label: 'Doğaüstü Güçler' },
+    { value: 'Askeri', label: 'Askeri' },
+    { value: 'Müzikal', label: 'Müzikal' }
   ];
+  
 
   const handleNameChange = (selectedOption) => {
     setName(selectedOption ? selectedOption.value : '');
