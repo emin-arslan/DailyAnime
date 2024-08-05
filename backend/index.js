@@ -50,7 +50,7 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
     const animeInfos = await AnimeInfo.find({ _id: { $in: animeIds } });
 
     // Bölümleri anime bilgileriyle eşleştir
-    const result = animeInfos.map(anime => {
+    let result = animeInfos.map(anime => {
       const episodes = recentEpisodes.filter(episode => episode.ANIME_ID.toString() === anime._id.toString());
 
       return {
@@ -70,6 +70,7 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
       };
     });
 
+    result = result.reverse();
     res.json(result);
   } catch (error) {
     console.error('Hata:', error);
