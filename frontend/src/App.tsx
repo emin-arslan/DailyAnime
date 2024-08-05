@@ -63,9 +63,7 @@ import Footer from './components/Footer';
           <>
             
               <HomePage homePageAnimes={homePageAnimes} setActiveAnime={setActiveAnime} setModal={setModal} />
-            
-            
-            <Analytics />
+              <Analytics />
           </>
         ),
       },
