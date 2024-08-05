@@ -51,7 +51,6 @@ const UpdateAnimeForm = () => {
   };
 
   const handleSubmit = (e) => {
-    console.log('selam');
       dispatch(updateAnime({
       id: animeID,
       name,

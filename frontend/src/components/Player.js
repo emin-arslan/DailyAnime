@@ -1,7 +1,6 @@
   import React, { useEffect, useState, useRef } from "react";
 
   const Player = ({ modal, activeAnime, setModal }) => {
-    console.log(activeAnime);
     const [episodeNumber, setEpisodeNumber] = useState(-1);
     const [isEpisodesVisible, setIsEpisodesVisible] = useState(true);
     const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
@@ -49,7 +48,7 @@
       const videoElement = videoRef.current;
 
       if (videoElement) {
-        const handlePlay = () => console.log("Oynatıldı.");
+        const handlePlay = () => {}
         const handlePause = () => setIsEpisodesVisible(true);
 
         videoElement.addEventListener("play", handlePlay);

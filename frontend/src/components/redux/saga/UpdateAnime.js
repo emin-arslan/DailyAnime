@@ -16,7 +16,6 @@ export function* UpdateAnime(paylaod) {
     if (!response.ok) {
       // Sunucudan gelen hata mesajını JSON olarak parse et
       const errorResponse = yield response.json();
-      console.log(errorResponse, "error");
 
       // Hata durumunda STATE güncelle
       yield put({

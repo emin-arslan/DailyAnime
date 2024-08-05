@@ -10,7 +10,6 @@ export const getHomePageAnimesAction = (count) =>{
 }
 
 export const addNewAnimeRequestAction = (anime) =>{
-  console.log(anime);
   return{
     type: ADD_NEW_ANIME_REQUEST,
     payload: anime

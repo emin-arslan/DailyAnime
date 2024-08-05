@@ -3,7 +3,6 @@ import { put } from "redux-saga/effects";
 export function* getAnimeInfos() {
   const API_URL = process.env.REACT_APP_API_URL;
   try {
-    console.log('Fetching anime infos...', API_URL);
     
     // API çağrısını yap
     let response = yield fetch(`${API_URL}/animes`);
@@ -14,8 +13,6 @@ export function* getAnimeInfos() {
     }
     
     let data = yield response.json();
-    
-    console.log(data, "SAGA");
     
     // Geriye bir action gönderelim
     yield put({ type: 'SET_ANIMES', payload: data });

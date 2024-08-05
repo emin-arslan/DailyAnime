@@ -7,7 +7,6 @@ import { addNewEpisodeRequestAction } from './redux/actions/action';
 const AddEpisodeForm = () => {
   const dispatch = useDispatch();
   const animes = useSelector(getAnimes);
-  console.log(animes, " animes");
 
   // Map animes to options with both NAME and LAST_PUBLISHED_EPISODE
   const animeOptions = animes.map(anime => ({
@@ -29,7 +28,6 @@ const AddEpisodeForm = () => {
     setAnimeName(selectedOption);
     if (selectedOption) {
       setEpisodeNumber(selectedOption.lastPublishedEpisode || '');
-      console.log(selectedOption, "selected");
       setAnimeID(selectedOption.id);
     }
   };

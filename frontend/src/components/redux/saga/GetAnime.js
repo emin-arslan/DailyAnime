@@ -4,7 +4,6 @@ import { SET_ANIME_INFO } from "../actions/actionTypes";
 export function* getAnime(payload) {
   const API_URL = process.env.REACT_APP_API_URL;
   try {
-    console.log('Fetching anime infos...', payload);
     
     // API çağrısını yap
     let response = yield fetch(`${API_URL}/searchAnime`,{
@@ -22,7 +21,6 @@ export function* getAnime(payload) {
     }
     
     let data = yield response.json();
-    console.log(data, "SAGAsss");
     yield put({ type: SET_ANIME_INFO, payload:  data});
     
     // Geriye bir action gönderelim
