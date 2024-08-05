@@ -92,7 +92,7 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
       {
         anime.largeImage &&
         <div className="w-full mx-auto">
-          <div className="relative flex flex-row items-start bg-gray-900 p-6 rounded-lg shadow-md">
+          <div className="relative flex flex-row items-start bg-[#353636] p-6 rounded-lg shadow-md">
             <div className="absolute inset-0 overflow-hidden rounded-lg">
               <img src={anime.largeImage} alt="Background" className="w-full h-full object-cover blur-lg opacity-50" />
             </div>
@@ -126,7 +126,7 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
               </div>
               <div className="flex space-x-2">
                 {anime.categories?.map((category, index) => (
-                  <span key={index} className="bg-gray-800 text-gray-200 py-1 px-2 rounded">
+                  <span key={index} className="bg-[#353636] text-gray-200 py-1 px-2 rounded">
                     {category}
                   </span>
                 ))}
