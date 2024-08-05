@@ -42,16 +42,12 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
   const count = parseInt(req.params.count, 10);
 
   try {
-    // Son eklenen bölümleri al ve tersine çevir
-    const recentEpisodes = await AnimeEpisode.find().sort({ _id: -1 }).limit(count).exec();
-    recentEpisodes.reverse();
+    // Son eklenen bölümleri al
+    const recentEpisodes = await AnimeEpisode.find().sort({ _id: -1 }).limit(count);
 
     // Anime ID'leriyle eşleşen anime bilgilerini al
     const animeIds = recentEpisodes.map(episode => episode.ANIME_ID);
-    const animeInfos = await AnimeInfo.find({ _id: { $in: animeIds } }).exec();
-
-    // Anime bilgilerini tersine çevir
-    animeInfos.reverse();
+    const animeInfos = await AnimeInfo.find({ _id: { $in: animeIds } });
 
     // Bölümleri anime bilgileriyle eşleştir
     const result = animeInfos.map(anime => {
@@ -80,7 +76,6 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
     res.status(500).json({ error: 'Sunucu hatası' });
   }
 });
-
 
 app.get('/animes', async (req, res) => {
   try {
