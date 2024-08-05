@@ -1,9 +1,9 @@
-import React from 'react'; // Arayüzlerin tanımlandığı dosyayı import edin
-import { Anime, PlayerInterface } from '../types/Anime';
-import Star from './Star';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Star from './Star';
 
 const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
+  const [visibleAnimes, setVisibleAnimes] = useState(15);
   const navigate = useNavigate();
 
   const startAnimePlayer = (anime) => {
@@ -27,7 +27,7 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
         </div>
       </div>
     ));
-    return <div className='h-screen'> <div className="grid  grid-cols-5 gap-x-34 p-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1 min-w-[220px] w-auto place-content-center">{placeholderItems}</div> </div>;
+    return <div className='h-screen'><div className="grid grid-cols-5 gap-x-34 p-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1 min-w-[220px] w-auto place-content-center">{placeholderItems}</div></div>;
   };
 
   const handleAnimeInfo = (name) => {
@@ -35,40 +35,58 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
     navigate(`/animeInfo/name?query=${encodedName}`);
   };
 
+  const handleShowMore = () => {
+    setVisibleAnimes((prevVisible) => prevVisible + 15);
+  };
+
   return (
     <div className="w-full relative transition-all h-full py-5 px-4 cursor-pointer xs:px-0">
       {homePageAnimes.length > 0 ? (
-        <div className="grid grid-cols-6 xs:grid-cols-1 sm:grid-cols-2 xl:grid-cols-4  md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4 xs:gap-2 ">
-          {homePageAnimes.map((anime) => (
-            <div key={anime.id} className="relative group">
-              <img
-                alt={anime.name}
-                src={anime.first_image}
-                className="w-full h-72 object-cover rounded-xl transition duration-500 ease-in-out transform group-hover:scale-105"
-              />
-              <div
-                onClick={() => startAnimePlayer(anime)}
-                className="absolute inset-0 flex flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100"
-              >
-                <p className="text-lg font-bold truncate text-white">{anime.name}</p>
-                <p className="text-sm text-gray-300">{`Episodes: ${anime.episodes[0].episode_number}`}</p>
-                <div className="flex justify-between items-center pt-2">
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation(); // Bu butonun tıklama olayının üst öğelere yayılmasını engeller
-                      handleAnimeInfo(anime.name);
-                    }}
-                    className="bg-blue-500 text-xs hover:cursor-pointer rounded-full px-2 py-1 opacity-90 text-white"
-                  >
-                    Animeye Git
-                  </span>
-                  <Star />
+        <>
+          <div className="grid grid-cols-6 xs:grid-cols-1 sm:grid-cols-2 xl:grid-cols-4  md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4 xs:gap-2 ">
+            {homePageAnimes.slice(0, visibleAnimes).map((anime) => (
+              <div key={anime.id} className="relative group">
+                <img
+                  alt={anime.name}
+                  src={anime.first_image}
+                  className="w-full h-72 object-cover rounded-xl transition duration-500 ease-in-out transform group-hover:scale-105"
+                />
+                <div
+                  onClick={() => startAnimePlayer(anime)}
+                  className="absolute inset-0 flex flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100"
+                >
+                  <p className="text-lg font-bold truncate text-white">{anime.name}</p>
+                  <p className="text-sm text-gray-300">{`Episodes: ${anime.episodes[0].episode_number}`}</p>
+                  <div className="flex justify-between items-center pt-2">
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation(); // Bu butonun tıklama olayının üst öğelere yayılmasını engeller
+                        handleAnimeInfo(anime.name);
+                      }}
+                      className="bg-blue-500 text-xs hover:cursor-pointer rounded-full px-2 py-1 opacity-90 text-white"
+                    >
+                      Animeye Git
+                    </span>
+                    <Star />
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+          {visibleAnimes < homePageAnimes.length && (
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={handleShowMore}
+                className="bg-[#252525] hover:bg-[#282828] text-white font-bold py-2 px-4 rounded"
+              >
+                Daha Fazla Göster
+              </button>
             </div>
-          ))}
-        </div>
-      ) : handleWaitForDatas()}
+          )}
+        </>
+      ) : (
+        handleWaitForDatas()
+      )}
     </div>
   );
 };
