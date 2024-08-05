@@ -245,12 +245,11 @@ app.put('/updateAnime', ipFilter, async (req, res) => {
 });
 
 app.post('/searchAnime', async (req, res) => {
-  const name  = req.body.payload; // Anime ismini body'den al
-  console.log(req.body.payload);
+  const name = req.body.payload; // Anime ismini body'den al
   if (!name) {
     return res.status(400).json({ error: 'Anime ismi gereklidir' });
   }
-  const animeName = name.toLowerCase(); // Anime ismini küçük harfe dönüştür
+  const animeName = name.trim().toLowerCase(); // Anime ismini temizle ve küçük harfe dönüştür
 
   try {
     // Anime ismiyle anime bilgilerini arama (case-insensitive)
@@ -267,26 +266,27 @@ app.post('/searchAnime', async (req, res) => {
 
     // Anime bilgilerini ve bölümleri döndür
     res.json({
-        id: anime._id,
-        name: anime.NAME,
-        description: anime.DESCRIPTION,
-        total_episodes: anime.TOTAL_EPISODES,
-        first_image: anime.FIRST_IMAGE,
-        second_image: anime.SECOND_IMAGE,
-        categories: anime.CATEGORIES,
-        episodes: episodes.map(ep => ({
-          id: ep._id,
-          episode_number: ep.EPISODE_NUMBER,
-          watch_link_1: ep.WATCH_LINK_1,
-          watch_link_2: ep.WATCH_LINK_2,
-          watch_link_3: ep.WATCH_LINK_3
-        }))      
+      id: anime._id,
+      name: anime.NAME,
+      description: anime.DESCRIPTION,
+      total_episodes: anime.TOTAL_EPISODES,
+      first_image: anime.FIRST_IMAGE,
+      second_image: anime.SECOND_IMAGE,
+      categories: anime.CATEGORIES,
+      episodes: episodes.map(ep => ({
+        id: ep._id,
+        episode_number: ep.EPISODE_NUMBER,
+        watch_link_1: ep.WATCH_LINK_1,
+        watch_link_2: ep.WATCH_LINK_2,
+        watch_link_3: ep.WATCH_LINK_3
+      }))
     });
   } catch (error) {
     console.error('Hata:', error);
     res.status(500).json({ error: 'Sunucu hatası' });
   }
 });
+
 
 // Index sayfasına erişimi engelleyen endpoint
 app.get("/", (req, res) => {

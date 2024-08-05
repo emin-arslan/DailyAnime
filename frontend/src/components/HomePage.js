@@ -12,13 +12,13 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
   };
 
   const handleWaitForDatas = () => {
-    const placeholderItems = Array.from({ length: 6 }).map((_, index) => (
-      <div key={index} className="bg-gray-800 ring-1 ring-gray-700 rounded-lg shadow-lg h-72 max-w-[220px] w-[220px]">
+    const placeholderItems = Array.from({ length: 5 }).map((_, index) => (
+      <div key={index} className="ring-1 ring-[#252525] rounded-lg shadow-lg h-72 max-w-[220px] w-[220px]">
         <div className="flex h-full animate-pulse relative justify-start items-end rounded-xl">
-          <div className='absolute right-0 w-20 h-6 from-gray-500 rounded-b-sm to-gray-300 bg-gradient-to-b top-0 rounded-tr-xl'></div>
-          <div className='absolute left-0 w-8 h-8 rounded-full bg-gray-400 top-0 ml-1 mt-1'></div>
-          <div className='h-20 bg-gray-400 rounded-b-xl flex flex-col p-2 w-[220px]'>
-            <div className='w-24 bg-gray-500 h-4 rounded-md mt-4'></div>
+          <div className='absolute right-0 w-20 h-6 bg-[#252525] rounded-b-sm to-gray-300 bg-gradient-to-b top-0 rounded-tr-xl'></div>
+          <div className='absolute left-0 w-8 h-8 rounded-full bg-[#252525] top-0 ml-1 mt-1'></div>
+          <div className='h-20 bg-[#252525] rounded-b-xl flex flex-col p-2 w-[220px]'>
+            <div className='w-24 bg-[#252525] h-4 rounded-md mt-4'></div>
             <div className='justify-between items-end h-8 flex'>
               <div className='w-20 h-4 bg-gray-800/30 rounded-md'></div>
               <div className='w-20 h-4 bg-gray-800/30 rounded-md'></div>
@@ -27,17 +27,18 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
         </div>
       </div>
     ));
-    return <div className="grid grid-cols-6 gap-4 mt-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1 min-w-[220px] w-auto place-content-center">{placeholderItems}</div>;
+    return <div className='h-screen'> <div className="grid  grid-cols-5 gap-x-34 p-5 md:grid-cols-4 lg:grid-cols-5 sm:grid-cols-2 xs:grid-cols-1 min-w-[220px] w-auto place-content-center">{placeholderItems}</div> </div>;
   };
 
   const handleAnimeInfo = (name) => {
-    navigate(`/animeInfo/name?query=${encodeURIComponent(name)}`);
+    const encodedName = encodeURIComponent(name);
+    navigate(`/animeInfo/name?query=${encodedName}`);
   };
 
   return (
-    <div className="w-full relative transition-all bg-gray-900 h-full py-5 px-4 cursor-pointer xs:px-0">
+    <div className="w-full relative transition-all h-full py-5 px-4 cursor-pointer xs:px-0">
       {homePageAnimes.length > 0 ? (
-        <div className="grid grid-cols-6 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6 gap-4 xs:gap-2 ">
+        <div className="grid grid-cols-6 xs:grid-cols-1 sm:grid-cols-2 xl:grid-cols-4  md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4 xs:gap-2 ">
           {homePageAnimes.map((anime) => (
             <div key={anime.id} className="relative group">
               <img

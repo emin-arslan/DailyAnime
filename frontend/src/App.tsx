@@ -13,6 +13,7 @@
   import AnimeInfo from './components/AnimeInfo';
   import MainForm from './components/MainForm';
   import { ErrorPage } from './components/ErrorPage';
+import Footer from './components/Footer';
 
   const App = () => {
     const [activeAnime, setActiveAnime] = useState({});
@@ -60,9 +61,9 @@
         path: "/",
         element: (
           <>
-            <Container>
+            
               <HomePage homePageAnimes={homePageAnimes} setActiveAnime={setActiveAnime} setModal={setModal} />
-            </Container>
+            
             
             <Analytics />
           </>
@@ -83,11 +84,13 @@
     ]);
 
     return (
-      <div className="w-full h-full relative transition-all bg-gray-900">
+      <div className="w-full h-full transition-all bg-[#1f2229]">
         <ToastContainer />
-        <Navi />
         <Player modal={modal} activeAnime={activeAnime} setModal={setModal} />
+        <Container>
+        
         <RouterProvider router={router} />
+        </Container>
       </div>
     );
   };

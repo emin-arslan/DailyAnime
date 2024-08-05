@@ -1,9 +1,13 @@
 import React from 'react';
+import Navi from './navi/Navi';
+import Footer from './Footer';
 
 const Container = ({ children }) => {
   return (
-    <div className="flex min-h-[calc(100vh-64px)]  mx-auto w-5/6 ">
+    <div className="flex-row bg-[#353636] mx-auto w-4/6 xl:w-9/12 lg:w-5/6 md:w-10/12 sm:w-10/12 h-full drop-shadow-xl">
+      <Navi/>
       {children}
+      <Footer/>
     </div>
   );
 }

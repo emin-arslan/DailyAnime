@@ -9,8 +9,19 @@
     const [episodeLinks, setEpisodeLinks] = useState([]);
     const [showReport, setShowReport] = useState(false);
     const videoRef = useRef(null);
+    
+    const handleAnimeInfo = () => {
+      const name = activeAnime.name ? activeAnime.name : activeAnime.title
+      const encodedName = encodeURIComponent(name);
+      window.location.href = `/animeInfo/name?query=${encodedName}`;
+    };
 
     useEffect(() => {
+      const handleBackButton = (event) => {
+        event.preventDefault();
+        setModal(false);
+      };
+      
       if (!modal) {
         setEpisodeNumber(-1);
         if (videoRef.current) {
@@ -21,13 +32,6 @@
         setCurrentEpisodeIndex(0)
         setEpisodeNumber(activeAnime.activeEpisodeNumber);
       }
-    }, [modal]);
-
-    useEffect(() => {
-      const handleBackButton = (event) => {
-        event.preventDefault();
-        setModal(false);
-      };
 
       if (modal) {
         window.history.pushState(null, "", window.location.href);
@@ -110,23 +114,50 @@
       setIsEpisodesVisible((prev) => !prev);
     };
 
-    const handleNextEpisode = () => {
-      setCurrentEpisodeIndex((prevIndex) => {
-        const newIndex = Math.max(prevIndex - 1, 0);
-        setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
-        return newIndex;
-      });
+    const handlePreviousEpisode  = () => {
+
+      if(activeAnime?.isAnimeInfo)
+        {
+          setCurrentEpisodeIndex((prevIndex) => {
+            const newIndex = Math.max(prevIndex - 1, 0);
+            setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
+            return newIndex;
+          });
+        }
+        else
+        {
+          setCurrentEpisodeIndex((prevIndex) => {
+            const newIndex = Math.min(
+              prevIndex + 1,
+              activeAnime.episodes?.length - 1 || 0
+            );
+            setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
+            return newIndex;
+          });
+        }
     };
 
-    const handlePreviousEpisode = () => {
-      setCurrentEpisodeIndex((prevIndex) => {
-        const newIndex = Math.min(
-          prevIndex + 1,
-          activeAnime.episodes?.length - 1 || 0
-        );
-        setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
-        return newIndex;
-      });
+    const handleNextEpisode = () => {
+     
+      if(activeAnime?.isAnimeInfo)
+        {
+          setCurrentEpisodeIndex((prevIndex) => {
+            const newIndex = Math.min(
+              prevIndex + 1,
+              activeAnime.episodes?.length - 1 || 0
+            );
+            setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
+            return newIndex;
+          });
+        }
+        else
+        {
+          setCurrentEpisodeIndex((prevIndex) => {
+            const newIndex = Math.max(prevIndex - 1, 0);
+            setEpisodeNumber(activeAnime.episodes?.[newIndex]?.episode_number || -1);
+            return newIndex;
+          });
+        }
     };
 
     if (!modal) return null;
@@ -137,7 +168,7 @@
         onClick={handleClickOutside}
         className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black"
       >
-        <div className="relative w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
+        <div className="relative w-9/12  max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
           <div className="relative w-full h-full flex items-center justify-center">
             <iframe
               ref={videoRef}
@@ -156,14 +187,14 @@
             ></iframe>
           </div>
           <div
-            className={`absolute top-0 right-0 h-full bg-gray-900 bg-opacity-75 shadow-lg transform transition-transform duration-500 ${
+            className={`absolute top-0 right-0 h-full bg-[#353636] bg-opacity-75 shadow-lg transform transition-transform duration-500 ${
               isEpisodesVisible ? "translate-x-0" : "translate-x-full"
             }`}
             style={{ width: "300px" }}
           >
             <button
               onClick={toggleEpisodesPane}
-              className="absolute left-[-30px] top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
+              className="absolute left-[-30px] top-1/2 transform -translate-y-1/2 bg-[#353636] bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
             >
               {isEpisodesVisible ? (
                 <span className="transform rotate-180">{'>'}</span>
@@ -173,16 +204,17 @@
             </button>
             <div className="p-4 flex flex-col space-y-4 h-full overflow-y-auto">
               <div
-                className="text-white text-lg font-bold mb-4 truncate"
+                onClick={handleAnimeInfo}
+                className="text-white text-lg font-bold mb-4 truncate cursor-pointer"
                 title={activeAnime.name}
               >
-                {activeAnime.name}
+                {activeAnime.name ? activeAnime.name : activeAnime.title}
               </div>
               <div className="text-white text-sm mb-2">Lütfen bir player seçin:</div>
               <select
                 onChange={(e) => setSelectedLink(e.target.value)}
                 value={selectedLink}
-                className="bg-gray-800 bg-opacity-50 border border-gray-600 text-white text-xs rounded-lg shadow-md focus:outline-none focus:ring-2 p-2 appearance-none"
+                className="bg-[#353636]  bg-opacity-50 border border-gray-800 text-white text-xs rounded-lg shadow-md focus:outline-none focus:ring-2 p-2 appearance-none"
               >
                 <option value="" disabled>
                   Player Seç
@@ -205,12 +237,12 @@
                       : activeAnime.activeEpisodeNumber
                   }
                   onChange={handleEpisodeInputChange}
-                  className="w-full text-black p-2 rounded-lg border border-gray-600 bg-opacity-50"
+                  className="w-full bg-[#252525] text-white p-2 rounded-lg border border-gray-600 bg-opacity-50"
                   placeholder="Bölüm"
                 />
                 <button
                   onClick={handleEpisodeSelect}
-                  className="bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
+                  className="bg-[#353636]  bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-[#1f2229] transition-all duration-300"
                 >
                   Git
                 </button>
@@ -224,16 +256,16 @@
                       setEpisodeNumber(episode.episode_number);
                       setCurrentEpisodeIndex(index);
                     }}
-                    className={`bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-gray-600 transition-all duration-300 cursor-pointer ${
+                    className={`bg-[#353636]  bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-[#353636] transition-all duration-300 cursor-pointer ${
                       index === currentEpisodeIndex ? "bg-gray-600" : ""
                     } ${
                       episodeNumber >= 0
                         ? episodeNumber === episode.episode_number
-                          ? "border-2 !border-green-300"
+                          ? "border-2 !border-gray-900"
                           : ""
                         : activeAnime.activeEpisodeNumber ===
                           episode.episode_number
-                        ? "border-2 !border-green-300"
+                        ? "border-2 !border-gray-900"
                         : ""
                     }`}
                   >
@@ -245,13 +277,13 @@
                 <div className="flex space-x-2">
                   <button
                     onClick={handlePreviousEpisode}
-                    className="flex-1 p-2 bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
+                    className="flex-1 p-2 bg-[#353636]  bg-opacity-50 text-white text-xs rounded-lg shadow-md hover:opacity-100 hover:bg-[#353636]  transition-all duration-300"
                   >
                     Önceki Bölüm
                   </button>
                   <button
                     onClick={handleNextEpisode}
-                    className="flex-1 p-2 bg-gray-800 bg-opacity-50 text-white text-xs rounded-lg shadow-md hover:opacity-100 hover:bg-gray-600 transition-all duration-300"
+                    className="flex-1 p-2 bg-[#353636]  bg-opacity-50 text-white text-xs rounded-lg shadow-md hover:opacity-100 hover:bg-[#353636]  transition-all duration-300"
                   >
                     Sonraki Bölüm
                   </button>
