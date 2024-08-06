@@ -24,7 +24,8 @@ const AddAnimeForm = () => {
     "Harem",
     "Doğaüstü Güçler",
     "Askeri",
-    "Müzikal"
+    "Müzikal",
+    "Aksiyon", "Dram", "Komedi", "Fantastik", "Romantik", "Yaşamdan Kesitler", "Gizem",  "Korku","Güçlü ana karakter","Zayıf ana karakter",
   ]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 

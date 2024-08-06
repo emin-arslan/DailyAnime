@@ -37,8 +37,19 @@ const UpdateAnimeForm = () => {
     { value: 'Harem', label: 'Harem' },
     { value: 'Doğaüstü Güçler', label: 'Doğaüstü Güçler' },
     { value: 'Askeri', label: 'Askeri' },
-    { value: 'Müzikal', label: 'Müzikal' }
+    { value: 'Müzikal', label: 'Müzikal' },
+    { value: 'Aksiyon', label: 'Aksiyon' },
+    { value: 'Dram', label: 'Dram' },
+    { value: 'Komedi', label: 'Komedi' },
+    { value: 'Fantastik', label: 'Fantastik' },
+    { value: 'Romantik', label: 'Romantik' },
+    { value: 'Yaşamdan Kesitler', label: 'Yaşamdan Kesitler' },
+    { value: 'Gizem', label: 'Gizem' },
+    { value: 'Korku', label: 'Korku' },
+    { value: 'Güçlü ana karakter', label: 'Güçlü ana karakter' },
+    { value: 'Zayıf ana karakter', label: 'Zayıf ana karakter' }
   ];
+  
   
 
   const handleNameChange = (selectedOption) => {

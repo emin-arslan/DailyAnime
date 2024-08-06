@@ -165,11 +165,11 @@ const Player = ({ modal, activeAnime, setModal }) => {
       onClick={handleClickOutside}
       className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black"
     >
-      <div className="relative w-9/12 lg:w-9/12 xs:w-full sm:w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
+      <div className="relative w-9/12 lg:w-10/12 xs:w-full md:h-auto md:w-auto  sm:w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
         <div className="relative w-full h-full flex items-center justify-center">
           <iframe
             ref={videoRef}
-            className="w-full h-full rounded-lg"
+            className="w-full h-full rounded-lg md:h-[50vh] md:w-[50vw]"
             title="video-player"
             allowFullScreen
             onError={() => {
@@ -184,7 +184,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
           ></iframe>
         </div>
         <div
-          className={`absolute top-0 right-0 h-full bg-[#353636] bg-opacity-75 shadow-lg transform transition-transform duration-500 ${
+          className={`absolute md:hidden top-0 right-0 h-full bg-[#353636] bg-opacity-75 shadow-lg transform transition-transform duration-500 ${
             isEpisodesVisible ? "translate-x-0" : "translate-x-full"
           }`}
           style={{ width: "300px" }}
@@ -297,6 +297,9 @@ const Player = ({ modal, activeAnime, setModal }) => {
               )}
             </div>
           </div>
+        </div>
+        <div className="absolute bottom-0 hidden md:visible text-xl text-white ">
+              Selam
         </div>
         <button
           onClick={() => setShowReport(true)}

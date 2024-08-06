@@ -47,7 +47,7 @@ const Navi = () => {
             placeholder="Search for anime, characters, genres..."
             value={searchTerm}
             onChange={handleSearchChange}
-            className="w-full py-2 px-4 z-50 xs:py-2 xs:w-full bg-[#353636] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3f4040] transition-all placeholder-opacity-80"
+            className="w-full py-2 px-4 z-50 xs:py-2 xs:w-full bg-[#252525] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3f4040] transition-all placeholder-opacity-80"
           />
           {suggestions.length > 0 ? (
             <ul className="absolute w-full bg-[#353636] border mt-4 border-gray-600 text-white z-50 rounded-md max-h-40 overflow-y-auto">
