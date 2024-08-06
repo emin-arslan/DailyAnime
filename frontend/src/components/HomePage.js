@@ -75,7 +75,10 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
                     <Star />
                   </div>
                 </div>
-              <div onClick={handleMobileAnimeWatch} className='w-full h-full bg-transparent hidden xs:flex sm:flex top-0 absolute '> 
+              <div onClick={(e) => {
+                        e.stopPropagation(); // Bu butonun tıklama olayının üst öğelere yayılmasını engeller
+                        handleMobileAnimeWatch(anime.name);
+                      }}className='w-full h-full bg-transparent hidden xs:flex sm:flex top-0 absolute '> 
               <div className='hidden xs:flex sm:flex absolute h-5 bottom-0 bg-black w-full opacity-70 items-center text-white transform group-hover:scale-105 rounded-b-lg text-[10px] transition duration-500 ease-in-out'>
                 <div className='flex justify-between w-full p-1'>
                   <div className='flex-1 truncate'>

@@ -14,6 +14,7 @@
   import MainForm from './components/MainForm';
   import { ErrorPage } from './components/ErrorPage';
 import Footer from './components/Footer';
+import WatchAnimeMobile from './components/WatchAnimeMobile';
 
   const App = () => {
     const [activeAnime, setActiveAnime] = useState({});
@@ -74,6 +75,10 @@ import Footer from './components/Footer';
       {
         path: "animeInfo/name",
         element: <AnimeInfo  setModal={setModal} setActiveAnime={setActiveAnime}/>,
+      },
+      {
+        path: 'mobile-anime/name',
+        element: <WatchAnimeMobile/>,
       },
       {
         path: '*',
