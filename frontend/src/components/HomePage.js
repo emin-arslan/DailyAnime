@@ -35,9 +35,9 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
     navigate(`/animeInfo/name?query=${encodedName}`);
   };
 
-  const handleMobileAnimeWatch = (name) => {
-    const encodedName = encodeURIComponent(name);
-    navigate(`/mobile-anime/name?query=${encodedName}`);
+  const handleMobileAnimeWatch = (anime) => {
+    const encodedName = encodeURIComponent(anime.name);
+    navigate(`/mobile-anime/name?query=${encodedName}&episode=${anime.episodes[0].episode_number}`);
   };
 
   const handleShowMore = () => {
@@ -77,7 +77,7 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
                 </div>
               <div onClick={(e) => {
                         e.stopPropagation(); // Bu butonun tıklama olayının üst öğelere yayılmasını engeller
-                        handleMobileAnimeWatch(anime.name);
+                        handleMobileAnimeWatch(anime);
                       }}className='w-full h-full bg-transparent hidden xs:flex sm:flex top-0 absolute '> 
               <div className='hidden xs:flex sm:flex absolute h-5 bottom-0 bg-black w-full opacity-70 items-center text-white transform group-hover:scale-105 rounded-b-lg text-[10px] transition duration-500 ease-in-out'>
                 <div className='flex justify-between w-full p-1'>

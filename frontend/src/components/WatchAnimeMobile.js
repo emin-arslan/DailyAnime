@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAnimeAction } from "./redux/actions/action";
 import { useLocation } from "react-router-dom";
@@ -11,13 +11,27 @@ const AnimeInfo = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const name = queryParams.get("query");
+  const activeEpisode = queryParams.get("episode");
   const [episodeIndex, setEpisodeIndex] = useState(0);
   const [selectedPlayer, setSelectedPlayer] = useState("");
   const animeInfo = useSelector(searchAnime);
+  const episodeRefs = useRef([]);
+  const episodeListRef = useRef(null);
 
   useEffect(() => {
     dispatch(getAnimeAction(name));
   }, [dispatch, name]);
+
+  useEffect(() => {
+    if (animeInfo.episodes && activeEpisode) {
+      const episodeIdx = animeInfo.episodes.findIndex(
+        (episode) => episode.episode_number === parseInt(activeEpisode, 10)
+      );
+      if (episodeIdx !== -1) {
+        setEpisodeIndex(episodeIdx);
+      }
+    }
+  }, [animeInfo.episodes, activeEpisode]);
 
   useEffect(() => {
     if (animeInfo.episodes && animeInfo.episodes[episodeIndex]) {
@@ -27,6 +41,16 @@ const AnimeInfo = () => {
           animeInfo.episodes[episodeIndex].watch_link_3 ||
           ""
       );
+      // Scroll to the active episode within the list
+      const activeEpisodeElement = episodeRefs.current[episodeIndex];
+      if (activeEpisodeElement && episodeListRef.current) {
+        const { offsetTop, offsetHeight } = activeEpisodeElement;
+        const listHeight = episodeListRef.current.offsetHeight;
+        episodeListRef.current.scrollTo({
+          top: offsetTop - listHeight / 2 + offsetHeight / 2,
+          behavior: "smooth",
+        });
+      }
     }
   }, [animeInfo, episodeIndex]);
 
@@ -72,7 +96,7 @@ const AnimeInfo = () => {
               value={selectedPlayer}
             >
               {anime.episodes[episodeIndex].watch_link_1 && (
-                <option  className="" value={anime.episodes[episodeIndex].watch_link_1}>
+                <option value={anime.episodes[episodeIndex].watch_link_1}>
                   Player 1
                 </option>
               )}
@@ -102,12 +126,16 @@ const AnimeInfo = () => {
               </button>
             </div>
           </div>
-          <div className="flex flex-col w-full md:w-1/4 p-1 bg-[#353535] rounded-lg shadow-lg overflow-y-auto h-64">
+          <div
+            className="flex flex-col w-full md:w-1/4 p-1 bg-[#353535] rounded-lg shadow-lg overflow-y-auto h-64"
+            ref={episodeListRef}
+          >
             <h2 className="text-xs font-semibold mb-4 px-1 border-b">Bölümler</h2>
             <ul className="space-y-2">
               {anime.episodes.map((episode, idx) => (
                 <li
                   key={idx}
+                  ref={(el) => (episodeRefs.current[idx] = el)}
                   className={`flex text-xs justify-between items-center p-2 rounded-lg shadow-md hover:bg-[#444444] transition-colors duration-300 cursor-pointer ${
                     episodeIndex === idx ? "bg-[#444444]" : "bg-[#353636]"
                   }`}
