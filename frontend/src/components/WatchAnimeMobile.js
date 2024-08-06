@@ -6,7 +6,7 @@ import { searchAnime } from "./redux/selector";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const AnimeInfo = () => {
+const WatchAnimeMobile = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -53,6 +53,10 @@ const AnimeInfo = () => {
       }
     }
   }, [animeInfo, episodeIndex]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Ensure the page scroll is at the top
+  }, []);
 
   const handlePlayerChange = (event) => {
     setSelectedPlayer(event.target.value);
@@ -153,4 +157,4 @@ const AnimeInfo = () => {
   );
 };
 
-export default AnimeInfo;
+export default WatchAnimeMobile;
