@@ -25,7 +25,7 @@ const AddAnimeForm = () => {
     "Doğaüstü Güçler",
     "Askeri",
     "Müzikal",
-    "Aksiyon", "Dram", "Komedi", "Fantastik", "Romantik", "Yaşamdan Kesitler", "Gizem",  "Korku","Güçlü Ana Karakter","Hafif Romantizm","Zayıftan Güçlüye"
+    "Aksiyon", "Dram", "Komedi", "Fantastik", "Romantik", "Yaşamdan Kesitler", "Gizem",  "Korku","Güçlü Ana Karakter","Hafif Romantizm","Zayıftan Güçlüye","intikam"
   ]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 

@@ -49,7 +49,8 @@ const UpdateAnimeForm = () => {
     { value: 'Güçlü Ana Karakter', label: 'Güçlü Ana Karakter' },
     { value: 'Zayıf Ana Karakter', label: 'Zayıf Ana Karakter' },
     { value: 'Hafif Romantizm', label: 'Hafif Romantizm'},
-    { value: 'Zayıftan Güçlüye', label:'Zayıftan Güçlüye'}
+    { value: 'Zayıftan Güçlüye', label:'Zayıftan Güçlüye'},
+    { value: 'intikam', label:"intikam"}
   ];
   
   
