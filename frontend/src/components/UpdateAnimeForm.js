@@ -46,8 +46,10 @@ const UpdateAnimeForm = () => {
     { value: 'Yaşamdan Kesitler', label: 'Yaşamdan Kesitler' },
     { value: 'Gizem', label: 'Gizem' },
     { value: 'Korku', label: 'Korku' },
-    { value: 'Güçlü ana karakter', label: 'Güçlü ana karakter' },
-    { value: 'Zayıf ana karakter', label: 'Zayıf ana karakter' }
+    { value: 'Güçlü Ana Karakter', label: 'Güçlü Ana Karakter' },
+    { value: 'Zayıf Ana Karakter', label: 'Zayıf Ana Karakter' },
+    { value: 'Hafif Romantizm', label: 'Hafif Romantizm'},
+    { value: 'Zayıftan Güçlüye', label:'Zayıftan Güçlüye'}
   ];
   
   

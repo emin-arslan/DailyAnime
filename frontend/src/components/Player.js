@@ -298,8 +298,23 @@ const Player = ({ modal, activeAnime, setModal }) => {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 hidden md:visible text-xl text-white ">
-              Selam
+        <div className="absolute bottom-0 left-0 hidden md:flex p-2 text-xl text-white w-full bg-[#353535] bg-opacity-50 z-50 h-20">
+        <div className="flex justify-evenly">
+        <select
+              onChange={(e) => setSelectedLink(e.target.value)}
+              value={selectedLink}
+              className="bg-[#353636] h-[30px] bg-opacity-50 border border-gray-800 text-white text-xs shadow-md focus:outline-none focus:ring-2 flex appearance-none pl-2"
+            >
+              <option value="" disabled className="">
+                Player Seç
+              </option>
+              {episodeLinks.map((link, index) => (
+                <option key={index} value={link}>
+                  Player {index + 1}
+                </option>
+              ))}
+            </select>
+        </div>
         </div>
         <button
           onClick={() => setShowReport(true)}
