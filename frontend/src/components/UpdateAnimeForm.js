@@ -42,7 +42,7 @@ const UpdateAnimeForm = () => {
     { value: 'Dram', label: 'Dram' },
     { value: 'Komedi', label: 'Komedi' },
     { value: 'Fantastik', label: 'Fantastik' },
-    { value: 'Romantik', label: 'Romantik' },
+    { value: 'Romantizm', label: 'Romantizm' },
     { value: 'Yaşamdan Kesitler', label: 'Yaşamdan Kesitler' },
     { value: 'Gizem', label: 'Gizem' },
     { value: 'Korku', label: 'Korku' },
@@ -50,7 +50,9 @@ const UpdateAnimeForm = () => {
     { value: 'Zayıf Ana Karakter', label: 'Zayıf Ana Karakter' },
     { value: 'Hafif Romantizm', label: 'Hafif Romantizm'},
     { value: 'Zayıftan Güçlüye', label:'Zayıftan Güçlüye'},
-    { value: 'intikam', label:"intikam"}
+    { value: 'intikam', label:"intikam"},
+    { value: 'Bilim Kurgu', label:'Bilim Kurgu'},
+    
   ];
   
   

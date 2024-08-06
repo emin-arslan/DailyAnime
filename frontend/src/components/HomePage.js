@@ -35,12 +35,17 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
     navigate(`/animeInfo/name?query=${encodedName}`);
   };
 
+  const handleMobileAnimeWatch = (name) => {
+    const encodedName = encodeURIComponent(name);
+    navigate(`/mobile-anime/name?query=${encodedName}`);
+  };
+
   const handleShowMore = () => {
     setVisibleAnimes((prevVisible) => prevVisible + 15);
   };
 
   return (
-    <div className="w-full relative transition-all h-full py-5 px-4 cursor-pointer xs:px-0">
+    <div className="w-full relative transition-all h-full py-5 px-4  xs:px-0">
       {homePageAnimes.length > 0 ? (
         <>
           <div className="grid grid-cols-6 xs:grid-cols-3 sm:grid-cols-3 xl:grid-cols-4  md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 xs:p-4">
@@ -53,7 +58,7 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
                 />
                 <div
                   onClick={() => startAnimePlayer(anime)}
-                  className="absolute inset-0 flex flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100"
+                  className="absolute inset-0 flex xs:hidden sm:hidden flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100"
                 >
                   <p className="text-lg font-bold truncate text-white">{anime.name}</p>
                   <p className="text-sm text-gray-300">{`Episodes: ${anime.episodes[0].episode_number}`}</p>
@@ -70,6 +75,18 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
                     <Star />
                   </div>
                 </div>
+              <div onClick={handleMobileAnimeWatch} className='w-full h-full bg-transparent hidden xs:flex sm:flex top-0 absolute '> 
+              <div className='hidden xs:flex sm:flex absolute h-5 bottom-0 bg-black w-full opacity-70 items-center text-white transform group-hover:scale-105 rounded-b-lg text-[10px] transition duration-500 ease-in-out'>
+                <div className='flex justify-between w-full p-1'>
+                  <div className='flex-1 truncate'>
+                    {anime.name.slice(0, 15)}
+                  </div>
+                  <div className='flex-none'>
+                    {anime.episodes.length}
+                  </div>
+                </div>
+              </div>
+              </div>
               </div>
             ))}
           </div>

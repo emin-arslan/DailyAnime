@@ -165,11 +165,11 @@ const Player = ({ modal, activeAnime, setModal }) => {
       onClick={handleClickOutside}
       className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-50 bg-black"
     >
-      <div className="relative w-9/12 lg:w-10/12 xs:w-full md:h-[60vh] md:w-auto md:items-start md:justify-start  sm:w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
+      <div className="relative w-9/12 lg:w-10/12 xs:w-full md:h-[70vh] md:w-auto md:items-start md:justify-start  sm:w-full max-w-screen-lg h-[85vh] flex bg-black bg-opacity-75 overflow-hidden">
         <div className="relative w-full h-full flex items-center justify-center md:items-start">
           <iframe
             ref={videoRef}
-            className="w-full h-full rounded-lg md:h-[50vh] md:w-[50vw]"
+            className="w-full h-full rounded-lg md:w-[83vw] md:h-[70vh]"
             title="video-player"
             allowFullScreen
             onError={() => {
