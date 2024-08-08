@@ -8,7 +8,7 @@ const allCategories = [
   "Spor", "Tarihi", "Mecha", "Ecchi", "Harem", "Doğaüstü Güçler", "Askeri",
   "Müzikal", "Aksiyon", "Dram", "Komedi", "Fantastik", "Romantizm",
   "Yaşamdan Kesitler", "Gizem", "Korku", "Güçlü Ana Karakter", "Hafif Romantizm",
-  "Zayıftan Güçlüye", "İntikam", "Bilim Kurgu", "Gerilim"
+  "Zayıftan Güçlüye", "İntikam", "Bilim Kurgu", "Gerilim","Macera"
 ];
 
 const CategoryFilter = () => {
