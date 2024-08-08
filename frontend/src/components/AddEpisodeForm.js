@@ -182,7 +182,7 @@ const AddEpisodeForm = () => {
             <input
               type="radio"
               name="type"
-              value="ova"
+              value="Ova"
               checked={type === 'Ova'}
               onChange={handleTypeChange}
               className="form-radio text-blue-500 h-5 w-5"
@@ -193,7 +193,7 @@ const AddEpisodeForm = () => {
             <input
               type="radio"
               name="type"
-              value="special"
+              value="Special"
               checked={type === 'Special'}
               onChange={handleTypeChange}
               className="form-radio text-blue-500 h-5 w-5"
@@ -204,7 +204,7 @@ const AddEpisodeForm = () => {
             <input
               type="radio"
               name="type"
-              value="extra"
+              value="Final"
               checked={type === 'Final'}
               onChange={handleTypeChange}
               className="form-radio text-blue-500 h-5 w-5"
