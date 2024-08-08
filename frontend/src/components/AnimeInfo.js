@@ -154,7 +154,10 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
                 </button>
               </div>
               <div className='w-full flex flex-col items-start justify-end h-full'> 
-              <h1 className='text-xl'>Diğer Sezonlar</h1>
+             {
+              relatedAnimesDetails && relatedAnimesDetails.length >0 &&
+               <h1 className='text-xl'>Diğer Sezonlar</h1>
+             }
               {relatedAnimesDetails && relatedAnimesDetails.length > 0 && (
             <section className="w-full bg-opacity-90 space-x-5 rounded-lg shadow-md  h-20 flex">
               
