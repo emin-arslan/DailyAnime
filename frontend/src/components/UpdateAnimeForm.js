@@ -13,7 +13,9 @@ const UpdateAnimeForm = () => {
   const [totalEpisodes, setTotalEpisodes] = useState('');
   const [smallImage, setSmallImage] = useState('');
   const [largeImage, setLargeImage] = useState('');
+  const [seasonNumber, setSeasonNumber] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [relatedAnimes, setRelatedAnimes] = useState([]);
 
   // Convert the anime names to the required format
   const nameOptions = animes.map(anime => ({
@@ -48,33 +50,37 @@ const UpdateAnimeForm = () => {
     { value: 'Korku', label: 'Korku' },
     { value: 'Güçlü Ana Karakter', label: 'Güçlü Ana Karakter' },
     { value: 'Zayıf Ana Karakter', label: 'Zayıf Ana Karakter' },
-    { value: 'Hafif Romantizm', label: 'Hafif Romantizm'},
-    { value: 'Zayıftan Güçlüye', label:'Zayıftan Güçlüye'},
-    { value: 'intikam', label:"intikam"},
-    { value: 'Bilim Kurgu', label:'Bilim Kurgu'},
-    
+    { value: 'Hafif Romantizm', label: 'Hafif Romantizm' },
+    { value: 'Zayıftan Güçlüye', label: 'Zayıftan Güçlüye' },
+    { value: 'intikam', label: 'intikam' },
+    { value: 'Bilim Kurgu', label: 'Bilim Kurgu' },
+    { value: "Gerilim", label: "Gerilim"}
   ];
-  
-  
 
   const handleNameChange = (selectedOption) => {
     setName(selectedOption ? selectedOption.value : '');
-    setAnimeID(selectedOption  ? selectedOption.id: '')
+    setAnimeID(selectedOption ? selectedOption.id : '');
   };
 
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions || []);
   };
 
-  const handleSubmit = (e) => {
-      dispatch(updateAnime({
+  const handleRelatedAnimesChange = (selectedOptions) => {
+    setRelatedAnimes(selectedOptions || []);
+  };
+
+  const handleSubmit = () => {
+    dispatch(updateAnime({
       id: animeID,
       name,
       description,
       totalEpisodes,
       smallImage,
       largeImage,
+      seasonNumber,
       categories: selectedCategories.map(option => option.value),
+      relatedAnimes: relatedAnimes.map(option => option.id) // Return the ids of related animes
     }));
   };
 
@@ -179,6 +185,17 @@ const UpdateAnimeForm = () => {
       </div>
 
       <div className="mb-4">
+        <label className="block text-gray-300 mb-1">Season Number:</label>
+        <input
+          type="number"
+          value={seasonNumber}
+          onChange={(e) => setSeasonNumber(e.target.value)}
+          className="w-full p-2 bg-gray-600 text-white rounded"
+          placeholder="Season Number"
+        />
+      </div>
+
+      <div className="mb-4">
         <label className="block text-gray-300 mb-1">Categories:</label>
         <Select
           isMulti
@@ -187,6 +204,76 @@ const UpdateAnimeForm = () => {
           onChange={handleCategoryChange}
           className="w-full"
           placeholder="Select Categories"
+          styles={{
+            control: (provided) => ({
+              ...provided,
+              backgroundColor: '#2d2d2d',
+              borderColor: '#444',
+              borderRadius: '0.375rem',
+              boxShadow: 'none',
+              minHeight: '3rem',
+              height: 'auto', // Allow height to adjust based on content
+            }),
+            menu: (provided) => ({
+              ...provided,
+              backgroundColor: '#2d2d2d',
+              borderRadius: '0.375rem',
+              marginTop: '0.25rem',
+            }),
+            option: (provided, state) => ({
+              ...provided,
+              backgroundColor: state.isSelected ? '#3b82f6' : '#2d2d2d',
+              color: state.isSelected ? '#ffffff' : '#a0aec0',
+              '&:hover': {
+                backgroundColor: '#3b82f6',
+                color: '#ffffff',
+              },
+            }),
+            placeholder: (provided) => ({
+              ...provided,
+              color: '#a0aec0',
+            }),
+            input: (provided) => ({
+              ...provided,
+              color: '#ffffff',
+            }),
+            menuList: (provided) => ({
+              ...provided,
+              color: '#ffffff',
+            }),
+            multiValue: (provided) => ({
+              ...provided,
+              backgroundColor: '#3b82f6',
+              color: '#ffffff',
+              borderRadius: '0.375rem',
+              padding: '0.25rem 0.5rem',
+              margin: '0.25rem 0.25rem 0 0',
+            }),
+            multiValueLabel: (provided) => ({
+              ...provided,
+              color: '#ffffff',
+            }),
+            multiValueRemove: (provided) => ({
+              ...provided,
+              color: '#ffffff',
+              ':hover': {
+                backgroundColor: '#3b82f6',
+                color: '#ffffff',
+              },
+            }),
+          }}
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-300 mb-1">Related Animes:</label>
+        <Select
+          isMulti
+          options={nameOptions}
+          value={relatedAnimes}
+          onChange={handleRelatedAnimesChange}
+          className="w-full"
+          placeholder="Select Related Animes"
           styles={{
             control: (provided) => ({
               ...provided,

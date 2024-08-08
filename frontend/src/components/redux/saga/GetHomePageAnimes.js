@@ -10,7 +10,6 @@ export function* GetHomePageAnimes({ count }) {
     }
     
     const animes = yield response.json(); // JSON olarak parse et
-
     // Gelen veriyi Redux store'a dispatch et
     yield put({ type: SET_HOMEPAGE_ANIMES, payload: animes });
 

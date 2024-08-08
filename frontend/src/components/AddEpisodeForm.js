@@ -22,6 +22,7 @@ const AddEpisodeForm = () => {
   const [link3, setLink3] = useState('');
   const [episodeNumber, setEpisodeNumber] = useState('');
   const [animeID, setAnimeID] = useState('');
+  const [type, setType] = useState('');
 
   // Handle changes in the Select component
   const handleAnimeChange = (selectedOption) => {
@@ -32,6 +33,10 @@ const AddEpisodeForm = () => {
     }
   };
 
+  const handleTypeChange = (e) => {
+    setType(e.target.value);
+  };
+
   const handleSubmit = () => {
     dispatch(addNewEpisodeRequestAction({
       animeId: animeID,
@@ -39,6 +44,7 @@ const AddEpisodeForm = () => {
       watchLink2: link2,
       watchLink3: link3,
       episodeNumber: episodeNumber,
+      type: type,
     }));
   };
 
@@ -167,6 +173,45 @@ const AddEpisodeForm = () => {
           className="w-full p-2 bg-gray-600 text-white rounded"
           placeholder="Episode Number"
         />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-300 mb-1">Episode Type:</label>
+        <div className="flex space-x-4">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="type"
+              value="ova"
+              checked={type === 'ova'}
+              onChange={handleTypeChange}
+              className="form-radio text-blue-500 h-5 w-5"
+            />
+            <span className="ml-2 text-gray-300">Ova</span>
+          </label>
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="type"
+              value="special"
+              checked={type === 'special'}
+              onChange={handleTypeChange}
+              className="form-radio text-blue-500 h-5 w-5"
+            />
+            <span className="ml-2 text-gray-300">Special</span>
+          </label>
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="type"
+              value="extra"
+              checked={type === 'extra'}
+              onChange={handleTypeChange}
+              className="form-radio text-blue-500 h-5 w-5"
+            />
+            <span className="ml-2 text-gray-300">Ekstra</span>
+          </label>
+        </div>
       </div>
 
       <button

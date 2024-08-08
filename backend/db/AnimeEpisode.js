@@ -23,6 +23,10 @@ const animeEpisodeSchema = new Schema({
   EPISODE_NUMBER: {
     type: Number,
     required: true
+  },
+  TYPE:{
+    type: String,
+    required: false
   }
 });
 

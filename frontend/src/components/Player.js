@@ -256,7 +256,7 @@ const Player = ({ modal, activeAnime, setModal }) => {
                     setEpisodeNumber(episode.episode_number);
                     setCurrentEpisodeIndex(index);
                   }}
-                  className={`bg-[#353636]  bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-[#353636] transition-all duration-300 cursor-pointer ${
+                  className={`bg-[#353636] relative w-full  bg-opacity-50 text-white text-xs rounded-lg shadow-md p-2 hover:opacity-100 hover:bg-[#353636] transition-all duration-300 cursor-pointer ${
                     index === currentEpisodeIndex ? "bg-gray-600" : ""
                   } ${
                     episodeNumber >= 0
@@ -270,7 +270,9 @@ const Player = ({ modal, activeAnime, setModal }) => {
                   }`}
                 >
                   {episode.episode_number}. Bölüm
+                  <span className="absolute right-0 px-2 ">{episode.type?.toUpperCase()}</span>
                 </li>
+                
               ))}
             </ul>
             <div className="flex flex-col space-y-2 mt-4">

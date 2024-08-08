@@ -7,6 +7,7 @@ export interface Anime{
     categories: [],
     episodes: Episode[]
     total_episodes: Number,
+    seasonNumber:Number
 }
 
 export interface Episode{

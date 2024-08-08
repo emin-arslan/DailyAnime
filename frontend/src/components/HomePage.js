@@ -56,10 +56,13 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
                   src={anime.first_image}
                   className="w-full h-72 xs:h-32 sm:h-32 md:h-60 object-cover rounded-xl transition duration-500 ease-in-out transform group-hover:scale-105"
                 />
+                <div>
+                </div>
                 <div
                   onClick={() => startAnimePlayer(anime)}
                   className="absolute inset-0 flex xs:hidden sm:hidden flex-col justify-end p-4 bg-black bg-opacity-50 rounded-xl transition duration-500 ease-in-out opacity-0 group-hover:opacity-100"
                 >
+                  <div className='absolute top-0 right-0 text-white text-xs px-1 font-bold'>{anime.seasonNumber && anime.seasonNumber+". Sezon"} </div>
                   <p className="text-lg font-bold truncate text-white">{anime.name}</p>
                   <p className="text-sm text-gray-300">{`Episodes: ${anime.episodes[0].episode_number}`}</p>
                   <div className="flex justify-between items-center pt-2">
@@ -78,7 +81,8 @@ const HomePage = ({ homePageAnimes, setActiveAnime, setModal }) => {
               <div onClick={(e) => {
                         e.stopPropagation(); // Bu butonun tıklama olayının üst öğelere yayılmasını engeller
                         handleMobileAnimeWatch(anime);
-                      }}className='w-full h-full bg-transparent hidden xs:flex sm:flex top-0 absolute '> 
+                      }}className='w-full h-full bg-transparent hidden xs:flex sm:flex top-0 absolute cursor-pointer '> 
+                                        <div className='absolute top-0 right-0 bg-black opacity-70 rounded-b group-hover:scale-105 transition text-white text-xs px-1 font-bold'>{anime.seasonNumber && anime.seasonNumber+". Sezon"} </div>
               <div className='hidden xs:flex sm:flex absolute h-5 bottom-0 bg-black w-full opacity-70 items-center text-white transform group-hover:scale-105 rounded-b-lg text-[10px] transition duration-500 ease-in-out'>
                 <div className='flex justify-between w-full p-1'>
                   <div className='flex-1 truncate'>

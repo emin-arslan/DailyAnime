@@ -26,6 +26,14 @@ const animeInfoSchema = new Schema({
   CATEGORIES: {
     type: [String],
     required: false
+  },
+  RELATED_ANIMES: {
+    type: [String],
+    required: false
+  },
+  SEASON_NUMBER:{
+    type: Number,
+    required: false,
   }
 });
 

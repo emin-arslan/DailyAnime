@@ -27,7 +27,6 @@ export function* updateEpisode(paylaod) {
     } else {
       // Başarılı yanıtı JSON olarak parse et
       const result = yield response.json();
-      console.log("Episode updated successfully:", result);
 
       // Başarı durumunda STATE güncelle
       yield put({

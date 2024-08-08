@@ -9,10 +9,10 @@ const MainForm = () => {
   const [activeForm, setActiveForm] = useState('addAnime');
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[#353636]">
+    <div className="relative w-full h-auto flex items-center justify-center bg-[#353636]">
      
       {/* Form Konteyneri */}
-      <div className="relative w-5/12 h-[850px] bg-gray-800 rounded-md shadow-lg p-6 flex flex-col overflow-hidden lg:w-2/3 xl:w-6/12 md:w-2/3 sm:w-full xs:w-full ">
+      <div className="relative w-5/12 min-h-full h-auto bg-gray-800 rounded-md shadow-lg p-6 flex flex-col overflow-hidden lg:w-2/3 xl:w-6/12 md:w-2/3 sm:w-full xs:w-full ">
         
         {/* Form Geçiş Butonları */}
         <div className="flex justify-around mb-4 md:!text-sm sm:!text-sm xs:!text-xs">
@@ -43,7 +43,7 @@ const MainForm = () => {
         </div>
 
         {/* Formlar */}
-        <div className="relative flex flex-col h-full w-full">
+        <div className="relative flex flex-col h-screen w-full">
           <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ease-in-out ${activeForm === 'addAnime' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
             <AddAnimeForm />
           </div>

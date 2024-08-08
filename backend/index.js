@@ -76,11 +76,14 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
         second_image: anime.SECOND_IMAGE,
         categories: anime.CATEGORIES,
         total_episodes: anime.TOTAL_EPISODES,
+        relatedAnimes: anime.RELATED_ANIMES,
+        seasonNumber: anime.SEASON_NUMBER,
         episodes: episodes.reverse().map(ep => ({
           episode_number: ep.EPISODE_NUMBER,
           watch_link_1: ep.WATCH_LINK_1,
           watch_link_2: ep.WATCH_LINK_2,
-          watch_link_3: ep.WATCH_LINK_3
+          watch_link_3: ep.WATCH_LINK_3,
+          type: ep.TYPE
         }))
       };
     });
@@ -99,6 +102,7 @@ app.get('/getHomePageAnimes/:count', async (req, res) => {
 
 
 app.get('/animes', async (req, res) => {
+  
   try {
     // Tüm anime bilgilerini çek
     const animes = await AnimeInfo.find().exec();
@@ -109,14 +113,12 @@ app.get('/animes', async (req, res) => {
       const lastEpisode = await AnimeEpisode.findOne({ ANIME_ID: anime._id })
         .sort({ EPISODE_NUMBER: -1 })
         .exec();
-
       // Anime bilgilerine en son yayınlanan bölüm numarasını ekle
       return {
         ...anime.toObject(),
         LAST_PUBLISHED_EPISODE: lastEpisode ? lastEpisode.EPISODE_NUMBER : 0
       };
     }));
-
     res.json(animesWithLastEpisode);
   } catch (error) {
     console.error(error);
@@ -126,8 +128,7 @@ app.get('/animes', async (req, res) => {
 
 // Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
 app.post('/addNewAnime', ipFilter, async (req, res) => {
-  const { NAME, DESCRIPTION, TOTAL_EPISODES, FIRST_IMAGE, SECOND_IMAGE, CATEGORIES } = req.body;
-  console.log(req.body)
+  const { NAME, DESCRIPTION, TOTAL_EPISODES, FIRST_IMAGE, SECOND_IMAGE, CATEGORIES,RELATED_ANIMES ,SEASON_NUMBER } = req.body;
   try {
     // Aynı isimde anime olup olmadığını kontrol et
     const existingAnime = await AnimeInfo.findOne({ NAME });
@@ -142,6 +143,8 @@ app.post('/addNewAnime', ipFilter, async (req, res) => {
       FIRST_IMAGE,
       SECOND_IMAGE,
       CATEGORIES,
+      RELATED_ANIMES,
+      SEASON_NUMBER
     });
 
     const savedAnime = await newAnime.save();
@@ -153,11 +156,10 @@ app.post('/addNewAnime', ipFilter, async (req, res) => {
 
 // Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
 app.post('/addNewEpisode', ipFilter, async (req, res) => {
-  const { animeId, watchLink1, watchLink2, watchLink3, episodeNumber } = req.body.payload;
+  const { animeId, watchLink1, watchLink2, watchLink3, episodeNumber, type } = req.body.payload;
 
   try {
     // Anime'nin var olup olmadığını kontrol et
-    console.log(req.body)
     const animeExists = await AnimeInfo.findById(animeId);
     if (!animeExists) {
       return res.status(404).json({ message: 'Anime not found' });
@@ -175,7 +177,8 @@ app.post('/addNewEpisode', ipFilter, async (req, res) => {
       WATCH_LINK_1: watchLink1,
       WATCH_LINK_2: watchLink2,
       WATCH_LINK_3: watchLink3,
-      EPISODE_NUMBER: episodeNumber
+      EPISODE_NUMBER: episodeNumber,
+      TYPE: type,
     });
 
     await newEpisode.save();
@@ -188,7 +191,7 @@ app.post('/addNewEpisode', ipFilter, async (req, res) => {
 
 // Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
 app.put('/updateEpisode', ipFilter, async (req, res) => {
-  const { animeId, watchLink1, watchLink2, watchLink3, episodeNumber } = req.body.payload;
+  const { animeId, watchLink1, watchLink2, watchLink3, episodeNumber, type } = req.body.payload;
 
   try {
     // Find the episode by animeId and episodeNumber
@@ -205,7 +208,7 @@ app.put('/updateEpisode', ipFilter, async (req, res) => {
     if (watchLink1) episode.WATCH_LINK_1 = watchLink1;
     if (watchLink2) episode.WATCH_LINK_2 = watchLink2;
     if (watchLink3) episode.WATCH_LINK_3 = watchLink3;
-
+    if(type) episode.TYPE = type;
     // Save the updated episode
     await episode.save();
 
@@ -218,8 +221,7 @@ app.put('/updateEpisode', ipFilter, async (req, res) => {
 
 // Sadece izin verilen IP'den gelen istekler için IP filtresi uygulandı
 app.put('/updateAnime', ipFilter, async (req, res) => {
-  const { id ,name, description, totalEpisodes, smallImage, largeImage, categories } = req.body.payload;
-
+  const { id ,name, description, totalEpisodes, smallImage, largeImage, categories, relatedAnimes,seasonNumber } = req.body.payload;
   try {
     const updateFields = {};
 
@@ -230,6 +232,8 @@ app.put('/updateAnime', ipFilter, async (req, res) => {
     if (smallImage) updateFields.FIRST_IMAGE = smallImage;
     if (largeImage) updateFields.SECOND_IMAGE = largeImage;
     if (categories) updateFields.CATEGORIES = categories;
+    if(relatedAnimes) updateFields.RELATED_ANIMES = relatedAnimes;
+    if(seasonNumber) updateFields.SEASON_NUMBER = seasonNumber;
 
     // Anime bilgilerini güncelle
     const updatedAnime = await AnimeInfo.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true });
@@ -263,7 +267,6 @@ app.post('/searchAnime', async (req, res) => {
 
     // Bulunan anime ID'si ile bölümleri arama
     const episodes = await AnimeEpisode.find({ ANIME_ID: anime._id });
-
     // Anime bilgilerini ve bölümleri döndür
     res.json({
       id: anime._id,
@@ -273,25 +276,21 @@ app.post('/searchAnime', async (req, res) => {
       first_image: anime.FIRST_IMAGE,
       second_image: anime.SECOND_IMAGE,
       categories: anime.CATEGORIES,
+      related_animes: anime.RELATED_ANIMES,
+      seasonNumber: anime.SEASON_NUMBER,
       episodes: episodes.map(ep => ({
         id: ep._id,
         episode_number: ep.EPISODE_NUMBER,
         watch_link_1: ep.WATCH_LINK_1,
         watch_link_2: ep.WATCH_LINK_2,
-        watch_link_3: ep.WATCH_LINK_3
+        watch_link_3: ep.WATCH_LINK_3,
+        type:ep.TYPE
       }))
     });
   } catch (error) {
     console.error('Hata:', error);
     res.status(500).json({ error: 'Sunucu hatası' });
   }
-});
-
-
-// Index sayfasına erişimi engelleyen endpoint
-app.get("/", (req, res) => {
-  console.log('Erişim engellendi');
-  res.status(403).send("Erişim engellendi");
 });
 
 app.listen(process.env.PORT || 5000, () => {
