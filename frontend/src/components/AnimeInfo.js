@@ -28,6 +28,10 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
     setModal(true);
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // Ensure the page scroll is at the top
+  }, []);
+
   const handleMobileAnimeWatch = (anime, animeIndex) => {
     const encodedName = encodeURIComponent(anime.name);
     navigate(`/mobile-anime/name?query=${encodedName}&episode=${animeIndex}`);
@@ -107,7 +111,6 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
     ? anime.relatedAnimes.map(relatedAnimeId => animes.find(a => a._id === relatedAnimeId))
     : [];
 
-    console.log(anime, "animeınfi")
   return (
     <div className="h-full min-h-screen bg-[#353636] text-gray-200 relative">
       {
@@ -138,10 +141,14 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
                   </button>
                 )}
               </p>
-              <div className="flex space-x-2 mb-4">
-                <button onClick={() => startAnimePlayer(anime, 1)} className="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded shadow">
+              <div className="flex mb-4 ">
+                <button onClick={() => startAnimePlayer(anime, 1)} className="bg-pink-600 xs:hidden sm:hidden hover:bg-pink-700 text-white py-2 px-4 rounded shadow mr-4">
                   Animeyi İzle
                 </button>
+                <button onClick={() => handleMobileAnimeWatch(anime, 1)} className="bg-pink-600 hidden xs:flex sm:flex hover:bg-pink-700 text-white py-2 px-4 rounded mr-2 shadow">
+                  Animeyi İzle
+                </button>
+
                 <button className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded shadow">
                   Listeye Ekle
                 </button>
@@ -163,9 +170,9 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
             </section>
           )}
           </div>
-              <div className="flex flex-wrap space-x-2">
+              <div className="flex flex-wrap">
                 {anime.categories?.map((category, index) => (
-                  <span key={index} className="bg-[#353636] text-gray-200 py-1 px-2 rounded m-1">
+                  <span key={index} className="bg-[#353636] text-gray-200  rounded p-2 mr-2 mt-2">
                     {category}
                   </span>
                 ))}
@@ -225,7 +232,6 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#353636] to-transparent opacity-50 rounded-lg"></div>
                       <div className="absolute bottom-0 left-0 w-full p-2 text-white">
                         <h3 className="text-lg font-semibold">{`Bölüm ${episode.episode_number}`}</h3>
-                        <p className="text-xs truncate">{episode.title}</p>
                       </div>
                     </div>
                   </div>

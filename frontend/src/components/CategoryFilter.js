@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getAnimes } from './redux/selector';
+import { useNavigate } from 'react-router-dom';
 
 const allCategories = [
   "Shounen", "Seinen", "Shoujo", "Isekai", "Okul", "Polisiye", "Psikolojik",
@@ -10,7 +11,15 @@ const allCategories = [
   "Zayıftan Güçlüye", "İntikam", "Bilim Kurgu", "Gerilim"
 ];
 
+const defaultCategoryImages = {
+  "Shounen": "path/to/shounen.jpg",
+  "Seinen": "path/to/seinen.jpg",
+  "Shoujo": "path/to/shoujo.jpg",
+  // Add paths for other categories
+};
+
 const CategoryFilter = () => {
+  const navigate = useNavigate();
   const animes = useSelector(getAnimes);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState(allCategories);
@@ -22,6 +31,11 @@ const CategoryFilter = () => {
         category.toLowerCase().includes(filterText)
       )
     );
+  };
+  
+  const handleAnimeInfo = (name) => {
+    const encodedName = encodeURIComponent(name);
+    navigate(`/animeInfo/name?query=${encodedName}`);
   };
 
   const handleCategoryClick = (category) => {
@@ -37,15 +51,12 @@ const CategoryFilter = () => {
     setFilteredCategories(allCategories.slice(0, 10));
   };
 
-  // If no categories are selected, show the first 10 categories
-  const displayedCategories = selectedCategories.length
-    ? filteredCategories
-    : allCategories.slice(0, 10);
-
-  // Collect results from all selected categories
-  const results = animes.filter((anime) =>
-    selectedCategories.every((category) => anime.CATEGORIES.includes(category))
-  );
+  // If no categories are selected, show the first 5 anime
+  const displayedAnimes = selectedCategories.length
+    ? animes.filter((anime) =>
+        selectedCategories.every((category) => anime.CATEGORIES.includes(category))
+      )
+    : animes.slice(0, 5);
 
   return (
     <div className="p-6 bg-[#353535] text-white rounded-lg shadow-lg min-h-[100vh]">
@@ -62,12 +73,12 @@ const CategoryFilter = () => {
       </div>
 
       {/* Kategori Butonları */}
-      <div className="grid grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-5 xl:grid-cols-4 gap-4 mb-6 lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-4 xs:grid-cols-4">
         {filteredCategories.slice(0, 10).map((category) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
-            className={`w-56 h-56 flex items-center justify-center text-lg font-semibold rounded-lg transition-transform transform hover:scale-105 focus:outline-none ${
+            className={`w-52 h-52 xl:w-54 xl:h-54 lg:w-44 lg:h-44 md:w-36 md:h-36 sm:h-20 sm:w-20 xs:w-16 xs:h-16 sm:text-xs  xs:text-xs flex items-center justify-center text-lg font-semibold rounded-lg transition-transform transform hover:scale-105 focus:outline-none ${
               selectedCategories.includes(category)
                 ? 'bg-blue-700 text-white shadow-lg'
                 : 'bg-[#252525] text-gray-200 hover:bg-gray-600'
@@ -97,17 +108,18 @@ const CategoryFilter = () => {
           </p>
         )}
         <ul className="space-y-4">
-          {results.length ? (
-            results.map((anime) => (
+          {displayedAnimes.length ? (
+            displayedAnimes.map((anime) => (
               <li
                 key={anime._id}
-                className="bg-[#252525] p-4 rounded-lg shadow-md relative overflow-hidden"
-                style={{ backgroundImage: `url(${anime.SECOND_IMAGE})`, backgroundSize: 'cover', backgroundPosition: 'center',}}
+                onClick={() =>{handleAnimeInfo(anime.NAME)}}
+                className="bg-[#252525]  p-4 rounded-lg shadow-md relative overflow-hidden cursor-pointer"
+                style={{ backgroundImage: `url(${anime.SECOND_IMAGE})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
               >
-                <div className="absolute inset-0 bg-black opacity-50" />
+                <div className="absolute inset-0 backdrop-blur bg-black opacity-50"></div>
                 <div className="relative z-10">
                   <h4 className="text-xl font-semibold">{anime.NAME}</h4>
-                  <p className="truncate">{anime.DESCRIPTION}</p>
+                  <p className="line-clamp-2">{anime.DESCRIPTION}</p>
                 </div>
               </li>
             ))

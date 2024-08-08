@@ -74,16 +74,16 @@ const Navi = () => {
         </div>
         <div className="flex items-center space-x-6  text-white sm:text-xs xs:text-xs md:text-xs">
           <a
-            href="#home"
+            href="/"
             className="hover:text-blue-500 transition-colors font-semibold"
           >
             Anasayfa
           </a>
           <a
-            href="#about"
+            href="/categories"
             className="hover:text-blue-500 transition-colors font-semibold"
           >
-            Iletişim
+            Kategoriler
           </a>
           <a
             href="#contact"
