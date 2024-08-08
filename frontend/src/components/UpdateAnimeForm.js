@@ -7,7 +7,7 @@ import { updateAnime } from './redux/actions/action';
 const UpdateAnimeForm = () => {
 
   const animes = useSelector(getAnimes);
-  console.log("updateAnime", animes)
+
   const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [animeID, setAnimeID] = useState('');
@@ -65,7 +65,6 @@ const UpdateAnimeForm = () => {
   const handleNameChange = (selectedOption) => {
     setName(selectedOption ? selectedOption.value : '');
     setAnimeID(selectedOption ? selectedOption.id : '');
-    console.log(selectedOption.categories, "handlename")
     setSelectedCategories(selectedOption ? selectedOption.categories.map(category => ({ value: category, label: category })) : []);
   };
 

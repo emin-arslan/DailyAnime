@@ -145,9 +145,18 @@ const CategoryFilter = () => {
                 style={{ backgroundImage: `url(${anime.SECOND_IMAGE})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
               >
                 <div className="absolute inset-0 backdrop-blur bg-black opacity-50"></div>
-                <div className="relative z-10">
-                  <h4 className="text-xl font-semibold">{anime.NAME}</h4>
+                <div className="relative z-10"> 
+                  <h4 className="text-xl font-semibold">{anime.NAME} </h4>
+
+                  
                   <p className="line-clamp-2">{anime.DESCRIPTION}</p>
+                  <div className='flex space-x-2 mt-2'>
+                  {
+                    anime?.CATEGORIES.map(e => (
+                        <span key={e} className="bg-[#252525] opacity-70 text-xs h-min    text-white rounded-lg p-1" >{e}</span>
+                    ))
+                  }
+                  </div>
                 </div>
               </li>
             ))
