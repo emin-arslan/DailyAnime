@@ -82,8 +82,12 @@ import CategoryFilter from './components/CategoryFilter';
         element: <WatchAnimeMobile/>,
       },
       {
-        path: "categories",
+        path: "categories/?:category",
         element: <CategoryFilter/>
+      },
+      {
+        path: "categories",
+        element: <CategoryFilter />
       },
       {
         path: '*',

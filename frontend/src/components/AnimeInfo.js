@@ -46,6 +46,11 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
     navigate(`/animeInfo/name?query=${encodedName}`);
   };
 
+  const handleCategoryNavigator = (e) =>{
+    const encodedName = encodeURIComponent(e);
+    navigate(`/categories/category?query=${e}`);
+  }
+
   const goToEpisode = () => {
     const episodeIndex = anime.episodes.findIndex(
       (episode) => episode.episode_number === parseInt(episodeNumber, 10)
@@ -175,7 +180,7 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
           </div>
               <div className="flex flex-wrap">
                 {anime.categories?.map((category, index) => (
-                  <span key={index} className="bg-[#353636] text-gray-200  rounded p-2 mr-2 mt-2">
+                  <span onClick={()=>{handleCategoryNavigator(category)}} key={index} className="bg-[#353636] cursor-pointer text-gray-200  rounded p-2 mr-2 mt-2">
                     {category}
                   </span>
                 ))}

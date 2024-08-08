@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { getAnimes } from './redux/selector';
 import { updateAnime } from './redux/actions/action';
 
 const UpdateAnimeForm = () => {
+
   const animes = useSelector(getAnimes);
+  console.log("updateAnime", animes)
   const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [animeID, setAnimeID] = useState('');
@@ -14,15 +16,17 @@ const UpdateAnimeForm = () => {
   const [smallImage, setSmallImage] = useState('');
   const [largeImage, setLargeImage] = useState('');
   const [seasonNumber, setSeasonNumber] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState();
   const [relatedAnimes, setRelatedAnimes] = useState([]);
 
   // Convert the anime names to the required format
   const nameOptions = animes.map(anime => ({
     value: anime.NAME,
     label: anime.NAME,
-    id: anime._id
+    id: anime._id,
+    categories: anime.CATEGORIES
   }));
+
 
   const categoryOptions = [
     { value: 'Shounen', label: 'Shounen' },
@@ -54,12 +58,15 @@ const UpdateAnimeForm = () => {
     { value: 'Zayıftan Güçlüye', label: 'Zayıftan Güçlüye' },
     { value: 'intikam', label: 'intikam' },
     { value: 'Bilim Kurgu', label: 'Bilim Kurgu' },
-    { value: "Gerilim", label: "Gerilim"}
+    { value: "Gerilim", label: "Gerilim"},
+    { value: "Macera", label: "Macera"}
   ];
 
   const handleNameChange = (selectedOption) => {
     setName(selectedOption ? selectedOption.value : '');
     setAnimeID(selectedOption ? selectedOption.id : '');
+    console.log(selectedOption.categories, "handlename")
+    setSelectedCategories(selectedOption ? selectedOption.categories.map(category => ({ value: category, label: category })) : []);
   };
 
   const handleCategoryChange = (selectedOptions) => {
