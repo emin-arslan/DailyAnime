@@ -156,7 +156,7 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
                     <div className="absolute top-0 right-0 text-xs w-full justify-end items-end text-end bg-black opacity-90 group-hover:scale-110 z-50 transition">   </div>
                     <img src={relatedAnime?.FIRST_IMAGE} alt={relatedAnime?.NAME} className="h-20 cursor-pointer hover:scale-105 group-hover:scale-105 transition w-20 rounded-lg" />
                     <div className='absolute left-0 flex justify-between bg-black opacity-70 text-xs bottom-0 w-full group-hover:scale-110 rounded-b transition cursor-pointer  '>
-                    <div className="text-xs text-center w-full h-full"> {relatedAnime.SEASON_NUMBER ? relatedAnime.SEASON_NUMBER +".Sezon ": "Film"}</div>
+                    <div className="text-xs text-center w-full h-full"> {relatedAnime?.SEASON_NUMBER ? relatedAnime?.SEASON_NUMBER +".Sezon ": "Film"}</div>
                     </div>
                   </div>
                 ))}

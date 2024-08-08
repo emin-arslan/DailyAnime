@@ -15,6 +15,7 @@
   import { ErrorPage } from './components/ErrorPage';
 import Footer from './components/Footer';
 import WatchAnimeMobile from './components/WatchAnimeMobile';
+import CategoryFilter from './components/CategoryFilter';
 
   const App = () => {
     const [activeAnime, setActiveAnime] = useState({});
@@ -79,6 +80,10 @@ import WatchAnimeMobile from './components/WatchAnimeMobile';
       {
         path: 'mobile-anime/:name',
         element: <WatchAnimeMobile/>,
+      },
+      {
+        path: "categories",
+        element: <CategoryFilter/>
       },
       {
         path: '*',
