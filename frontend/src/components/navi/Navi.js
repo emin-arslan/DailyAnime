@@ -38,7 +38,7 @@ const Navi = () => {
         <img
           onClick={handleLogoClick}
           src={logo}
-          alt="Logo"
+          alt="animeelysium"
           className="h-10 cursor-pointer select-none transition-transform transform hover:scale-110 xs:h-5 sm:h-5"
         />
         <div className="flex-1 max-w-lg w-9/12 relative z-50 xs:hidden sm:hidden md:hidden">
