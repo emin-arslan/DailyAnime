@@ -189,7 +189,7 @@ const UpdateEpisodeForm = () => {
             <input
               type="radio"
               name="type"
-              value="Final"
+              value="Special"
               checked={type === 'Special'}
               onChange={handleTypeChange}
               className="form-radio text-blue-500 h-5 w-5"
