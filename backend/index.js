@@ -231,10 +231,10 @@ app.put('/updateAnime', ipFilter, async (req, res) => {
     if (totalEpisodes || totalEpisodes === 0) updateFields.TOTAL_EPISODES = totalEpisodes;
     if (smallImage) updateFields.FIRST_IMAGE = smallImage;
     if (largeImage) updateFields.SECOND_IMAGE = largeImage;
-    if (categories) updateFields.CATEGORIES = categories;
-    if(relatedAnimes) updateFields.RELATED_ANIMES = relatedAnimes;
+    if (categories.length > 0) updateFields.CATEGORIES = categories;
+    if(relatedAnimes.length > 0) updateFields.RELATED_ANIMES = relatedAnimes;
     if(seasonNumber) updateFields.SEASON_NUMBER = seasonNumber;
-
+    console.log(updateFields);
     // Anime bilgilerini güncelle
     const updatedAnime = await AnimeInfo.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true });
 

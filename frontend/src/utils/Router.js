@@ -6,11 +6,13 @@ import MainForm from './components/MainForm';
 import AnimeInfo from './components/AnimeInfo';
 import ErrorPage from './components/ErrorPage';
 import { getHomePageAnimesSelector } from './components/redux/selector';
+import WatchAnimeMobile from '../components/WatchAnimeMobile';
 
 const Router = () => (
   <Routes>
     <Route path="/" element={<HomePage />} />
-    <Route path="animeInfo/name" element={<AnimeInfo />} />
+    <Route path="animeInfo/:name" element={<AnimeInfo />} />
+    <Route path='mobile-anime/:name' element={<WatchAnimeMobile/>} />
     <Route path="*" element={<ErrorPage />} />
   </Routes>
 );

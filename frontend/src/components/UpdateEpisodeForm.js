@@ -179,7 +179,7 @@ const UpdateEpisodeForm = () => {
               type="radio"
               name="type"
               value="ova"
-              checked={type === 'ova'}
+              checked={type === 'Ova'}
               onChange={handleTypeChange}
               className="form-radio text-blue-500 h-5 w-5"
             />
@@ -190,7 +190,7 @@ const UpdateEpisodeForm = () => {
               type="radio"
               name="type"
               value="special"
-              checked={type === 'special'}
+              checked={type === 'Special'}
               onChange={handleTypeChange}
               className="form-radio text-blue-500 h-5 w-5"
             />
@@ -201,11 +201,11 @@ const UpdateEpisodeForm = () => {
               type="radio"
               name="type"
               value="extra"
-              checked={type === 'extra'}
+              checked={type === 'Final'}
               onChange={handleTypeChange}
               className="form-radio text-blue-500 h-5 w-5"
             />
-            <span className="ml-2 text-gray-300">Ekstra</span>
+            <span className="ml-2 text-gray-300">Final</span>
           </label>
         </div>
       </div>

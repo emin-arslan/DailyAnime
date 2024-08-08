@@ -91,7 +91,7 @@ const WatchAnimeMobile = () => {
   return (
     <div className="h-full min-h-screen bg-[#353636] text-gray-200 flex flex-col items-center p-0">
       <div className="flex w-full"> 
-      <h1 className="text-sm w-9/12 font-bold p-2 ">{anime.title}</h1>
+      <h1 onClick={()=>{handleAnimeInfo(animeInfo.name)}} className="text-sm w-9/12 font-bold p-2 cursor-pointer ">{anime.title}</h1>
       <div className="w-3/12 flex justify-end py-1 h-auto"> 
           <button
                 onClick={()=>{handleAnimeInfo(animeInfo.name)}}
@@ -170,7 +170,6 @@ const WatchAnimeMobile = () => {
                 >
                   <span>{`Bölüm ${episode.episode_number}`}</span>
                   
-                  <span className="text-sm text-gray-400">{episode.title}</span>
                   <span className="text-end">{episode.type?.toUpperCase()}</span>
                 </li>
               ))}

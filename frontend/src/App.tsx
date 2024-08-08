@@ -73,11 +73,11 @@ import WatchAnimeMobile from './components/WatchAnimeMobile';
         element: <MainForm />,
       },
       {
-        path: "animeInfo/name",
+        path: "animeInfo/:name",
         element: <AnimeInfo  setModal={setModal} setActiveAnime={setActiveAnime}/>,
       },
       {
-        path: 'mobile-anime/name',
+        path: 'mobile-anime/:name',
         element: <WatchAnimeMobile/>,
       },
       {

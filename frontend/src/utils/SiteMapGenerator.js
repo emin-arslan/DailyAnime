@@ -10,6 +10,7 @@ const sitemap = new SitemapStream({ hostname: 'https://animeelysium.com' });
 const urls = [
   { url: '/', changefreq: 'daily', priority: 1.0 },
   { url: '/animeInfo/name', changefreq: 'daily', priority: 0.8 },
+  { url: '/mobile-anime/name', changefreq: 'daily', priority:0.8},
   // Diğer URL'ler
 ];
 
