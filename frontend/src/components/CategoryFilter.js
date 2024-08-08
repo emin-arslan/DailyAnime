@@ -25,6 +25,10 @@ const CategoryFilter = () => {
   const [filteredCategories, setFilteredCategories] = useState(allCategories);
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Ensure the page scroll is at the top
+  }, []);
+
+  useEffect(() => {
     // When query parameter changes, update selected categories
     if (allCategories.includes(query)) {
       setSelectedCategories([query]);
