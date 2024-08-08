@@ -65,7 +65,7 @@ import CategoryFilter from './components/CategoryFilter';
           <>
             
               <HomePage homePageAnimes={homePageAnimes} setActiveAnime={setActiveAnime} setModal={setModal} />
-              <Analytics />
+              
           </>
         ),
       },
@@ -103,6 +103,7 @@ import CategoryFilter from './components/CategoryFilter';
         
         <RouterProvider router={router} />
         </Container>
+        <Analytics />
       </div>
     );
   };
