@@ -137,7 +137,7 @@ app.post('/addNewAnime', ipFilter, async (req, res) => {
     }
 
     const newAnime = new AnimeInfo({
-      NAME,
+      NAME:NAME.trim(),
       DESCRIPTION,
       TOTAL_EPISODES,
       FIRST_IMAGE,
