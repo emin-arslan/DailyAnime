@@ -154,7 +154,7 @@ const AnimeInfo = ({ setModal, setActiveAnime }) => {
                   Animeyi İzle
                 </button>
 
-                <button className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded shadow">
+                <button className="bg-gray-600 hidden hover:bg-gray-700 text-white py-2 px-4 rounded shadow">
                   Listeye Ekle
                 </button>
               </div>
